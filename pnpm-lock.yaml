@@ -5,7 +5,6 @@ importers:
   .:
     specifiers:
       '@types/inquirer': ^8.2.1
-      '@types/node': ^18.0.3
       esbuild: ^0.14.48
       esno: ^0.16.3
       inquirer: ^9.0.0
@@ -15,7 +14,6 @@ importers:
       zx: ^7.0.7
     devDependencies:
       '@types/inquirer': 8.2.1
-      '@types/node': 18.0.3
       esbuild: 0.14.48
       esno: 0.16.3
       inquirer: 9.0.0
@@ -25,6 +23,9 @@ importers:
       zx: 7.0.7
 
   packages/copymanga:
+    specifiers: {}
+
+  packages/e-hentai-infinite-scroll:
     specifiers: {}
 
 packages:

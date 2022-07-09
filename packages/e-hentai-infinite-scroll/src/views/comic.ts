@@ -9,7 +9,7 @@ export default function setup() {
   function api_call(page: number, nextImgKey: string) {
     return new Promise<any>((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open('POST', api_url)
+      xhr.open('POST', window.api_url)
       xhr.setRequestHeader('Content-Type', 'application/json')
       xhr.withCredentials = true
       xhr.onreadystatechange = () => {
@@ -20,10 +20,10 @@ export default function setup() {
       xhr.send(
         JSON.stringify({
           method: 'showpage',
-          gid: gid,
+          gid: window.gid,
           page: page,
           imgkey: nextImgKey,
-          showkey: showkey,
+          showkey: window.showkey,
         })
       )
     })
@@ -37,7 +37,7 @@ export default function setup() {
     .querySelector<HTMLAnchorElement>('#i3 a[onclick]')!
     .onclick!.toString()
     .match(/'(?<key>.*)'/)!.groups!.key
-  let page = startpage + 1
+  let page = window.startpage + 1
 
   let isLoading = false
   async function loadImgInfo() {
