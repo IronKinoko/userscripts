@@ -1,8 +1,7 @@
 {
   "name": "copymanga",
   "version": "1.0.0",
-  "private": true,
-  "description": "enhance copymanga",
+  "description": "处理图片资源加载失败时自动重新加载",
   "main": "index.js",
   "scripts": {},
   "repository": {
@@ -11,9 +10,9 @@
   },
   "keywords": [],
   "author": "IronKinoko <kinoko.main@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
-  "homepage": "https://github.com/IronKinoko/userscripts#readme"
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga#readme"
 }

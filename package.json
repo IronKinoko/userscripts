@@ -6,7 +6,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "esno scripts/build.ts"
+    "dev": "esno scripts/build.ts --watch",
+    "build": "esno scripts/build.ts",
+    "build:all": "esno scripts/build.ts --all"
   },
   "repository": {
     "type": "git",

@@ -8,10 +8,6 @@ export default function createConfig(opts: Options) {
   const { define, ...rollupOptions } = opts
   return defineConfig({
     ...rollupOptions,
-    plugins: [
-      esbuild({
-        define,
-      }),
-    ],
+    plugins: [esbuild({ define })],
   })
 }

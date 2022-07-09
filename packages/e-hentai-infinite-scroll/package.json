@@ -1,0 +1,18 @@
+{
+  "name": "e-hentai-infinite-scroll",
+  "version": "1.0.3",
+  "description": "Exhentai infinite scroll scripts.",
+  "main": "index.user.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IronKinoko/userscripts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IronKinoko/userscripts/issues"
+  },
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/e-hentai-infinite-scroll#readme"
+}
