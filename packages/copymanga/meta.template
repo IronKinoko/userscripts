@@ -1,0 +1,13 @@
+// ==UserScript==
+// @name         修复copymanga图片错误
+// @namespace    https://github.com/IronKinoko/copymanga
+// @version      #version#
+// @license      MIT
+// @description  处理图片资源加载失败时自动重新加载
+// @author       IronKinoko
+// @match        https://www.copymanga.org/*
+// @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
+// @grant        none
+// @noframes
+// @updateURL    https://github.com/IronKinoko/copymanga/raw/master/dist/index.user.js
+// ==/UserScript==

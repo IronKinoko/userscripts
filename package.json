@@ -1,0 +1,33 @@
+{
+  "name": "userscripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "personal userscripts",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "esno scripts/build.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IronKinoko/userscripts.git"
+  },
+  "keywords": [],
+  "author": "IronKinoko <kinoko.main@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IronKinoko/userscripts/issues"
+  },
+  "homepage": "https://github.com/IronKinoko/userscripts#readme",
+  "devDependencies": {
+    "@types/inquirer": "^8.2.1",
+    "@types/node": "^18.0.3",
+    "esbuild": "^0.14.48",
+    "esno": "^0.16.3",
+    "inquirer": "^9.0.0",
+    "rollup": "^2.76.0",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript": "^4.7.4",
+    "zx": "^7.0.7"
+  }
+}
