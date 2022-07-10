@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
-  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga#readme"
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga#readme",
+  "devDependencies": {
+    "shared": "workspace:^1.0.0"
+  }
 }

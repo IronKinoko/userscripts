@@ -1,27 +1,5 @@
-export function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
-}
-
 export function s2d(string: string) {
   return new DOMParser().parseFromString(string, 'text/html').body.firstChild!
-}
-
-export async function waitDOM<T extends Element>(query: string) {
-  return new Promise<T>((resolve, reject) => {
-    const now = Date.now()
-    function getDOM() {
-      if (Date.now() - now > 5000) reject()
-      const dom = document.querySelector<T>(query)
-      if (dom) {
-        resolve(dom)
-      } else {
-        requestAnimationFrame(getDOM)
-      }
-    }
-    getDOM()
-  })
 }
 
 export function addErrorListener(img: HTMLImageElement) {

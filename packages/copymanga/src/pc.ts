@@ -1,4 +1,5 @@
-import { addErrorListener, s2d, waitDOM } from './utils'
+import { addErrorListener, s2d } from './utils'
+import { waitDOM } from 'shared'
 
 function replaceHeader() {
   const header = document.querySelector<HTMLDivElement>(

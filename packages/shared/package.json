@@ -1,0 +1,9 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "copy-to-clipboard": "^3.3.1"
+  },
+  "sideEffects": false
+}

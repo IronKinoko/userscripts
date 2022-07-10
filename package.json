@@ -6,9 +6,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "esno scripts/build.ts --watch",
-    "build": "esno scripts/build.ts",
-    "build:all": "esno scripts/build.ts --all",
+    "dev": "rollup -c --watch",
+    "build": "rollup -c",
+    "build:all": "rollup -c --environment ALL",
     "prepare": "husky install"
   },
   "repository": {
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/IronKinoko/userscripts#readme",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/inquirer": "^8.2.1",
     "esbuild": "^0.14.48",
     "esno": "^0.16.3",

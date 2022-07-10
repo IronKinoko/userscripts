@@ -1,4 +1,5 @@
-import { addErrorListener, sleep, waitDOM } from './utils'
+import { addErrorListener } from './utils'
+import { sleep, waitDOM } from 'shared'
 
 async function openControl() {
   const li = await waitDOM('li.comicContentPopupImageItem')
