@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/IronKinoko/userscripts#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.23.1",
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/inquirer": "^8.2.1",
