@@ -9,5 +9,5 @@
 // @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
 // @grant        none
 // @noframes
-// @updateURL    https://github.com/IronKinoko/copymanga/raw/master/dist/index.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/copymanga.user.js
 // ==/UserScript==
