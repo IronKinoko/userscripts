@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         修复copymanga图片错误
-// @namespace    https://github.com/IronKinoko/copymanga
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga
 // @version      #version#
 // @license      MIT
 // @description  处理图片资源加载失败时自动重新加载
