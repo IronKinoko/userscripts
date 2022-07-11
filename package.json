@@ -6,6 +6,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "bootstrap": "esno scripts/bootstrap",
     "dev": "rollup -c --watch",
     "build": "rollup -c",
     "build:all": "rollup -c --environment ALL",

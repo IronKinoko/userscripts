@@ -39,7 +39,9 @@ export default run()
 async function createConfig(root) {
   const pkg = await fs.readJson(path.resolve(root, 'package.json'))
   let meta = await fs.readFile(path.resolve(root, 'meta.template'), 'utf-8')
-  meta = meta.replace('#version#', pkg.version)
+  meta = meta
+    .replace('#version#', pkg.version)
+    .replace('#description#', pkg.description)
 
   pkg.globals ||= {}
 

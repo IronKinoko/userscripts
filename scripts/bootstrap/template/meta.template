@@ -1,0 +1,13 @@
+// ==UserScript==
+// @name         {{name}}
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/{{name}}
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        
+// @icon         https://www.google.com/s2/favicons?domain=
+// @grant        none
+// @noframes
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/{{name}}.user.js
+// ==/UserScript==

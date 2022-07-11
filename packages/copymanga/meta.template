@@ -3,7 +3,7 @@
 // @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga
 // @version      #version#
 // @license      MIT
-// @description  处理图片资源加载失败时自动重新加载
+// @description  #description#
 // @author       IronKinoko
 // @match        https://www.copymanga.org/*
 // @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
