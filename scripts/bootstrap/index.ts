@@ -42,7 +42,7 @@ async function genFiles(name: string) {
   const root = path.resolve(`packages/${name}`)
   await fs.copy(path.resolve(__dirname, 'template'), root)
 
-  const files = await glob(`${root}/**.*`)
+  const files = await glob(`packages/${name}/**/*`, { absolute: true })
 
   for (const file of files) {
     let content = await fs.readFile(file, 'utf-8')

@@ -3,6 +3,7 @@ import inquirer from 'inquirer'
 import esbuild from 'rollup-plugin-esbuild'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import styles from 'rollup-plugin-styles'
 import url from 'url'
 
 async function run() {
@@ -21,6 +22,7 @@ async function run() {
         message: 'choice package',
         type: 'checkbox',
         choices: packages,
+        validate: (v) => v && v.length > 0,
       },
     ])
     buildPackages = ans.package
@@ -55,6 +57,7 @@ async function createConfig(root) {
     },
     external: Object.keys(pkg.globals),
     plugins: [
+      styles(),
       esbuild(),
       commonjs(),
       nodeResolve({ browser: true }),
