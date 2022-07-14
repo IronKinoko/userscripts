@@ -1,0 +1,21 @@
+{
+  "name": "manhuagui",
+  "version": "1.0.0",
+  "description": "enhance manhuagui",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IronKinoko/userscripts.git"
+  },
+  "keywords": [],
+  "author": "IronKinoko <kinoko.main@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IronKinoko/userscripts/issues"
+  },
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/manhuagui#readme",
+  "devDependencies": {
+    "shared": "workspace:^1.0.0"
+  }
+}

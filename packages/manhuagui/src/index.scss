@@ -1,0 +1,21 @@
+.k-custom-btn.k-custom-btn {
+  text-indent: 0;
+  background: #b5b5b5;
+  color: white;
+  line-height: 40px;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    background: #ca0f0f;
+  }
+}
+.backToTop {
+  height: auto !important;
+}
+.tbCenter {
+  border: none !important;
+  background: none !important;
+}
+[data-tag='mangaFile'] {
+  width: 980px !important;
+}
