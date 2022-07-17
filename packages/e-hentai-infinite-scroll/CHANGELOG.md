@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.0.7
+
+### Patch Changes
+
+- 339ef8e: fix: style error
+
 ## 1.0.6
 
 ### Patch Changes
