@@ -1,3 +1,5 @@
+import { debounce } from 'shared'
+
 type Info = {
   key: string
   src: string
@@ -140,16 +142,6 @@ export default function setup() {
     dom.dataset.source = location.pathname
     document.getElementById('i3')!.append(dom)
     document.querySelector('#i3 a')!.remove()
-  }
-
-  function debounce(fn: Function, delay: number) {
-    let timer: number //借助闭包
-    return function () {
-      if (timer) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(fn, delay) // 简化写法
-    }
   }
 
   const replaceCurrentPathname = debounce(function () {

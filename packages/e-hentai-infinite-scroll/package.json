@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
-  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/e-hentai-infinite-scroll#readme"
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/e-hentai-infinite-scroll#readme",
+  "dependencies": {
+    "shared": "workspace:*"
+  }
 }

@@ -1,3 +1,4 @@
+export * from 'lodash-es'
 export { Cookie } from './utils/cookie'
 export { copy } from './utils/copy'
 export { sleep } from './utils/sleep'

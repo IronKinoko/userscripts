@@ -1,0 +1,13 @@
+.e-hentai-infinite-scroll {
+  .g-scroll-body {
+    overflow: auto;
+    max-height: 80vh;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: white, $alpha: 0.15);
+      border-radius: 2px;
+    }
+  }
+}

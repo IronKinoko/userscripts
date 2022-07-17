@@ -7,6 +7,7 @@ importers:
       '@rollup/plugin-commonjs': ^22.0.1
       '@rollup/plugin-node-resolve': ^13.3.0
       '@types/inquirer': ^8.2.1
+      '@types/lodash-es': ^4.17.6
       esbuild: ^0.14.48
       esno: ^0.16.3
       husky: ^8.0.0
@@ -24,6 +25,7 @@ importers:
       '@rollup/plugin-commonjs': 22.0.1_rollup@2.76.0
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.76.0
       '@types/inquirer': 8.2.1
+      '@types/lodash-es': 4.17.6
       esbuild: 0.14.48
       esno: 0.16.3
       husky: 8.0.1
@@ -44,7 +46,10 @@ importers:
       shared: link:../shared
 
   packages/e-hentai-infinite-scroll:
-    specifiers: {}
+    specifiers:
+      shared: workspace:*
+    dependencies:
+      shared: link:../shared
 
   packages/manhuagui:
     specifiers:
@@ -55,8 +60,10 @@ importers:
   packages/shared:
     specifiers:
       copy-to-clipboard: ^3.3.1
+      lodash-es: ^4.17.21
     dependencies:
       copy-to-clipboard: 3.3.1
+      lodash-es: 4.17.21
 
 packages:
   /@babel/code-frame/7.18.6:
@@ -535,6 +542,22 @@ packages:
       }
     dependencies:
       ci-info: 3.3.2
+    dev: true
+
+  /@types/lodash-es/4.17.6:
+    resolution:
+      {
+        integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==,
+      }
+    dependencies:
+      '@types/lodash': 4.14.182
+    dev: true
+
+  /@types/lodash/4.14.182:
+    resolution:
+      {
+        integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==,
+      }
     dev: true
 
   /@types/minimatch/3.0.5:
@@ -2885,6 +2908,13 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash-es/4.17.21:
+    resolution:
+      {
+        integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==,
+      }
+    dev: false
 
   /lodash.memoize/4.1.2:
     resolution:

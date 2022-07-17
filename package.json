@@ -28,6 +28,7 @@
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/inquirer": "^8.2.1",
+    "@types/lodash-es": "^4.17.6",
     "esbuild": "^0.14.48",
     "esno": "^0.16.3",
     "husky": "^8.0.0",
