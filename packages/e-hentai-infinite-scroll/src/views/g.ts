@@ -72,7 +72,7 @@ async function fetchNextDom(url: string, info: Info) {
   }
 }
 let isLoading = false
-async function loadNextPage(info: Info) {
+async function loadNextPage(info: Info, mode: 'tiny' | 'large') {
   if (isLoading) return
 
   let url = info.unloadPageLinks.shift()
@@ -82,7 +82,9 @@ async function loadNextPage(info: Info) {
     isLoading = false
 
     if (items) {
-      createPageIndex(info.currentPage)
+      if (mode === 'large') {
+        createPageIndex(info.currentPage)
+      }
       $('#gdt').append(...items)
       $$('#gdt .c').forEach((node) => node.remove())
     }
@@ -95,12 +97,26 @@ function createPageIndex(currentPage: number) {
   dom.className = 'g-scroll-page-index'
   $('#gdt').append(dom)
 }
-export default async function setup() {
+
+function tinyGallery() {
   const info = getPageInfo()
 
-  if (!info.unloadPageLinks.length) return
+  const handleScroll = () => {
+    const dom = document.scrollingElement!
 
-  $('body').classList.add('e-hentai-infinite-scroll')
+    if (
+      $('#cdiv').getBoundingClientRect().y <=
+      dom.scrollTop + dom.clientHeight + 2000
+    ) {
+      loadNextPage(info, 'tiny')
+    }
+  }
+  document.addEventListener('scroll', handleScroll)
+}
+
+function largeGallery() {
+  const info = getPageInfo()
+
   $('#gdt').classList.add('g-scroll-body')
   $$(info.childrenClass).forEach((node) => {
     node.setAttribute('data-page', info.currentPage + '')
@@ -142,13 +158,26 @@ export default async function setup() {
     const dom = $('#gdt')
 
     if (dom.scrollHeight - 2000 < dom.scrollTop + dom.clientHeight) {
-      loadNextPage(info)
+      loadNextPage(info, 'large')
     }
 
     replaceCurrentURL()
   }
   handleScroll()
   $('#gdt').addEventListener('scroll', handleScroll)
+}
+
+export default async function setup() {
+  const info = getPageInfo()
+  $('body').classList.add('e-hentai-infinite-scroll')
+
+  if (!info.unloadPageLinks.length) return
+
+  if (info.unloadPageLinks.length > 2) {
+    largeGallery()
+  } else {
+    tinyGallery()
+  }
 }
 
 if (/\/g\/.*\/.*/.test(window.location.pathname)) {
