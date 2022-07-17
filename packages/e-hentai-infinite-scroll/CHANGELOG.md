@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.0.6
+
+### Patch Changes
+
+- aafa27e: feat: enhance tiny gallery scroll
+
 ## 1.0.5
 
 ### Patch Changes
