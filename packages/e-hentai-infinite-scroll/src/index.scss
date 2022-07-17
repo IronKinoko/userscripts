@@ -3,11 +3,33 @@
     overflow: auto;
     max-height: 80vh;
     &::-webkit-scrollbar {
-      width: 4px;
+      width: 0;
     }
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba($color: white, $alpha: 0.15);
-      border-radius: 2px;
+    @supports (overflow: overlay) {
+      overflow: overlay;
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba($color: white, $alpha: 0.15);
+        border-radius: 2px;
+      }
+    }
+  }
+  .g-scroll-page-index {
+    clear: both;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    &::before,
+    &::after {
+      display: block;
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: #ddd;
+      margin: 0 10px;
     }
   }
 }

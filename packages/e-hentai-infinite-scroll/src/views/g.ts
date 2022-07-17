@@ -82,12 +82,19 @@ async function loadNextPage(info: Info) {
     isLoading = false
 
     if (items) {
+      createPageIndex(info.currentPage)
       $('#gdt').append(...items)
       $$('#gdt .c').forEach((node) => node.remove())
     }
   }
 }
 
+function createPageIndex(currentPage: number) {
+  const dom = document.createElement('div')
+  dom.innerText = currentPage + 1 + ''
+  dom.className = 'g-scroll-page-index'
+  $('#gdt').append(dom)
+}
 export default async function setup() {
   const info = getPageInfo()
 
