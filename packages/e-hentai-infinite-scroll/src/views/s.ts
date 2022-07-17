@@ -111,30 +111,6 @@ export default function setup() {
     })
   }
 
-  function injectCSS() {
-    const style = document.createElement('style')
-    style.innerHTML = `
-      .auto-load-img {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 10px;
-        display: block;
-        box-sizing: border-box;
-      }
-  
-      .auto-load-img-empty {
-        min-height:1000px;
-        width: 100px !important;
-        margin: 0 auto !important;
-      }
-      #i3 a {
-        pointer-events: none;
-      }
-      `
-    document.head.append(style)
-  }
-
   function resetDefaultImgDOM() {
     const dom = document.querySelector<HTMLImageElement>('#i3 a img')!
     dom.removeAttribute('style')
@@ -160,7 +136,8 @@ export default function setup() {
     }
   }, 30)
 
-  injectCSS()
+  document.body.classList.add('e-hentai-infinite-scroll', 's')
+
   resetDefaultImgDOM()
   loadImgInfo()
   document.addEventListener('scroll', () => {

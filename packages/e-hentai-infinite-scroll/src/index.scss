@@ -1,4 +1,9 @@
 .e-hentai-infinite-scroll {
+  #gdt::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
   .g-scroll-body {
     overflow: auto;
     max-height: 80vh;
@@ -30,6 +35,26 @@
       height: 1px;
       background: #ddd;
       margin: 0 10px;
+    }
+  }
+
+  &.s {
+    .auto-load-img {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 10px;
+      display: block;
+      box-sizing: border-box;
+    }
+
+    .auto-load-img-empty {
+      min-height: 1000px;
+      width: 100px !important;
+      margin: 0 auto !important;
+    }
+    #i3 a {
+      pointer-events: none;
     }
   }
 }
