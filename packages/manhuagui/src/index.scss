@@ -6,7 +6,7 @@
   text-align: center;
   text-decoration: none;
   &:hover {
-    background: #ca0f0f;
+    background: #c00f20;
   }
 }
 .backToTop {
@@ -18,4 +18,16 @@
 }
 [data-tag='mangaFile'] {
   width: 980px !important;
+}
+
+.big-h5-btn {
+  width: calc(100% - 72px);
+  display: block;
+  height: 100px;
+  background-color: #c00f20;
+  color: white;
+  font-size: 36px;
+  margin: 36px auto;
+  outline: 0;
+  border: #c00f20;
 }

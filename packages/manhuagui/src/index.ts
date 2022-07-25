@@ -1,4 +1,4 @@
-import { waitDOM } from 'shared'
+import { waitDOM, isMobile } from 'shared'
 import './index.scss'
 
 // main
@@ -6,6 +6,8 @@ import './index.scss'
   document.oncontextmenu = null
   createNextBtn()
   createFullScreen()
+
+  createNextBtnInH5()
 })()
 
 async function createNextBtn() {
@@ -48,4 +50,18 @@ async function createFullScreen() {
       a.click()
     }
   })
+}
+
+async function createNextBtnInH5() {
+  if (!isMobile()) return
+
+  const $pagination = await waitDOM('#pagination')
+  $pagination.innerHTML = ''
+
+  const btn = document.createElement('button')
+  btn.className = 'big-h5-btn'
+  btn.textContent = '下一章'
+  btn.onclick = () => window.SMH.nextC()
+
+  $pagination.replaceWith(btn)
 }
