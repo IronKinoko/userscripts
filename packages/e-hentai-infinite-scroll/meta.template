@@ -7,5 +7,6 @@
 // @match        https://exhentai.org/s/*
 // @match        https://exhentai.org/g/*
 // @grant        none
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/e-hentai-infinite-scroll.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/e-hentai-infinite-scroll.user.js
 // ==/UserScript==

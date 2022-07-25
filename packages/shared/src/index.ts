@@ -1,4 +1,5 @@
-export * from 'lodash-es'
+export { default as debounce } from 'lodash-es/debounce'
+export { default as throttle } from 'lodash-es/throttle'
 export { Cookie } from './utils/cookie'
 export { copy } from './utils/copy'
 export { sleep } from './utils/sleep'
