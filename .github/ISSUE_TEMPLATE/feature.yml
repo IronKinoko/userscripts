@@ -1,0 +1,21 @@
+name: 新功能/意见/建议
+description: 有什么好的建议快提给我吧
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: 脚本名称
+      description: 请选择脚本名字
+      options:
+        - copymanga
+        - e-hentai-infinite-scroll
+        - manhuagui
+    validations:
+      required: true
+  - type: textarea
+    id: desc
+    attributes:
+      label: 简要描述下需要的功能、意见或建议
+      value:
+    validations:
+      required: true
