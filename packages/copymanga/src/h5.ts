@@ -12,9 +12,6 @@ function fakeClickEvent() {
   return new MouseEvent('click', { clientX: width / 2, clientY: height / 2 })
 }
 
-/**
- * @param {Event} e
- */
 async function currentPage() {
   try {
     if (!/h5\/comicContent\/.*/.test(location.href)) return
@@ -34,10 +31,14 @@ async function currentPage() {
   } catch (e) {}
 }
 
+let trackId = { current: 0 }
 async function runH5main() {
   try {
     if (!/h5\/comicContent\/.*/.test(location.href)) return
+    let runTrackId = ++trackId.current
     const ulDom = await waitDOM<HTMLUListElement>('.comicContentPopupImageList')
+    if (runTrackId !== trackId.current) return
+
     const uuid = getComicId()
     const domUUID = ulDom.dataset.uuid
     if (domUUID !== uuid) {
@@ -45,6 +46,7 @@ async function runH5main() {
     }
 
     injectFixImg()
+    injectFastLoadImg()
 
     const main = ulDom.parentElement!
     main.style.position = 'unset'
@@ -86,7 +88,7 @@ async function runH5main() {
       ? 'none'
       : 'block'
   } catch (error) {
-    console.error(error)
+    throw error
   }
 }
 
@@ -133,6 +135,28 @@ async function injectFixImg() {
   const ob = new MutationObserver(injectEvent)
   ob.observe(listDOM, { childList: true, subtree: true })
   injectEvent()
+}
+
+async function injectFastLoadImg() {
+  const $list = await waitDOM('.comicContentPopupImageList')
+
+  function fastLoad() {
+    const $imgs = document.querySelectorAll<HTMLImageElement>('ul li img')
+
+    $imgs.forEach(($img) => {
+      if ($img.dataset.fastLoad === $img.dataset.src) return
+      $img.dataset.fastLoad = $img.dataset.src
+      $img.src = $img.dataset.src!
+    })
+  }
+
+  const ob = new MutationObserver(fastLoad)
+  ob.observe($list, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-src'],
+  })
 }
 
 export default function () {

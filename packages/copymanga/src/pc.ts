@@ -48,9 +48,26 @@ async function injectFixImg() {
   injectEvent()
 }
 
+async function injectFastLoadImg() {
+  const $list = await waitDOM('.comicContent-list')
+
+  function fastLoad() {
+    const $imgs = $list.querySelectorAll<HTMLImageElement>('li img')
+    $imgs.forEach(($img) => {
+      if ($img.dataset.fastLoad === 'true') return
+      $img.dataset.fastLoad = 'true'
+      $img.src = $img.dataset.src!
+    })
+  }
+
+  const ob = new MutationObserver(fastLoad)
+  ob.observe($list, { childList: true, subtree: true })
+}
+
 export default function () {
   if (/comic\/.*\/chapter/.test(location.href)) {
     injectFixImg()
+    injectFastLoadImg()
   }
 
   replaceHeader()

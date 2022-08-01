@@ -3,8 +3,8 @@ export function s2d(string: string) {
 }
 
 export function addErrorListener(img: HTMLImageElement) {
-  if (img.dataset.inject === 'true') return
-  img.dataset.inject = 'true'
+  if (img.dataset.errorFix === 'true') return
+  img.dataset.errorFix = 'true'
   img.onerror = () => {
     const url = new URL(img.src)
     let v = parseInt(url.searchParams.get('v')!) || 0
