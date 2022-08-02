@@ -10,6 +10,11 @@
 | [youtube-danmaku](https://github.com/IronKinoko/youtube-danmaku) | Youtube Live Chat 直播评论以弹幕方式显示                                                 |
 | [manhuagui](/packages/manhuagui)                                 | 增强漫画柜观看体验                                                                       |
 
-## iOS/Mac safari install
+## iOS & Mac safari install
 
 Use [quoid/userscripts](https://github.com/quoid/userscripts)
+
+## Android & Windows install
+
+[tampermonkey](https://www.tampermonkey.net/)
+
