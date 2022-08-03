@@ -167,7 +167,7 @@ function largeGallery() {
   $('#gdt').addEventListener('scroll', handleScroll)
 }
 
-export default async function setup() {
+async function setup() {
   const info = getPageInfo()
   $('body').classList.add('e-hentai-infinite-scroll')
 

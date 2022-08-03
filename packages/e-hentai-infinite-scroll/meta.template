@@ -4,8 +4,8 @@
 // @version      #version#
 // @description  #description#
 // @author       IronKinoko
-// @match        https://exhentai.org/s/*
-// @match        https://exhentai.org/g/*
+// @match        https://e-hentai.org/*
+// @match        https://exhentai.org/*
 // @grant        none
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/e-hentai-infinite-scroll.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/e-hentai-infinite-scroll.user.js

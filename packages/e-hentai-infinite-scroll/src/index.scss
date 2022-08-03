@@ -56,5 +56,34 @@
     #i3 a {
       pointer-events: none;
     }
+
+    .ehis-bottom-info-wrapper {
+      position: sticky;
+      bottom: 0;
+      overflow: hidden;
+
+      .ehis-bottom-info-container {
+        transition: all 0.15s ease-in;
+        transform: translateY(20px);
+        opacity: 0;
+        &::after {
+          content: '';
+          display: table;
+        }
+      }
+
+      &:hover {
+        .ehis-bottom-info-container {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      &.static {
+        .ehis-bottom-info-container {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
   }
 }
