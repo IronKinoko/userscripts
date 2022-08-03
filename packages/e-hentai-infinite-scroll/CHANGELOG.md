@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.1.0
+
+### Minor Changes
+
+- 3302d20: feat: show bottom info
+
 ## 1.0.7
 
 ### Patch Changes
