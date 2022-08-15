@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.2.1
+
+### Patch Changes
+
+- daf45d9: feat: add fixed next part btn
+
 ## 1.2.0
 
 ### Minor Changes
