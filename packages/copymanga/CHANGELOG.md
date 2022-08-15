@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.2.5
+
+### Patch Changes
+
+- 0ca109a: refactor: change next btn show time
+
 ## 1.2.4
 
 ### Patch Changes
