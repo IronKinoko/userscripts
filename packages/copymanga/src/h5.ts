@@ -111,8 +111,8 @@ async function createNextPartDom() {
 
         const dom = document.scrollingElement!
         if (
-          dom.scrollTop < 1000 ||
-          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 2000
+          dom.scrollTop < 50 ||
+          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800
         ) {
           fixedNextBtn?.classList.remove('hide')
         } else {
