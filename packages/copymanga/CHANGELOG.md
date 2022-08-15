@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.2.2
+
+### Patch Changes
+
+- d46b8b1: fix: style error in safari
+
 ## 1.2.1
 
 ### Patch Changes
