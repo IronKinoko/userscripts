@@ -16,6 +16,7 @@
     box-shadow: rgba(0, 0, 0, 0.45) 0 0 10px 0px;
     transition: all 0.2s ease;
     transform: translateX(0);
+    opacity: 1;
 
     &.hide {
       opacity: 0;
