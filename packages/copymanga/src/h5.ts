@@ -52,44 +52,69 @@ async function runH5main() {
     main.style.position = 'unset'
     main.style.overflowY = 'unset'
 
-    let nextPartDom = document.querySelector<HTMLDivElement>(
-      '#comicContentMain #nextpart'
-    )
-    let nextButton = document.querySelector<HTMLSpanElement>(
-      '.comicControlBottomTop > div:nth-child(3) > span'
-    )
-    if (!nextPartDom) {
-      if (!nextButton) {
-        await openControl()
-        nextButton = document.querySelector(
-          '.comicControlBottomTop > div:nth-child(3) > span'
-        )
-      }
-
-      nextPartDom = document.createElement('div')
-      nextPartDom.style.textAlign = 'center'
-      nextPartDom.style.lineHeight = '50px'
-      nextPartDom.style.fontSize = '16px'
-      nextPartDom.style.paddingBottom = '100px'
-      nextPartDom.textContent = '下一话'
-      nextPartDom.id = 'nextpart'
-
-      nextPartDom.onclick = async (e) => {
-        e.stopPropagation()
-        nextButton && nextButton.click()
-        document.scrollingElement!.scrollTop = 0
-      }
-
-      document.getElementById('comicContentMain')!.appendChild(nextPartDom)
-    }
-    nextPartDom.style.display = nextButton!.parentElement!.classList.contains(
-      'noneUuid'
-    )
-      ? 'none'
-      : 'block'
+    createNextPartDom()
   } catch (error) {
     throw error
   }
+}
+
+let ob: IntersectionObserver
+async function createNextPartDom() {
+  let nextPartDom = document.querySelector<HTMLDivElement>(
+    '#comicContentMain .next-part-btn'
+  )
+  let nextButton = document.querySelector<HTMLSpanElement>(
+    '.comicControlBottomTop > div:nth-child(3) > span'
+  )
+  if (!nextPartDom) {
+    if (!nextButton) {
+      await openControl()
+      nextButton = document.querySelector(
+        '.comicControlBottomTop > div:nth-child(3) > span'
+      )
+    }
+
+    nextPartDom = document.createElement('div')
+    nextPartDom.className = 'next-part-btn'
+    nextPartDom.textContent = '下一话'
+
+    nextPartDom.onclick = async (e) => {
+      e.stopPropagation()
+      nextButton && nextButton.click()
+      document.scrollingElement!.scrollTop = 0
+    }
+
+    document.getElementById('comicContentMain')!.appendChild(nextPartDom)
+  }
+  nextPartDom.style.display = nextButton!.parentElement!.classList.contains(
+    'noneUuid'
+  )
+    ? 'none'
+    : 'block'
+
+  let fixedNextBtn = document.querySelector<HTMLDivElement>(
+    '.next-part-btn-fixed'
+  )
+  if (!fixedNextBtn) {
+    fixedNextBtn = document.createElement('div')
+    fixedNextBtn.className = 'next-part-btn-fixed'
+    fixedNextBtn.textContent = '下一话'
+    fixedNextBtn.onclick = nextPartDom.onclick
+    document.body.appendChild(fixedNextBtn)
+
+    ob = new IntersectionObserver(
+      (e) => {
+        console.log(e)
+        if (e[0].isIntersecting) fixedNextBtn?.classList.remove('hide')
+        else fixedNextBtn?.classList.add('hide')
+      },
+      { threshold: [0, 1], rootMargin: '0px 0px 1000px 0px' }
+    )
+  }
+
+  ob.observe(nextPartDom)
+
+  fixedNextBtn.style.display = nextPartDom.style.display
 }
 
 function getComicId() {

@@ -1,0 +1,26 @@
+.k-copymanga {
+  .next-part-btn {
+    height: 150px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 16px;
+  }
+  .next-part-btn-fixed {
+    position: fixed;
+    right: 0;
+    top: 25vh;
+    font-size: 16px;
+    background: white;
+    padding: 8px;
+    writing-mode: vertical-lr;
+    box-shadow: rgba(0, 0, 0, 0.45) 0 0 10px 0px;
+    transition: all 0.2s ease;
+    transform: translateX(0);
+
+    &.hide {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(100%);
+    }
+  }
+}
