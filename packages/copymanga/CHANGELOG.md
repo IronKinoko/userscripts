@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.2.3
+
+### Patch Changes
+
+- b6e3408: fix: style error in safari
+
 ## 1.2.2
 
 ### Patch Changes
