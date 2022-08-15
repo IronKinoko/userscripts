@@ -1,5 +1,5 @@
 import { addErrorListener } from './utils'
-import { sleep, waitDOM } from 'shared'
+import { sleep, throttle, waitDOM } from 'shared'
 
 async function openControl() {
   const li = await waitDOM('li.comicContentPopupImageItem')
@@ -58,7 +58,6 @@ async function runH5main() {
   }
 }
 
-let ob: IntersectionObserver
 async function createNextPartDom() {
   let nextPartDom = document.querySelector<HTMLDivElement>(
     '#comicContentMain .next-part-btn'
@@ -102,17 +101,26 @@ async function createNextPartDom() {
     fixedNextBtn.onclick = nextPartDom.onclick
     document.body.appendChild(fixedNextBtn)
 
-    ob = new IntersectionObserver(
-      (e) => {
-        console.log(e)
-        if (e[0].isIntersecting) fixedNextBtn?.classList.remove('hide')
-        else fixedNextBtn?.classList.add('hide')
-      },
-      { threshold: [0, 1], rootMargin: '0px 0px 1000px 0px' }
+    window.addEventListener(
+      'scroll',
+      throttle(() => {
+        if (!/h5\/comicContent\/.*/.test(location.href)) {
+          fixedNextBtn?.classList.add('hide')
+          return
+        }
+
+        const dom = document.scrollingElement!
+        if (
+          dom.scrollTop < 1000 ||
+          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 2000
+        ) {
+          fixedNextBtn?.classList.remove('hide')
+        } else {
+          fixedNextBtn?.classList.add('hide')
+        }
+      }, 100)
     )
   }
-
-  ob.observe(nextPartDom)
 
   fixedNextBtn.style.display = nextPartDom.style.display
 }
@@ -133,7 +141,7 @@ async function addH5HistoryListener() {
   window.addEventListener('pushState', runH5main)
   window.addEventListener('replaceState', runH5main)
   window.addEventListener('popstate', runH5main)
-  window.addEventListener('scroll', currentPage)
+  window.addEventListener('scroll', throttle(currentPage, 100))
 
   runH5main()
 }
