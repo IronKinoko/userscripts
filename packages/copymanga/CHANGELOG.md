@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.2.6
+
+### Patch Changes
+
+- c541e79: fix: click function error
+
 ## 1.2.5
 
 ### Patch Changes
