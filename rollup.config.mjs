@@ -6,7 +6,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import styles from 'rollup-plugin-styles'
 import url from 'url'
 
-async function run() {
+export default async function run() {
   const packages = (await glob('packages/*', { onlyDirectories: true })).filter(
     (root) => fs.existsSync(path.resolve(root, 'meta.template'))
   )
@@ -31,8 +31,6 @@ async function run() {
   const pkgConfigs = await Promise.all(buildPackages.map(createConfig))
   return pkgConfigs
 }
-
-export default run()
 
 /**
  * @param {string} root

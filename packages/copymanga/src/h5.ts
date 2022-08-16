@@ -98,7 +98,6 @@ async function createNextPartDom() {
     fixedNextBtn = document.createElement('div')
     fixedNextBtn.className = 'next-part-btn-fixed'
     fixedNextBtn.textContent = '下一话'
-    fixedNextBtn.onclick = nextPartDom.onclick
     document.body.appendChild(fixedNextBtn)
 
     window.addEventListener(
@@ -122,6 +121,7 @@ async function createNextPartDom() {
     )
   }
 
+  fixedNextBtn.onclick = nextPartDom.onclick
   fixedNextBtn.style.display = nextPartDom.style.display
 }
 
