@@ -1,9 +1,8 @@
-import 'zx/globals'
 import inquirer from 'inquirer'
-import url from 'url'
-
-const __filename = url.fileURLToPath(import.meta.url)
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+import glob from 'globby'
+import chalk from 'chalk'
+import fs from 'fs-extra'
+import path from 'path'
 
 run()
 async function run() {

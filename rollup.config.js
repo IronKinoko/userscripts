@@ -1,10 +1,12 @@
-import 'zx/globals'
 import inquirer from 'inquirer'
 import esbuild from 'rollup-plugin-esbuild'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import styles from 'rollup-plugin-styles'
 import url from 'url'
+import path from 'path'
+import glob from 'globby'
+import fs from 'fs-extra'
 
 export default async function run() {
   const packages = (await glob('packages/*', { onlyDirectories: true })).filter(
@@ -53,7 +55,7 @@ async function createConfig(root) {
       esbuild(),
       commonjs(),
       nodeResolve({ browser: true }),
-      argv.watch && userscriptsDev({ root }),
+      process.argv.includes('--watch') && userscriptsDev({ root }),
     ].filter(Boolean),
   }
 }
