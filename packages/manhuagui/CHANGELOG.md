@@ -1,5 +1,11 @@
 # manhuagui
 
+## 1.0.4
+
+### Patch Changes
+
+- 7f5e2e2: fix: revert next btn
+
 ## 1.0.3
 
 ### Patch Changes
