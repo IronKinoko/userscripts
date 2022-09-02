@@ -1,4 +1,4 @@
-import { waitDOM, isMobile } from 'shared'
+import { waitDOM, isMobile, throttle } from 'shared'
 import './index.scss'
 
 // main
@@ -7,7 +7,9 @@ import './index.scss'
   createNextBtn()
   createFullScreen()
 
-  createNextBtnInH5()
+  if (isMobile()) {
+    createNextBtnInH5()
+  }
 })()
 
 async function createNextBtn() {
@@ -53,8 +55,6 @@ async function createFullScreen() {
 }
 
 async function createNextBtnInH5() {
-  if (!isMobile()) return
-
   const $pagination = await waitDOM('#pagination')
   $pagination.innerHTML = ''
 
@@ -64,4 +64,24 @@ async function createNextBtnInH5() {
   btn.onclick = () => window.SMH.nextC()
 
   $pagination.replaceWith(btn)
+
+  const fixedNextBtn = document.createElement('div')
+  fixedNextBtn.className = 'next-part-btn-fixed'
+  fixedNextBtn.textContent = '下一章'
+  document.body.appendChild(fixedNextBtn)
+
+  window.addEventListener(
+    'scroll',
+    throttle(() => {
+      const dom = document.scrollingElement!
+      if (
+        dom.scrollTop < 200 ||
+        dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800
+      ) {
+        fixedNextBtn?.classList.remove('hide')
+      } else {
+        fixedNextBtn?.classList.add('hide')
+      }
+    }, 100)
+  )
 }

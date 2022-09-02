@@ -31,3 +31,24 @@
   outline: 0;
   border: #c00f20;
 }
+
+.next-part-btn-fixed {
+  position: fixed;
+  right: 0;
+  top: 25vh;
+  font-size: 4.27vw;
+  background: white;
+  padding: 2.13vw;
+  writing-mode: vertical-lr;
+  box-shadow: rgba(0, 0, 0, 0.2) -0.27vw 0.27vw 2.67vw 0vw;
+  transition: all 0.2s ease;
+  transform: translateX(0);
+  border-radius: 1.07vw 0 0 1.07vw;
+  opacity: 1;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+  }
+}

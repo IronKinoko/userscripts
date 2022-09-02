@@ -1,5 +1,11 @@
 # manhuagui
 
+## 1.0.2
+
+### Patch Changes
+
+- feat: add next btn
+
 ## 1.0.1
 
 ### Patch Changes
