@@ -9,7 +9,7 @@
     "dev": "rollup -c --watch",
     "build": "rollup -c",
     "build:all": "rollup -c --environment ALL",
-    "release": "pnpm changeset version && git add . -A && git commit -m \"chore: release\" && pnpm changeset tag && git push && git push --tags",
+    "release": "pnpm changeset version && pnpm i && git add . -A && git commit -m \"chore: release\" && pnpm changeset tag && git push && git push --tags",
     "prepare": "husky install"
   },
   "repository": {
