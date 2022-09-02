@@ -64,24 +64,4 @@ async function createNextBtnInH5() {
   btn.onclick = () => window.SMH.nextC()
 
   $pagination.replaceWith(btn)
-
-  const fixedNextBtn = document.createElement('div')
-  fixedNextBtn.className = 'next-part-btn-fixed'
-  fixedNextBtn.textContent = '下一章'
-  document.body.appendChild(fixedNextBtn)
-
-  window.addEventListener(
-    'scroll',
-    throttle(() => {
-      const dom = document.scrollingElement!
-      if (
-        dom.scrollTop < 50 ||
-        dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800
-      ) {
-        fixedNextBtn?.classList.remove('hide')
-      } else {
-        fixedNextBtn?.classList.add('hide')
-      }
-    }, 100)
-  )
 }
