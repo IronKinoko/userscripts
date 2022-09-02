@@ -75,7 +75,7 @@ async function createNextBtnInH5() {
     throttle(() => {
       const dom = document.scrollingElement!
       if (
-        dom.scrollTop < 200 ||
+        dom.scrollTop < 50 ||
         dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800
       ) {
         fixedNextBtn?.classList.remove('hide')
