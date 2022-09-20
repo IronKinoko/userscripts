@@ -11,7 +11,7 @@ async function main() {
 }
 
 function resetPageEvent() {
-  const $body = document.querySelector('body')!
+  const $body = document.body
   $body.onclick = (e) => {
     const toolsId = ['#toptools', '#bottomtools', '#readset']
     if (
@@ -28,9 +28,11 @@ function resetPageEvent() {
 function injectMovePageEvent() {
   let left: number,
     startX: number,
+    startY: number,
     diffX: number,
     startTime: number,
-    isMoved: boolean
+    isMoved: boolean,
+    direction: 'x' | 'y' | ''
   const $page = document.getElementById('apage')!
 
   window.addEventListener('touchstart', (e) => {
@@ -38,20 +40,35 @@ function injectMovePageEvent() {
 
     left = parseFloat($page.style.left.replace('px', '')) || 0
     startX = e.touches[0].clientX
+    startY = e.touches[0].clientY
     startTime = Date.now()
     isMoved = false
+    direction = ''
   })
-  window.addEventListener('touchmove', (e) => {
-    if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
-    isMoved = true
-    diffX = e.touches[0].clientX - startX
-    $page.style.left = left + diffX + 'px'
-    $page.style.transition = 'initail'
-  })
+  window.addEventListener(
+    'touchmove',
+    (e) => {
+      if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
+      isMoved = true
+      diffX = e.touches[0].clientX - startX
+      let diffY = e.touches[0].clientY - startY
+
+      if (direction === '') {
+        direction = Math.abs(diffX) > Math.abs(diffY) ? 'x' : 'y'
+      }
+      if (direction === 'x') {
+        e.preventDefault()
+
+        $page.style.left = left + diffX + 'px'
+        $page.style.transition = 'initail'
+      }
+    },
+    { passive: false }
+  )
   window.addEventListener('touchend', (e) => {
     if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
 
-    if (!isMoved) return
+    if (!isMoved || direction === 'y') return
 
     const diffTime = Date.now() - startTime
 
