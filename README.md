@@ -9,6 +9,7 @@
 | [agefans-enhance](https://github.com/IronKinoko/agefans-enhance) | 增强 agefans 播放功能，实现自动换集、无缝换集、画中画、历史记录、断点续播、弹幕等功能    |
 | [youtube-danmaku](https://github.com/IronKinoko/youtube-danmaku) | Youtube Live Chat 直播评论以弹幕方式显示                                                 |
 | [manhuagui](/packages/manhuagui)                                 | 增强漫画柜观看体验                                                                       |
+| [linovelib](/packages/linovelib)                                 | 增强哔哩轻小说观看体验                                                                   |
 
 ## iOS & Mac safari install
 
@@ -17,4 +18,3 @@ Use [quoid/userscripts](https://github.com/quoid/userscripts)
 ## Android & Windows install
 
 [tampermonkey](https://www.tampermonkey.net/)
-

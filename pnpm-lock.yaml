@@ -57,6 +57,12 @@ importers:
     dependencies:
       shared: link:../shared
 
+  packages/linovelib:
+    specifiers:
+      shared: workspace:^1.0.0
+    devDependencies:
+      shared: link:../shared
+
   packages/manhuagui:
     specifiers:
       shared: workspace:^1.0.0
