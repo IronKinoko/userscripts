@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/manhuagui#readme",
   "devDependencies": {
-    "shared": "workspace:^1.0.0"
+    "shared": "workspace:*"
   }
 }
