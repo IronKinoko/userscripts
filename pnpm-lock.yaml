@@ -59,7 +59,7 @@ importers:
 
   packages/linovelib:
     specifiers:
-      shared: workspace:^1.0.0
+      shared: workspace:^1.0.2
     devDependencies:
       shared: link:../shared
 
