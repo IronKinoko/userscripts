@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.1.2
+
+### Patch Changes
+
+- 3ed3d54: fix: total page regexp error
+
 ## 1.1.1
 
 ### Patch Changes
