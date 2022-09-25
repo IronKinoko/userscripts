@@ -21,7 +21,7 @@ function getPageInfo(): Info {
   const mode = $('#gdo4 .ths').textContent!.toLowerCase() as Info['mode']
   const pageSize = (mode === 'normal' ? 10 : 5) * rows
   const total = +$('.gtb p.gpc').textContent!.match(
-    /of\s(?<total>\d+)\simages/
+    /of\s(?<total>[0-9,]+)\simages/
   )!.groups!.total
 
   const url = new URL(window.location.href)

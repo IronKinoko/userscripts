@@ -47,7 +47,7 @@ importers:
 
   packages/copymanga:
     specifiers:
-      shared: workspace:^1.0.0
+      shared: workspace:*
     devDependencies:
       shared: link:../shared
 
@@ -59,13 +59,13 @@ importers:
 
   packages/linovelib:
     specifiers:
-      shared: workspace:^1.0.2
+      shared: workspace:*
     devDependencies:
       shared: link:../shared
 
   packages/manhuagui:
     specifiers:
-      shared: workspace:^1.0.0
+      shared: workspace:*
     devDependencies:
       shared: link:../shared
 
