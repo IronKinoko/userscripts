@@ -35,8 +35,16 @@ function injectMovePageEvent() {
     direction: 'x' | 'y' | ''
   const $page = document.getElementById('apage')!
 
+  const isDisabled = (e: TouchEvent) => {
+    return (
+      window.ReadTools.pagemid != 1 ||
+      e.touches.length > 1 ||
+      window.visualViewport.scale !== 1
+    )
+  }
+
   window.addEventListener('touchstart', (e) => {
-    if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
+    if (isDisabled(e)) return
 
     left = parseFloat($page.style.left.replace('px', '')) || 0
     startX = e.touches[0].clientX
@@ -48,7 +56,8 @@ function injectMovePageEvent() {
   window.addEventListener(
     'touchmove',
     (e) => {
-      if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
+      if (isDisabled(e)) return
+
       isMoved = true
       diffX = e.touches[0].clientX - startX
       let diffY = e.touches[0].clientY - startY
@@ -66,7 +75,7 @@ function injectMovePageEvent() {
     { passive: false }
   )
   window.addEventListener('touchend', (e) => {
-    if (window.ReadTools.pagemid != 1 || e.touches.length > 1) return
+    if (isDisabled(e)) return
 
     if (!isMoved || direction === 'y') return
 
