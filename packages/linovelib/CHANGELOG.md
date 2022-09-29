@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.0.3
+
+### Patch Changes
+
+- ab5c072: fix: disabled swipe when user scale view
+
 ## 1.0.2
 
 ### Patch Changes
