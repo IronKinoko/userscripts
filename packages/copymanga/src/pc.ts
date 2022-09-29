@@ -1,5 +1,6 @@
 import { addErrorListener, s2d } from './utils'
-import { waitDOM } from 'shared'
+import { keybind, wait, waitDOM } from 'shared'
+import { pick } from 'lodash-es'
 
 function replaceHeader() {
   const header = document.querySelector<HTMLDivElement>(
@@ -64,10 +65,37 @@ async function injectFastLoadImg() {
   ob.observe($list, { childList: true, subtree: true })
 }
 
+async function removeMouseupEvent() {
+  await wait(() => !!document.body.onmouseup)
+
+  document.body.onmouseup = null
+}
+
+async function injectEvent() {
+  keybind(['z', 'x'], (e, key) => {
+    switch (key) {
+      case 'z': {
+        document
+          .querySelector<HTMLAnchorElement>(`[class='comicContent-prev'] a`)
+          ?.click()
+        break
+      }
+      case 'x': {
+        document
+          .querySelector<HTMLAnchorElement>(`[class='comicContent-next'] a`)
+          ?.click()
+        break
+      }
+    }
+  })
+}
+
 export default function () {
   if (/comic\/.*\/chapter/.test(location.href)) {
     injectFixImg()
     injectFastLoadImg()
+    removeMouseupEvent()
+    injectEvent()
   }
 
   replaceHeader()
