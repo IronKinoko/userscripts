@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.3.0
+
+### Minor Changes
+
+- dc5b18e: feat: remove mouseup and add shortcuts
+
 ## 1.2.6
 
 ### Patch Changes
