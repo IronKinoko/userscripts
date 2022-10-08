@@ -8,17 +8,11 @@ export default function main() {
 }
 
 function removeSelectEvent() {
-  // Your code here...
   const dom = document.createElement('style')
-  dom.innerHTML = `
-  * {
-    user-select: initial !important;
-  }
-  `
+  dom.innerHTML = `* { user-select: initial !important; }`
+  document.body.append(dom)
 
   document.body.removeAttribute('onselectstart')
-
-  document.body.append(dom)
 }
 
 function injectEvent() {
@@ -37,18 +31,52 @@ function injectEvent() {
 
   const { pre, next } = res.groups
 
-  keybind(['w', 's', 'a', 'd'], (e, key) => {
-    switch (key) {
-      case 'w':
-      case 's':
-        const direction = key === 'w' ? -1 : 1
-        if (e.repeat) return
-        window.scrollBy({ behavior: 'smooth', top: direction * 200 })
-        break
-      case 'a':
-      case 'd':
-        window.location.pathname = key === 'a' ? pre : next
-        break
+  keybind(
+    ['w', 's', 'a', 'd'],
+    (e, key) => {
+      switch (key) {
+        case 'w':
+        case 's':
+          const direction = key === 'w' ? -1 : 1
+          if (e.repeat) scroll.start(direction * 15)
+          else window.scrollBy({ behavior: 'smooth', top: direction * 200 })
+          break
+        case 'a':
+        case 'd':
+          window.location.pathname = key === 'a' ? pre : next
+          break
+      }
+    },
+    (e, key) => {
+      switch (key) {
+        case 'w':
+        case 's':
+          scroll.stop()
+          break
+      }
     }
-  })
+  )
 }
+
+const scroll = (() => {
+  let handle: number | undefined
+
+  function stop() {
+    if (!handle) return
+    cancelAnimationFrame(handle)
+    handle = undefined
+  }
+
+  function start(step: number) {
+    if (handle) return
+
+    function animate() {
+      handle = requestAnimationFrame(animate)
+
+      window.scrollBy({ top: step })
+    }
+
+    handle = requestAnimationFrame(animate)
+  }
+  return { start, stop }
+})()
