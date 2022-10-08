@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: support pc
+
 ## 1.0.3
 
 ### Patch Changes
