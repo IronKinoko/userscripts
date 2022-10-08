@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.1.1
+
+### Patch Changes
+
+- a4be1e8: feat: support long press
+
 ## 1.1.0
 
 ### Minor Changes
