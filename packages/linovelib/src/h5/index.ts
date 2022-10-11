@@ -1,10 +1,28 @@
 import { isMobile } from 'shared'
 
 export default async function main() {
+  if (/novel\/\d+\.html/.test(window.location.pathname)) {
+    injectDownload()
+  }
+
   if (!window.ReadTools) return
   resetPageEvent()
 
   if (isMobile()) injectMovePageEvent()
+}
+
+function injectDownload() {
+  const bookId = window.location.pathname.split('/').pop()!.split('.').shift()!
+
+  const dom = document.querySelector('.book-detail-btn .btn-group')
+  console.log(dom)
+  const a = document.createElement('a')
+  dom?.append(a)
+  a.outerHTML = `
+  <li class="btn-group-cell">
+    <a class="btn-normal white" href="http://www.zhidianbao.cn:8088/qs_xq_epub?bookId=${bookId}" target="_blank">Epub下载</a>
+  </li>
+  `
 }
 
 function resetPageEvent() {

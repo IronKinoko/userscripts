@@ -2,6 +2,11 @@ import { keybind } from 'shared'
 
 export default function main() {
   removeSelectEvent()
+
+  if (/novel\/\d+\.html/.test(window.location.pathname)) {
+    injectDownload()
+  }
+
   if (document.body.id === 'readbg') {
     injectEvent()
   }
@@ -56,6 +61,16 @@ function injectEvent() {
       }
     }
   )
+}
+
+function injectDownload() {
+  const bookId = window.location.pathname.split('/').pop()!.split('.').shift()!
+
+  const dom = document.querySelector('.fr.link-group')
+
+  const a = document.createElement('a')
+  dom?.prepend(a)
+  a.outerHTML = `<a class="all-catalog" href="http://www.zhidianbao.cn:8088/qs_xq_epub?bookId=${bookId}" target="_blank"><em></em>Epub下载</a>`
 }
 
 const scroll = (() => {
