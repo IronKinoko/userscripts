@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.2.0
+
+### Minor Changes
+
+- 7a76293: feat: support epub download
+
 ## 1.1.1
 
 ### Patch Changes
