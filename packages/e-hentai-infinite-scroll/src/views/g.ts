@@ -181,30 +181,39 @@ function addWatchTag(tag: string) {
   })
 }
 async function injectWatchTag() {
-  await waitDOM('#tagmenu_act img')
   const node = document.querySelector<HTMLDivElement>('#tagmenu_act')!
 
-  const img = document.createElement('img')
-  const a = document.createElement('a')
-  const br = document.createElement('br')
-  node.append(br, img, a)
+  const inject = () => {
+    const img = document.createElement('img')
+    const a = document.createElement('a')
+    const br = document.createElement('br')
+    node.append(br, img, a)
 
-  img.outerHTML = '<img src="https://ehgt.org/g/mr.gif" class="mr" alt=">"> '
-  a.href = '#'
-  a.textContent = 'Watch'
+    img.outerHTML = '<img src="https://ehgt.org/g/mr.gif" class="mr" alt=">"> '
+    a.href = '#'
+    a.textContent = 'Watch'
 
-  a.addEventListener('click', (e) => {
-    e.preventDefault()
-    if (window.selected_tag)
-      addWatchTag(window.selected_tag)
-        .then(() => {
-          alert('success')
-        })
-        .catch((error) => {
-          console.error(error)
-          alert(error.message)
-        })
+    a.addEventListener('click', (e) => {
+      e.preventDefault()
+      if (window.selected_tag) {
+        addWatchTag(window.selected_tag)
+          .then(() => {
+            alert('success')
+          })
+          .catch((error) => {
+            console.error(error)
+            alert(error.message)
+          })
+      }
+    })
+  }
+
+  const ob = new MutationObserver(() => {
+    if (node.style.display !== 'none') {
+      inject()
+    }
   })
+  ob.observe(node, { attributes: true })
 }
 async function setup() {
   injectWatchTag()
