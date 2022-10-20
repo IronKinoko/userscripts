@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.2.0
+
+### Minor Changes
+
+- 15db24a: feat: add watch action
+
 ## 1.1.2
 
 ### Patch Changes
