@@ -1,4 +1,4 @@
-import { session, debounce } from 'shared'
+import { session, debounce, waitDOM } from 'shared'
 
 const $ = <T extends Element = Element>(selector: string) =>
   document.querySelector<T>(selector)!
@@ -167,7 +167,48 @@ function largeGallery() {
   $('#gdt').addEventListener('scroll', handleScroll)
 }
 
+function addWatchTag(tag: string) {
+  return fetch('/mytags', {
+    method: 'POST',
+    body: new URLSearchParams({
+      usertag_action: 'add',
+      tagname_new: tag,
+      tagwatch_new: 'on',
+      tagcolor_new: '',
+      tagweight_new: '10',
+      usertag_target: '0',
+    }),
+  })
+}
+async function injectWatchTag() {
+  await waitDOM('#tagmenu_act img')
+  const node = document.querySelector<HTMLDivElement>('#tagmenu_act')!
+
+  const img = document.createElement('img')
+  const a = document.createElement('a')
+  const br = document.createElement('br')
+  node.append(br, img, a)
+
+  img.outerHTML = '<img src="https://ehgt.org/g/mr.gif" class="mr" alt=">"> '
+  a.href = '#'
+  a.textContent = 'Watch'
+
+  a.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (window.selected_tag)
+      addWatchTag(window.selected_tag)
+        .then(() => {
+          alert('success')
+        })
+        .catch((error) => {
+          console.error(error)
+          alert(error.message)
+        })
+  })
+}
 async function setup() {
+  injectWatchTag()
+
   const info = getPageInfo()
   $('body').classList.add('e-hentai-infinite-scroll')
 
