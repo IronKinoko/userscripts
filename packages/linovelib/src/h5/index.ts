@@ -1,4 +1,4 @@
-import { isMobile } from 'shared'
+import { isMobile, keybind } from 'shared'
 
 export default async function main() {
   if (/novel\/\d+\.html/.test(window.location.pathname)) {
@@ -9,6 +9,7 @@ export default async function main() {
   resetPageEvent()
 
   if (isMobile()) injectMovePageEvent()
+  else injectShortcuts()
 }
 
 function injectDownload() {
@@ -54,7 +55,8 @@ function injectMovePageEvent() {
     return (
       window.ReadTools.pagemid != 1 ||
       e.touches.length > 1 ||
-      (window.visualViewport && window.visualViewport.scale !== 1)
+      (window.visualViewport && window.visualViewport.scale !== 1) ||
+      (window.getSelection() && window.getSelection()!.toString().length > 0)
     )
   }
 
@@ -112,6 +114,31 @@ function injectMovePageEvent() {
       }
     } else {
       window.ReadPages.ShowPage()
+    }
+  })
+}
+
+function injectShortcuts() {
+  keybind(['a', 's', 'w', 'd', 'space', 'shift+space'], (e, key) => {
+    if (window.ReadTools.pagemid != 1) return
+
+    switch (key) {
+      case 'shift+space':
+      case 'a':
+      case 'w':
+        window.ReadPages.ShowPage('previous')
+
+        break
+
+      case 'space':
+      case 'd':
+      case 's':
+        window.ReadPages.ShowPage('next')
+
+        break
+
+      default:
+        break
     }
   })
 }

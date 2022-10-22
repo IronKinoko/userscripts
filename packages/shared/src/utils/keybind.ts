@@ -1,4 +1,34 @@
-const SHIFT_KEY = '~!@#$%^&*()_+{}|:"<>?' + '～！@#¥%…&*（）——+「」｜：“《》？'
+export function normalizeKeyEvent(e: KeyboardEvent) {
+  const SPECIAL_KEY_EN = '`-=[]\\;\',./~!@#$%^&*()_+{}|:"<>?'.split('')
+  const SPECIAL_KEY_ZH =
+    '·-=【】、；‘，。/～！@#¥%…&*（）—+「」｜：“《》？'.split('')
+
+  let key = e.key
+
+  if (e.code === 'Space') {
+    key = 'Space'
+  }
+
+  // trans a-z to A-Z
+  if (/^[a-z]$/.test(key)) {
+    key = key.toUpperCase()
+  } else if (SPECIAL_KEY_ZH.includes(key)) {
+    key = SPECIAL_KEY_EN[SPECIAL_KEY_ZH.indexOf(key)]
+  }
+
+  let keyArr = []
+
+  e.ctrlKey && keyArr.push('ctrl')
+  e.metaKey && keyArr.push('meta')
+  e.shiftKey && !SPECIAL_KEY_EN.includes(key) && keyArr.push('shift')
+  e.altKey && keyArr.push('alt')
+
+  if (!/Control|Meta|Shift|Alt/i.test(key)) keyArr.push(key)
+
+  keyArr = [...new Set(keyArr)]
+
+  return keyArr.join('+')
+}
 
 export function keybind(
   keys: string[],
@@ -12,23 +42,10 @@ export function keybind(
     return function (e: KeyboardEvent) {
       if (document.activeElement?.tagName === 'INPUT') return
 
-      let keyArr = []
+      const normalizedKey = normalizeKeyEvent(e).toLowerCase()
 
-      e.ctrlKey && keyArr.push('ctrl')
-      e.metaKey && keyArr.push('meta')
-      e.shiftKey && !SHIFT_KEY.includes(e.key) && keyArr.push('shift')
-      e.altKey && keyArr.push('alt')
-
-      if (!['Control', 'Meta', 'Shift', 'Alt'].includes(e.key)) {
-        keyArr.push(e.key)
-      }
-
-      keyArr = [...new Set(keyArr)]
-
-      const key = keyArr.join('+')
-
-      if (keys.includes(key)) {
-        callback(e, key)
+      for (const key of keys) {
+        if (key.toLowerCase() === normalizedKey) callback(e, key)
       }
     }
   }

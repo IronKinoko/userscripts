@@ -1,6 +1,5 @@
 import { addErrorListener, s2d } from './utils'
 import { keybind, wait, waitDOM } from 'shared'
-import { pick } from 'lodash-es'
 
 function replaceHeader() {
   const header = document.querySelector<HTMLDivElement>(
