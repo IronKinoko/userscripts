@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.3.0
+
+### Minor Changes
+
+- 4d40fd0: feat: support shortcuts
+
 ## 1.2.0
 
 ### Minor Changes
