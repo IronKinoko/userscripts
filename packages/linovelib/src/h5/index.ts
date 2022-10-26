@@ -1,8 +1,12 @@
-import { isMobile, keybind } from 'shared'
+import { isMobile, keybind, s2d } from 'shared'
 
 export default async function main() {
   if (/novel\/\d+\.html/.test(window.location.pathname)) {
     injectDownload()
+  }
+
+  if (/novel\/\d+\/catalog/.test(window.location.pathname)) {
+    injectDownloadSection()
   }
 
   if (!window.ReadTools) return
@@ -13,7 +17,7 @@ export default async function main() {
 }
 
 function injectDownload() {
-  const bookId = window.location.pathname.split('/').pop()!.split('.').shift()!
+  const bookId = window.location.pathname.match(/\d+/)![0]
 
   const dom = document.querySelector('.book-detail-btn .btn-group')
   console.log(dom)
@@ -21,9 +25,85 @@ function injectDownload() {
   dom?.append(a)
   a.outerHTML = `
   <li class="btn-group-cell">
-    <a class="btn-normal white" href="http://www.zhidianbao.cn:8088/qs_xq_epub?bookId=${bookId}" target="_blank">Epub下载</a>
+    <a class="btn-normal white" href="https://www.zhidianbao.cn:8443/qs_xq_epub?bookId=${bookId}" target="_blank">Epub下载</a>
   </li>
   `
+}
+
+export interface SyncProgressEvent {
+  total: number
+  loaded: number
+  progress: number
+}
+export interface SyncProgress {
+  status: 'chapter' | 'asset' | 'done'
+  id?: string
+  chapter: SyncProgressEvent
+  asset: SyncProgressEvent
+}
+
+type SyncResult = {
+  code: number
+  progress: SyncProgress
+  message: string
+  done: boolean
+  downloadURL: string
+}
+
+function injectDownloadSection() {
+  const bookId = window.location.pathname.match(/\d+/)![0]
+
+  document
+    .querySelectorAll<HTMLDivElement>('#volumes .chapter-bar')
+    .forEach((node, idx) => {
+      const api = `https://www.zhidianbao.cn:8443/qs_xq_epub/api/catalog/${bookId}/${idx}/sync`
+
+      node.innerHTML = `
+        <span>${node.textContent}</span>
+        <button class="download-btn"></button>
+        <div class="progress">
+          <div hidden></div>
+        </div>
+      `
+
+      const $btn = node.querySelector<HTMLButtonElement>('.download-btn')!
+      const $progress = node.querySelector<HTMLDivElement>('.progress div')!
+
+      const setProgress = (progress?: SyncProgress) => {
+        if (progress) {
+          $progress.hidden = false
+          const { asset, chapter } = progress
+          $progress.style.width =
+            ((chapter.progress + asset.progress) * 100) / 2 + '%'
+        } else {
+          $progress.hidden = true
+          $progress.style.width = '0'
+        }
+      }
+      $btn.onclick = () => {
+        $btn.disabled = true
+        ;(async function fn() {
+          const res: SyncResult = await fetch(api).then((res) => res.json())
+          setProgress(res.progress)
+
+          if (res.code !== 0) {
+            alert(res.message)
+            $btn.disabled = false
+          } else {
+            if (res.done) {
+              window.location.href = new URL(
+                res.downloadURL,
+                'https://www.zhidianbao.cn:8443'
+              ).toString()
+              setTimeout(() => setProgress(undefined), 100)
+              $btn.disabled = false
+            } else {
+              setTimeout(fn, 300)
+            }
+          }
+        })()
+      }
+    })
 }
 
 function resetPageEvent() {

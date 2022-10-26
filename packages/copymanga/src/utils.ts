@@ -1,7 +1,3 @@
-export function s2d(string: string) {
-  return new DOMParser().parseFromString(string, 'text/html').body.firstChild!
-}
-
 export function addErrorListener(img: HTMLImageElement) {
   if (img.dataset.errorFix === 'true') return
   img.dataset.errorFix = 'true'

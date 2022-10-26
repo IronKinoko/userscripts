@@ -1,0 +1,52 @@
+.k-wrapper {
+  #catelogX .module-header-r {
+    min-width: 0;
+    .module-header-btn {
+      position: static;
+      padding: 0;
+    }
+  }
+  #volumes {
+    .chapter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      &::after {
+        content: none;
+      }
+      .download-btn {
+        border-radius: 4px;
+        background-color: rgba(255, 57, 84, 0.1);
+        padding: 4px 12px;
+        font-weight: 500;
+        color: #ff3955;
+        border: 0;
+        white-space: nowrap;
+        margin-left: 16px;
+        &::after {
+          content: '下载';
+        }
+        &:disabled {
+          opacity: 0.5;
+          &::after {
+            content: '下载中...';
+          }
+        }
+      }
+      .progress,
+      .progress > div {
+        position: absolute;
+        pointer-events: none;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+      .progress > div {
+        background-color: rgba(255, 57, 84, 0.1);
+        transition: all 0.2s linear;
+      }
+    }
+  }
+}
