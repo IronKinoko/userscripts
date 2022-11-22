@@ -44,7 +44,10 @@ jobs:
         run: pnpm install
 
       - name: build all scripts
-        run: pnpm run build
+        run: pnpm -r build
+
+      - name: cp all dist to root
+        run: cp packages/*/dist
 
       - name: deploy dist
         # You may pin to the exact commit or the version.
