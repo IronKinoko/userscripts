@@ -3,7 +3,10 @@
   "version": "1.4.0",
   "description": "优化 linovelib 阅读体验",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "bochi dev",
+    "build": "bochi build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IronKinoko/userscripts.git"

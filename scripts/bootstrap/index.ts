@@ -1,8 +1,11 @@
 import inquirer from 'inquirer'
-import glob from 'globby'
+import { globby as glob } from 'globby'
 import chalk from 'chalk'
 import fs from 'fs-extra'
 import path from 'path'
+import url from 'url'
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
 run()
 async function run() {

@@ -3,7 +3,10 @@
   "version": "1.3.0",
   "description": "处理图片资源加载失败时自动重新加载",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "bochi dev",
+    "build": "bochi build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IronKinoko/userscripts.git"
