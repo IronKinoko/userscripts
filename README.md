@@ -10,6 +10,7 @@
 | [youtube-danmaku](https://github.com/IronKinoko/youtube-danmaku) | Youtube Live Chat 直播评论以弹幕方式显示                                                 | [GitHub](https://github.com/IronKinoko/youtube-danmaku/raw/gh-pages/index.user.js) \| [greasyfork](https://greasyfork.org/scripts/409684)            |
 | [manhuagui](/packages/manhuagui)                                 | 增强漫画柜观看体验                                                                       | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/manhuagui.user.js) \| [greasyfork](https://greasyfork.org/scripts/451739)                |
 | [linovelib](/packages/linovelib)                                 | 增强哔哩轻小说观看体验                                                                   | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/linovelib.user.js) \| [greasyfork](https://greasyfork.org/scripts/451738)                |
+| [syosetu](/packages/syosetu)                                     | 增加 syosetu 阅读体验                                                                    | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/syosetu.user.js) \| [greasyfork](https://greasyfork.org/scripts/451738)                  |
 
 ## iOS & Mac safari install
 
