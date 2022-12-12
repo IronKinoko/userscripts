@@ -24,7 +24,7 @@
     "@changesets/cli": "^2.25.2",
     "@types/fs-extra": "^9.0.13",
     "@types/inquirer": "^9.0.3",
-    "bochi": "^1.0.5",
+    "bochi": "^1.0.6",
     "chalk": "^5.1.2",
     "esbuild": "^0.15.15",
     "esno": "^0.16.3",
