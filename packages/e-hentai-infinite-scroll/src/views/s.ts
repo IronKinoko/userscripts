@@ -263,11 +263,7 @@ function setupBottomInfo() {
   })
 }
 
-function setup() {
+export function setup() {
   setupInfiniteScroll()
   setupBottomInfo()
-}
-
-if (/\/s\/.*\/.*/.test(window.location.pathname)) {
-  setup()
 }

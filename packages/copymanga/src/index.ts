@@ -1,10 +1,11 @@
 import h5 from './h5'
 import pc from './pc'
 import './index.scss'
+import { router } from 'shared'
 
 document.body.classList.add('k-copymanga')
-if (location.pathname.startsWith('/h5')) {
-  h5()
-} else {
-  pc()
-}
+
+router([
+  { pathname: /^\/h5/, run: h5 },
+  { pathname: /^(?!\/h5)/, run: pc },
+])

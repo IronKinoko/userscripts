@@ -1,13 +1,10 @@
-import { isMobile, keybind, s2d } from 'shared'
+import { isMobile, keybind, router } from 'shared'
 
 export default async function main() {
-  if (/novel\/\d+\.html/.test(window.location.pathname)) {
-    injectDownload()
-  }
-
-  if (/novel\/\d+\/catalog/.test(window.location.pathname)) {
-    injectDownloadSection()
-  }
+  router([
+    { pathname: /novel\/\d+\.html/, run: injectDownload },
+    { pathname: /novel\/\d+\/catalog/, run: injectDownloadSection },
+  ])
 
   if (!window.ReadTools) return
   resetPageEvent()

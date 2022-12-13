@@ -215,7 +215,7 @@ async function injectWatchTag() {
   })
   ob.observe(node, { attributes: true })
 }
-async function setup() {
+export async function setup() {
   injectWatchTag()
 
   const info = getPageInfo()
@@ -228,8 +228,4 @@ async function setup() {
   } else {
     tinyGallery()
   }
-}
-
-if (/\/g\/.*\/.*/.test(window.location.pathname)) {
-  setup()
 }
