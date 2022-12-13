@@ -9,6 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?domain=
 // @grant        none
 // @noframes
+// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/{{name}}.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/{{name}}.user.js
 // ==/UserScript==

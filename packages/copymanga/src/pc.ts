@@ -1,5 +1,5 @@
 import { addErrorListener } from './utils'
-import { keybind, wait, waitDOM, s2d } from 'shared'
+import { keybind, wait, waitDOM } from 'shared'
 
 function replaceHeader() {
   const header = document.querySelector<HTMLDivElement>(
@@ -7,8 +7,9 @@ function replaceHeader() {
   )
   if (header) {
     header.style.flexWrap = 'nowrap'
-    header.querySelector('div:nth-child(6)')!.replaceWith(
-      ...s2d(
+    $(header)
+      .find('div:nth-child(6)')!
+      .replaceWith(
         `<div class="col-1">
           <div class="log-txt">
             <a href="/web/person/shujia">我的书架</a>
@@ -16,9 +17,9 @@ function replaceHeader() {
           </div>
         </div>`
       )
-    )
-    header.querySelector('div:nth-child(7)')!.replaceWith(
-      ...s2d(
+    $(header)
+      .find('div:nth-child(7)')!
+      .replaceWith(
         `<div class="col-1">
           <div class="log-txt">
             <a href="/web/person/liulan">我的浏览</a>
@@ -26,7 +27,6 @@ function replaceHeader() {
           </div>
         </div>`
       )
-    )
 
     header.querySelector('div:nth-child(8)')!.className = 'col'
     header.querySelector<HTMLDivElement>(

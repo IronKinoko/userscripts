@@ -1,7 +1,5 @@
-import { waitDOM, isMobile, throttle } from 'shared'
+import { isMobile, waitDOM } from 'shared'
 import './index.scss'
-
-// main
 ;(async () => {
   document.oncontextmenu = null
   createNextBtn()
