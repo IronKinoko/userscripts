@@ -9,9 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "shared": ["packages/shared/src/index.ts"]
+      "shared": ["./packages/shared/src/index.ts"]
     }
   },
   "exclude": ["dist", "node_modules"]
