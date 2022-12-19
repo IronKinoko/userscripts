@@ -9,7 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?domain=manhuagui.com
 // @grant        none
 // @noframes
-// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.js
+// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/manhuagui.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/manhuagui.user.js
 // ==/UserScript==

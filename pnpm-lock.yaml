@@ -49,6 +49,12 @@ importers:
     dependencies:
       shared: link:../shared
 
+  packages/esjzone:
+    specifiers:
+      shared: workspace:*
+    devDependencies:
+      shared: link:../shared
+
   packages/linovelib:
     specifiers:
       shared: workspace:*
@@ -65,17 +71,9 @@ importers:
     specifiers:
       copy-to-clipboard: ^3.3.1
       lodash-es: ^4.17.21
-      valtio: ^1.7.6
     dependencies:
       copy-to-clipboard: 3.3.1
       lodash-es: 4.17.21
-      valtio: 1.7.6
-
-  packages/syosetu:
-    specifiers:
-      shared: workspace:*
-    devDependencies:
-      shared: link:../shared
 
 packages:
   /@babel/code-frame/7.18.6:
@@ -4373,13 +4371,6 @@ packages:
       prettier: 2.7.1
     dev: true
 
-  /proxy-compare/2.3.0:
-    resolution:
-      {
-        integrity: sha512-c3L2CcAi7f7pvlD0D7xsF+2CQIW8C3HaYx2Pfgq8eA4HAl3GAH6/dVYsyBbYF/0XJs2ziGLrzmz5fmzPm6A0pQ==,
-      }
-    dev: false
-
   /pseudomap/1.0.2:
     resolution:
       {
@@ -5229,15 +5220,6 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /use-sync-external-store/1.2.0:
-    resolution:
-      {
-        integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dev: false
-
   /util-deprecate/1.0.2:
     resolution:
       {
@@ -5254,37 +5236,6 @@ packages:
       spdx-correct: 3.1.1
       spdx-expression-parse: 3.0.1
     dev: true
-
-  /valtio/1.7.6:
-    resolution:
-      {
-        integrity: sha512-zsGrCCYOIpy8egQxftduFyJusF/BMu3CganhHKUOE/I6t6V6yA1MDfZZkrYoWYCGkC3rSBYcIHEEsoYQM9lV2w==,
-      }
-    engines: { node: '>=12.7.0' }
-    peerDependencies:
-      '@babel/helper-module-imports': '>=7.12'
-      '@babel/types': '>=7.13'
-      aslemammad-vite-plugin-macro: '>=1.0.0-alpha.1'
-      babel-plugin-macros: '>=3.0'
-      react: '>=16.8'
-      vite: '>=2.8.6'
-    peerDependenciesMeta:
-      '@babel/helper-module-imports':
-        optional: true
-      '@babel/types':
-        optional: true
-      aslemammad-vite-plugin-macro:
-        optional: true
-      babel-plugin-macros:
-        optional: true
-      react:
-        optional: true
-      vite:
-        optional: true
-    dependencies:
-      proxy-compare: 2.3.0
-      use-sync-external-store: 1.2.0
-    dev: false
 
   /wcwidth/1.0.1:
     resolution:

@@ -3,9 +3,8 @@ import { globbySync } from 'globby'
 import { execSync } from 'child_process'
 import path from 'path'
 
-const files = globbySync('packages/*/dist/index.user.js')
-
 execSync('pnpm -r build', { stdio: 'inherit' })
+const files = globbySync('packages/*/dist/index.user.js')
 
 fs.ensureDirSync('dist')
 

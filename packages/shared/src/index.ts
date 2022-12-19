@@ -1,12 +1,10 @@
 export { default as debounce } from 'lodash-es/debounce'
 export { default as throttle } from 'lodash-es/throttle'
-export * from 'valtio/vanilla'
 
 export { Cookie } from './utils/cookie'
 export { copy } from './utils/copy'
 export * from './utils/sleep'
 export * from './utils/wait'
-export { request } from './utils/request'
 export * from './utils/storage'
 export { gm } from './utils/gm'
 export * from './utils/is'

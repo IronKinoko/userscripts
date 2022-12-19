@@ -5,11 +5,11 @@
 // @license      MIT
 // @description  #description#
 // @author       IronKinoko
-// @match        
-// @icon         https://www.google.com/s2/favicons?domain=
+// @match        https://www.esjzone.cc/*
+// @icon         https://www.google.com/s2/favicons?domain=esjzone.cc
 // @grant        none
 // @noframes
-// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.js
+// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/esjzone.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/esjzone.user.js
 // ==/UserScript==
