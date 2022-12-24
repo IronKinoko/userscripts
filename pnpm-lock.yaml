@@ -4,6 +4,7 @@ importers:
   .:
     specifiers:
       '@changesets/cli': ^2.25.2
+      '@types/crypto-js': ^4.1.1
       '@types/fs-extra': ^9.0.13
       '@types/inquirer': ^9.0.3
       '@types/jquery': ^3.5.14
@@ -21,6 +22,7 @@ importers:
       typescript: ^4.9.3
     devDependencies:
       '@changesets/cli': 2.25.2
+      '@types/crypto-js': 4.1.1
       '@types/fs-extra': 9.0.13
       '@types/inquirer': 9.0.3
       '@types/jquery': 3.5.14
@@ -39,7 +41,10 @@ importers:
 
   packages/copymanga:
     specifiers:
+      crypto-js: ^4.1.1
       shared: workspace:*
+    dependencies:
+      crypto-js: 4.1.1
     devDependencies:
       shared: link:../shared
 
@@ -573,6 +578,13 @@ packages:
         integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==,
       }
     engines: { node: '>=10.13.0' }
+    dev: true
+
+  /@types/crypto-js/4.1.1:
+    resolution:
+      {
+        integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==,
+      }
     dev: true
 
   /@types/estree/1.0.0:
@@ -1288,6 +1300,13 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto-js/4.1.1:
+    resolution:
+      {
+        integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==,
+      }
+    dev: false
 
   /css-declaration-sorter/6.3.1_postcss@8.4.14:
     resolution:
