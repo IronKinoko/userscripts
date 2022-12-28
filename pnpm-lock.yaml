@@ -9,7 +9,7 @@ importers:
       '@types/inquirer': ^9.0.3
       '@types/jquery': ^3.5.14
       '@types/lodash-es': ^4.17.6
-      bochi: ^1.1.1
+      bocchi: ^1.1.1
       chalk: ^5.1.2
       esbuild: ^0.15.15
       esno: ^0.16.3
@@ -27,7 +27,7 @@ importers:
       '@types/inquirer': 9.0.3
       '@types/jquery': 3.5.14
       '@types/lodash-es': 4.17.6
-      bochi: 1.1.1
+      bocchi: 1.1.1
       chalk: 5.1.2
       esbuild: 0.15.15
       esno: 0.16.3
@@ -896,10 +896,10 @@ packages:
       readable-stream: 3.6.0
     dev: true
 
-  /bochi/1.1.1:
+  /bocchi/1.1.1:
     resolution:
       {
-        integrity: sha512-FmJDsOpYjDf+FoQBDfidZcc5q0b1ndLllFG5oOAwAS39NfWvsQPmCOwT0F25tq9N+r3PecHYLKMr7gw/TPfJHw==,
+        integrity: sha512-DRGh4lBqWrkp7VKdVjfAfUtzl6lBGm45mQwP0BJ4JyUpMq89M5hTtS6hzrzuufcNUdJR6JlEoCNJiWDZTBdrtg==,
       }
     hasBin: true
     dependencies:

@@ -4,8 +4,8 @@
   "description": "enhance manhuagui",
   "main": "index.js",
   "scripts": {
-    "dev": "bochi dev",
-    "build": "bochi build"
+    "dev": "bocchi dev",
+    "build": "bocchi build"
   },
   "repository": {
     "type": "git",

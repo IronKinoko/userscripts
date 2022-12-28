@@ -4,8 +4,8 @@
   "description": "Exhentai infinite scroll scripts.",
   "main": "index.user.js",
   "scripts": {
-    "dev": "bochi dev",
-    "build": "bochi build"
+    "dev": "bocchi dev",
+    "build": "bocchi build"
   },
   "repository": {
     "type": "git",

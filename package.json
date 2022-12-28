@@ -27,7 +27,7 @@
     "@types/inquirer": "^9.0.3",
     "@types/jquery": "^3.5.14",
     "@types/lodash-es": "^4.17.6",
-    "bochi": "^1.1.1",
+    "bocchi": "^1.1.1",
     "chalk": "^5.1.2",
     "esbuild": "^0.15.15",
     "esno": "^0.16.3",
