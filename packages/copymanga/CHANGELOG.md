@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.3
+
+### Patch Changes
+
+- e6c36d6: fix: remove grant
+
 ## 1.4.2
 
 ### Patch Changes
