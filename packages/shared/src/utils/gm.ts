@@ -5,10 +5,11 @@ export interface Opts {
   method?: 'GET' | 'POST'
   params?: any
   responseType?: 'text' | 'steam' | 'arraybuffer' | 'blob' | 'json'
+  headers?: any
 }
 
 export function request(opts: Opts) {
-  let { url, method = 'GET', params, responseType = 'json' } = opts
+  let { url, method = 'GET', params, responseType = 'json', ...rest } = opts
 
   if (params) {
     let u = new URL(url)
@@ -26,6 +27,7 @@ export function request(opts: Opts) {
       url,
       method,
       responseType,
+      ...rest,
       onload: (res: any) => {
         console.log(res)
         resolve(res)

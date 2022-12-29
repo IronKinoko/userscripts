@@ -20,11 +20,5 @@
   "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/copymanga#readme",
   "devDependencies": {
     "shared": "workspace:*"
-  },
-  "dependencies": {
-    "crypto-js": "^4.1.1"
-  },
-  "globals": {
-    "crypto-js": "CryptoJS"
   }
 }

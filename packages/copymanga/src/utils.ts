@@ -20,39 +20,23 @@ function h5URLToPC(href: string) {
   const match = url.pathname.match(re)
   if (match) {
     const { name, episode } = match.groups!
-    url.pathname = `/comic/${name}/chapter/${episode}`
-    return url.toString()
+    return `https://www.zhidianbao.cn:8443/qs_xq_proxy/api/copymanga/comic/${name}/chapter/${episode}`
   }
   return null
 }
 
 export async function getFullImages() {
-  const { responseText } = await gm.request({
-    url: h5URLToPC(window.location.href)!,
-    method: 'GET',
-    responseType: 'text',
-  })
-  const $root = $(responseText)
-  const imageData = $root.filter('.imageData').attr('contentkey')!
-  const jojo = responseText.match(/var jojo = '(.*?)'/)[1]
-  const data = parseImageData(imageData, jojo)
-  return data
-}
+  const url = h5URLToPC(window.location.href)
 
-function parseImageData(imageData: string, jojo: string) {
-  const key = imageData.slice(0, 0x10)
-  const content = imageData.slice(0x10)
+  if (!url) throw new Error('请在移动端运行')
 
-  const wordArray1 = crypto.enc.Utf8.parse(jojo)
-  const wordArray2 = crypto.enc.Utf8.parse(key)
-
-  let nextContent = crypto.enc.Base64.stringify(crypto.enc.Hex.parse(content))
-
-  const raw = crypto.AES.decrypt(nextContent, wordArray1, {
-    iv: wordArray2,
-    mode: crypto.mode.CBC,
-    padding: crypto.pad.Pkcs7,
-  }).toString(crypto.enc.Utf8)
-
-  return JSON.parse(raw) as { url: string }[]
+  try {
+    const data = await fetch(url).then((r) => r.json())
+    if (!data.ok) throw new Error(data.message)
+    return data.manga as { url: string }[]
+  } catch (error: any) {
+    console.error(error)
+    alert(`接口调用失败 ${error.message}`)
+    return []
+  }
 }
