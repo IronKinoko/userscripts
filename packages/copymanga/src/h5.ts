@@ -1,4 +1,4 @@
-import { addErrorListener, getFullImages } from './utils'
+import { getFullImages } from './utils'
 import { sleep, throttle, waitDOM } from 'shared'
 
 async function openControl() {
@@ -46,7 +46,6 @@ async function runH5main() {
     }
     await openControl()
     await injectImageData()
-    injectFixImg()
 
     const main = ulDom.parentElement!
     main.style.position = 'unset'
@@ -164,7 +163,7 @@ async function injectImageData() {
   data.forEach(({ url }, idx) => {
     html += `
     <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
-      <img src="${url}" />
+      <img-lazy src="${url}" />
     </li>
     `
   })
@@ -174,41 +173,6 @@ async function injectImageData() {
 
   $('.comicContentPopupImageList').prepend(html)
   currentPage()
-}
-
-async function injectFixImg() {
-  const listDOM = await waitDOM('.comicContentPopupImageList')
-
-  async function injectEvent() {
-    const imgs = document.querySelectorAll<HTMLImageElement>('ul li img')
-    imgs.forEach(addErrorListener)
-  }
-
-  const ob = new MutationObserver(injectEvent)
-  ob.observe(listDOM, { childList: true, subtree: true })
-  injectEvent()
-}
-
-async function injectFastLoadImg() {
-  const $list = await waitDOM('.comicContentPopupImageList')
-
-  function fastLoad() {
-    const $imgs = document.querySelectorAll<HTMLImageElement>('ul li img')
-
-    $imgs.forEach(($img) => {
-      if ($img.dataset.fastLoad === $img.dataset.src) return
-      $img.dataset.fastLoad = $img.dataset.src
-      $img.src = $img.dataset.src!
-    })
-  }
-
-  const ob = new MutationObserver(fastLoad)
-  ob.observe($list, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['data-src'],
-  })
 }
 
 export default function () {

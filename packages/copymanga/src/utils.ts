@@ -1,6 +1,3 @@
-import crypto from 'crypto-js'
-import { gm } from 'shared'
-
 export function addErrorListener(img: HTMLImageElement) {
   if (img.dataset.errorFix === 'true') return
   img.dataset.errorFix = 'true'
