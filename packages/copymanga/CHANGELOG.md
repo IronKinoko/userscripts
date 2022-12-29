@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.0
+
+### Minor Changes
+
+- 64eed56: feat: suppport ios
+
 ## 1.3.0
 
 ### Minor Changes
