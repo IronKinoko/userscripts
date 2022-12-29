@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.1
+
+### Patch Changes
+
+- 1df8290: fix: request error
+
 ## 1.4.0
 
 ### Minor Changes
