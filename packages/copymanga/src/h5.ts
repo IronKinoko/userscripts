@@ -173,6 +173,7 @@ async function injectImageData() {
   $('.comicContentPopupImageItem').remove()
 
   $('.comicContentPopupImageList').prepend(html)
+  currentPage()
 }
 
 async function injectFixImg() {

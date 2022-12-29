@@ -8,7 +8,7 @@
 // @match        https://www.copymanga.org/*
 // @match        https://www.copymanga.site/*
 // @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
-// @grant        GM_xmlhttpRequest
+// @grant        none
 // @noframes
 // @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/copymanga.user.js
