@@ -25,4 +25,17 @@
       transform: translateX(100%);
     }
   }
+
+  .comicContentPopup .comicContentPopupImageList {
+    .comicContentPopupImageItem img {
+      display: block;
+      float: none;
+    }
+    > li[style] {
+      [role='alert'],
+      [role='alert'] + button {
+        display: none;
+      }
+    }
+  }
 }

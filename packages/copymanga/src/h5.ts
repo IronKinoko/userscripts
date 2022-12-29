@@ -1,4 +1,4 @@
-import { addErrorListener } from './utils'
+import { addErrorListener, getFullImages } from './utils'
 import { sleep, throttle, waitDOM } from 'shared'
 
 async function openControl() {
@@ -16,14 +16,14 @@ async function currentPage() {
   try {
     if (!/h5\/comicContent\/.*/.test(location.href)) return
     const scrollHeight = document.scrollingElement!.scrollTop
-    const list = await waitHasComicContent()
+    const list = document.querySelectorAll('li.comicContentPopupImageItem')
     let height = 0
     for (let i = 0; i < list.length; i++) {
       const item = list[i]
       height += item.getBoundingClientRect().height
       if (height > scrollHeight) {
         const dom = document.querySelector('.comicContentPopup .comicFixed')!
-        dom.textContent = dom.textContent!.replace(/(.*)\//, `${i + 1}/`)
+        dom.textContent = `${i + 1}/${list.length}`
         break
       }
     }
@@ -44,9 +44,9 @@ async function runH5main() {
     if (domUUID !== uuid) {
       ulDom.dataset.uuid = uuid
     }
-
+    await openControl()
+    await injectImageData()
     injectFixImg()
-    injectFastLoadImg()
 
     const main = ulDom.parentElement!
     main.style.position = 'unset'
@@ -100,6 +100,7 @@ async function createNextPartDom() {
     fixedNextBtn.textContent = '下一话'
     document.body.appendChild(fixedNextBtn)
 
+    let prevPosition = 0
     window.addEventListener(
       'scroll',
       throttle(() => {
@@ -109,14 +110,17 @@ async function createNextPartDom() {
         }
 
         const dom = document.scrollingElement!
+
         if (
           dom.scrollTop < 50 ||
-          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800
+          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800 ||
+          dom.scrollTop < prevPosition
         ) {
           fixedNextBtn?.classList.remove('hide')
         } else {
           fixedNextBtn?.classList.add('hide')
         }
+        prevPosition = dom.scrollTop
       }, 100)
     )
   }
@@ -128,10 +132,6 @@ async function createNextPartDom() {
 function getComicId() {
   const [, uuid] = location.href.match(/h5\/comicContent\/.*\/(.*)/)!
   return uuid
-}
-
-async function waitHasComicContent() {
-  return document.querySelectorAll('.comicContentPopupImageItem')
 }
 
 async function addH5HistoryListener() {
@@ -155,6 +155,24 @@ const _historyWrap = function (type: 'pushState' | 'replaceState') {
     window.dispatchEvent(e)
     return rv
   }
+}
+
+async function injectImageData() {
+  const data = await getFullImages()
+
+  let html = ''
+  data.forEach(({ url }, idx) => {
+    html += `
+    <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
+      <img src="${url}" />
+    </li>
+    `
+  })
+
+  await waitDOM('.comicContentPopupImageList .comicContentPopupImageItem')
+  $('.comicContentPopupImageItem').remove()
+
+  $('.comicContentPopupImageList').prepend(html)
 }
 
 async function injectFixImg() {

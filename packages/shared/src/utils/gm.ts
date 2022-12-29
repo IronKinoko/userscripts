@@ -4,6 +4,7 @@ export interface Opts {
   url: string
   method?: 'GET' | 'POST'
   params?: any
+  responseType?: 'text' | 'steam' | 'arraybuffer' | 'blob'
 }
 
 export function request(opts: Opts) {
@@ -26,7 +27,10 @@ export function request(opts: Opts) {
       method: method || 'GET',
       responseType: 'json',
       onload: (res: any) => {
-        resolve(res.response)
+        if (process.env.NODE_ENV === 'development') {
+          console.log(res)
+        }
+        resolve(res)
       },
       onerror: reject,
     })

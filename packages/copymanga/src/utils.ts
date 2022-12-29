@@ -1,4 +1,5 @@
 import crypto from 'crypto-js'
+import { gm } from 'shared'
 
 export function addErrorListener(img: HTMLImageElement) {
   if (img.dataset.errorFix === 'true') return
@@ -13,29 +14,29 @@ export function addErrorListener(img: HTMLImageElement) {
   }
 }
 
-export function getFullImages() {
-  return new Promise((resolve, reject) => {
-    const iframe = document.createElement('iframe')
+function h5URLToPC(href: string) {
+  const url = new URL(href)
+  const re = /\/h5\/comicContent\/(?<name>.*?)\/(?<episode>.*)/
+  const match = url.pathname.match(re)
+  if (match) {
+    const { name, episode } = match.groups!
+    url.pathname = `/comic/${name}/chapter/${episode}`
+    return url.toString()
+  }
+  return null
+}
 
-    iframe.src = window.location.href.replace('/h5/', '/')
-    iframe.style.display = 'none'
-    document.body.appendChild(iframe)
-
-    function load() {
-      const document = iframe.contentDocument!
-
-      const imageData = document
-        .querySelector('.imageData')!
-        .getAttribute('contentkey')!
-
-      const jojo = iframe.contentWindow!.jojo
-      resolve(parseImageData(imageData, jojo))
-
-      iframe.remove()
-    }
-    iframe.contentWindow!.addEventListener('DOMContentLoaded', load)
-    iframe.contentWindow!.addEventListener('load', load)
+export async function getFullImages() {
+  const { responseText } = await gm.request({
+    url: h5URLToPC(window.location.href)!,
+    method: 'GET',
+    responseType: 'text',
   })
+  const $root = $(responseText)
+  const imageData = $root.filter('.imageData').attr('contentkey')!
+  const jojo = responseText.match(/var jojo = '(.*?)'/)[1]
+  const data = parseImageData(imageData, jojo)
+  return data
 }
 
 function parseImageData(imageData: string, jojo: string) {
@@ -53,5 +54,5 @@ function parseImageData(imageData: string, jojo: string) {
     padding: crypto.pad.Pkcs7,
   }).toString(crypto.enc.Utf8)
 
-  return JSON.parse(raw)
+  return JSON.parse(raw) as { url: string }[]
 }
