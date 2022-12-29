@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.4
+
+### Patch Changes
+
+- 7a6dfe1: feat: lazy-load
+
 ## 1.4.3
 
 ### Patch Changes
