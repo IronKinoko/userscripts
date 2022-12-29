@@ -41,10 +41,7 @@ importers:
 
   packages/copymanga:
     specifiers:
-      crypto-js: ^4.1.1
       shared: workspace:*
-    dependencies:
-      crypto-js: 4.1.1
     devDependencies:
       shared: link:../shared
 
@@ -1300,13 +1297,6 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
-
-  /crypto-js/4.1.1:
-    resolution:
-      {
-        integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==,
-      }
-    dev: false
 
   /css-declaration-sorter/6.3.1_postcss@8.4.14:
     resolution:

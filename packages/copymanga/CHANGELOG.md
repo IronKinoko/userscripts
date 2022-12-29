@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.2
+
+### Patch Changes
+
+- aad685c: fix: use proxy server
+
 ## 1.4.1
 
 ### Patch Changes
