@@ -4,11 +4,11 @@ export interface Opts {
   url: string
   method?: 'GET' | 'POST'
   params?: any
-  responseType?: 'text' | 'steam' | 'arraybuffer' | 'blob'
+  responseType?: 'text' | 'steam' | 'arraybuffer' | 'blob' | 'json'
 }
 
 export function request(opts: Opts) {
-  let { url, method, params } = opts
+  let { url, method = 'GET', params, responseType = 'json' } = opts
 
   if (params) {
     let u = new URL(url)
@@ -24,12 +24,10 @@ export function request(opts: Opts) {
   return new Promise<any>((resolve, reject) => {
     GM_xmlhttpRequest({
       url,
-      method: method || 'GET',
-      responseType: 'json',
+      method,
+      responseType,
       onload: (res: any) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(res)
-        }
+        console.log(res)
         resolve(res)
       },
       onerror: reject,
