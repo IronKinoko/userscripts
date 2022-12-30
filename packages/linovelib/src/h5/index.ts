@@ -1,30 +1,13 @@
 import { isMobile, keybind, router } from 'shared'
 
 export default async function main() {
-  router([
-    { pathname: /novel\/\d+\.html/, run: injectDownload },
-    { pathname: /novel\/\d+\/catalog/, run: injectDownloadSection },
-  ])
+  router([{ pathname: /novel\/\d+\/catalog/, run: injectDownloadSection }])
 
   if (!window.ReadTools) return
   resetPageEvent()
 
   if (isMobile()) injectMovePageEvent()
   else injectShortcuts()
-}
-
-function injectDownload() {
-  const bookId = window.location.pathname.match(/\d+/)![0]
-
-  const dom = document.querySelector('.book-detail-btn .btn-group')
-  console.log(dom)
-  const a = document.createElement('a')
-  dom?.append(a)
-  a.outerHTML = `
-  <li class="btn-group-cell">
-    <a class="btn-normal white" href="https://www.zhidianbao.cn:8443/qs_xq_epub?bookId=${bookId}" target="_blank">Epub下载</a>
-  </li>
-  `
 }
 
 export interface SyncProgressEvent {
