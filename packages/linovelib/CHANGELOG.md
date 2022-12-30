@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.4.1
+
+### Patch Changes
+
+- 143b321: fix: remove epub download button in main page
+
 ## 1.4.0
 
 ### Minor Changes
