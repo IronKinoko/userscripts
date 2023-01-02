@@ -4,6 +4,7 @@
   "description": "personal userscripts",
   "type": "module",
   "scripts": {
+    "log": "pnpm changeset",
     "bootstrap": "esno scripts/bootstrap",
     "build": "esno scripts/build.ts",
     "release": "pnpm changeset version && pnpm i && git add . -A && git commit -m \"chore: release\" && pnpm changeset tag && git push && git push --tags",

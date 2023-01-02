@@ -17,7 +17,6 @@ export default function setup() {
         this.img.onerror = () => {
           const url = new URL(this.img.src)
           let v = parseInt(url.searchParams.get('v')!) || 0
-          if (v > 5) return (this.img.onerror = null)
           url.searchParams.set('v', ++v + '')
           this.img.src = url.toString()
           this.img.alt = '图片加载出错'
