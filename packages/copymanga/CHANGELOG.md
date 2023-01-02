@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.6
+
+### Patch Changes
+
+- 2d393e1: chore: loop load error image
+
 ## 1.4.5
 
 ### Patch Changes
