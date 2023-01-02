@@ -25,16 +25,13 @@ export default function setup() {
 
         this.ob = new IntersectionObserver(
           ([e]) => {
-            if (e.intersectionRatio !== 1) return
+            if (!e.isIntersecting) return
             const src = this.getAttribute('src')
             if (!src) return
             this.img.src = src
             this.ob.unobserve(this)
           },
-          {
-            rootMargin: '0px 0px 2000px 0px',
-            threshold: 1,
-          }
+          { rootMargin: '2000px 0px', threshold: 1 }
         )
 
         const style = document.createElement('style')
@@ -57,8 +54,13 @@ export default function setup() {
         this.ob.disconnect()
       }
 
+      static get observedAttributes() {
+        return ['src']
+      }
+
       attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         if (attrName === 'src') {
+          this.ob.unobserve(this)
           this.ob.observe(this)
         }
       }
