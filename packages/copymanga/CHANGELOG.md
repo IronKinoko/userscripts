@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.8
+
+### Patch Changes
+
+- 34795dd: fix: ios img alt display error
+
 ## 1.4.7
 
 ### Patch Changes
