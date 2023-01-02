@@ -17,9 +17,10 @@ export default function setup() {
         this.img.onerror = () => {
           const url = new URL(this.img.src)
           let v = parseInt(url.searchParams.get('v')!) || 0
-          url.searchParams.set('v', ++v + '')
+          v++
+          url.searchParams.set('v', v + '')
           this.img.src = url.toString()
-          this.img.alt = '图片加载出错'
+          this.img.alt = `图片加载出错 [${v}] ${url}`
         }
 
         this.ob = new IntersectionObserver(
