@@ -20,7 +20,7 @@ export default function setup() {
           v++
           url.searchParams.set('v', v + '')
           this.img.src = url.toString()
-          this.img.alt = `图片加载出错 [${v}] ${url}`
+          this.img.alt = `图片加载出错 [${v}]`
         }
 
         this.ob = new IntersectionObserver(
