@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.5
+
+### Patch Changes
+
+- d3d5c24: chore: refactor api
+
 ## 1.4.4
 
 ### Patch Changes
