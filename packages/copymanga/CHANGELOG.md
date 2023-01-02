@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.7
+
+### Patch Changes
+
+- 69bfdd3: feat: show more info when image load error
+
 ## 1.4.6
 
 ### Patch Changes
