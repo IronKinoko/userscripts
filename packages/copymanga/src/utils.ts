@@ -13,11 +13,11 @@ export function addErrorListener(img: HTMLImageElement) {
 
 function h5URLToPC(href: string) {
   const url = new URL(href)
-  const re = /\/h5\/comicContent\/(?<name>.*?)\/(?<episode>.*)/
+  const re = /\/h5\/comicContent\/(?<comicId>.*?)\/(?<chapterId>.*)/
   const match = url.pathname.match(re)
   if (match) {
-    const { name, episode } = match.groups!
-    return `https://www.zhidianbao.cn:8443/qs_xq_proxy/api/copymanga/comic/${name}/chapter/${episode}`
+    const { comicId, chapterId } = match.groups!
+    return `https://userscripts-proxy.vercel.app/api/copymanga/comic/${comicId}/chapter/${chapterId}`
   }
   return null
 }
