@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.9
+
+### Patch Changes
+
+- 800af43: feat: enhance scroll logic
+
 ## 1.4.8
 
 ### Patch Changes
