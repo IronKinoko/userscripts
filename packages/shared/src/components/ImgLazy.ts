@@ -31,7 +31,7 @@ export default function setup() {
             this.img.src = src
             this.ob.unobserve(this)
           },
-          { rootMargin: '2000px 0px', threshold: 1 }
+          { rootMargin: '2000px 0px' }
         )
 
         const style = document.createElement('style')
