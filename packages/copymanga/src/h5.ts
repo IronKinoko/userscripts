@@ -99,7 +99,8 @@ async function createNextPartDom() {
     fixedNextBtn.textContent = '下一话'
     document.body.appendChild(fixedNextBtn)
 
-    let prevPosition = 0
+    let prevY = 0
+    let storeY = 0
     window.addEventListener(
       'scroll',
       throttle(() => {
@@ -110,16 +111,22 @@ async function createNextPartDom() {
 
         const dom = document.scrollingElement!
 
+        const currentY = dom.scrollTop
+        let diffY = currentY - storeY
         if (
-          dom.scrollTop < 50 ||
-          dom.scrollTop + dom.clientHeight > dom.scrollHeight - 800 ||
-          dom.scrollTop < prevPosition
+          currentY < 50 ||
+          currentY + dom.clientHeight > dom.scrollHeight - 800 ||
+          diffY < -30
         ) {
           fixedNextBtn?.classList.remove('hide')
         } else {
           fixedNextBtn?.classList.add('hide')
         }
-        prevPosition = dom.scrollTop
+
+        if (currentY > prevY) {
+          storeY = currentY
+        }
+        prevY = currentY
       }, 100)
     )
   }
