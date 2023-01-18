@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.10
+
+### Patch Changes
+
+- 8f0bf6a: feat: support controls
+
 ## 1.4.9
 
 ### Patch Changes
