@@ -176,9 +176,23 @@ async function injectImageData() {
   })
 
   await waitDOM('.comicContentPopupImageList .comicContentPopupImageItem')
-  $('.comicContentPopupImageItem').remove()
-
+  $('.comicContentPopupImageItem').attr('class', 'k-open-control-item').hide()
+  $('[data-k]').remove()
   $('.comicContentPopupImageList').prepend(html)
+  $('.comicContentPopupImageItem').on('click', (e) => {
+    const { innerWidth, innerHeight } = window
+    const x = e.clientX
+    const y = e.clientY
+    if (
+      innerWidth / 3 < x &&
+      x < (innerWidth / 3) * 2 &&
+      innerHeight / 3 < y &&
+      y < (innerHeight / 3) * 2
+    ) {
+      const li = $('.k-open-control-item').get(0)
+      li?.dispatchEvent(fakeClickEvent())
+    }
+  })
   currentPage()
 }
 
