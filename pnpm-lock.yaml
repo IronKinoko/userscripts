@@ -77,6 +77,12 @@ importers:
       copy-to-clipboard: 3.3.1
       lodash-es: 4.17.21
 
+  packages/zelda-map:
+    specifiers:
+      shared: workspace:*
+    devDependencies:
+      shared: link:../shared
+
 packages:
   /@babel/code-frame/7.18.6:
     resolution:
