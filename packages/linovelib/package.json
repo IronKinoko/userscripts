@@ -1,6 +1,6 @@
 {
   "name": "linovelib",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "优化 linovelib 阅读体验",
   "main": "index.js",
   "scripts": {

@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.4.2
+
+### Patch Changes
+
+- b3ceb34: fix: remove @require jquery
+
 ## 1.4.1
 
 ### Patch Changes
