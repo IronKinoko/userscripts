@@ -57,6 +57,12 @@ importers:
     devDependencies:
       shared: link:../shared
 
+  packages/kakuyomu-translate:
+    specifiers:
+      shared: workspace:*
+    devDependencies:
+      shared: link:../shared
+
   packages/linovelib:
     specifiers:
       shared: workspace:*

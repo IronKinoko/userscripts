@@ -1,0 +1,5 @@
+---
+'kakuyomu-translate': major
+---
+
+init
