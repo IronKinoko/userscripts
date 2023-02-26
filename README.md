@@ -11,6 +11,7 @@
 | [manhuagui](/packages/manhuagui)                                 | 增强漫画柜观看体验                                                                       | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/manhuagui.user.js) \| [greasyfork](https://greasyfork.org/scripts/451739)                |
 | [linovelib](/packages/linovelib)                                 | 增强哔哩轻小说观看体验                                                                   | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/linovelib.user.js) \| [greasyfork](https://greasyfork.org/scripts/451738)                |
 | [esjzone](/packages/esjzone)                                     | 增加 esjzone 阅读体验                                                                    | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/esjzone.user.js)                                                                         |
+| [kakuyomu-translate](/packages/kakuyomu-translate)               | 增加 kakuyomu 阅读体验                                                                   | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/kakuyomu-translate.user.js)                                                              |
 
 ## iOS & Mac safari install
 
