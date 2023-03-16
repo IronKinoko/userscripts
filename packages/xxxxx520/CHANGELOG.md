@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.0.2
+
+### Patch Changes
+
+- 6bb9bb5: feat: skip notice
+
 ## 1.0.1
 
 ### Patch Changes
