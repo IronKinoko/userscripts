@@ -1,7 +1,6 @@
-function set(name: string, value: string | number, _in_days = 1) {
-  var Days = _in_days
+function set(name: string, value: string | number, days = 1) {
   var exp = new Date()
-  exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
+  exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000)
   document.cookie =
     name +
     '=' +
