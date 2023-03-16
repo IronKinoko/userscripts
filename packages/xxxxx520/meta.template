@@ -1,0 +1,15 @@
+// ==UserScript==
+// @name         xxxxx520
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/xxxxx520
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://xxxxx520.com/*
+// @match        https://fourpetal.com/*
+// @icon         https://www.google.com/s2/favicons?domain=
+// @grant        none
+// @noframes
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js
+// ==/UserScript==

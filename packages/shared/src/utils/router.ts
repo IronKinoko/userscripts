@@ -11,12 +11,15 @@ function matcher(source: string, regexp: MatcherInput) {
   if (typeof regexp === 'string') return source.includes(regexp)
   return !!source.match(regexp)
 }
-export interface RouterOptions {
-  domain?: MatcherInput
+export type RouterOptions = {
+  domain: MatcherInput
   routes: Route | Route[] | (() => void)
 }
+export function router(config: RouterOptions): void
+export function router(config: Route | Route[]): void
 export function router(config: RouterOptions | Route | Route[]) {
   const opts: RouterOptions = {
+    domain: '',
     routes: [],
   }
 
