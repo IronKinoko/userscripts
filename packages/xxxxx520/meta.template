@@ -7,7 +7,7 @@
 // @author       IronKinoko
 // @match        https://xxxxx520.com/*
 // @match        https://fourpetal.com/*
-// @icon         https://www.google.com/s2/favicons?domain=
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=xxxxx520.com
 // @grant        none
 // @noframes
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js
