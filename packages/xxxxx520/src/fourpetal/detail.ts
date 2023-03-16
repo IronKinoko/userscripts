@@ -1,4 +1,5 @@
 export function detail() {
+  moveDownloadToTop()
   enhanceDownload()
 }
 
@@ -7,4 +8,11 @@ function enhanceDownload() {
   if (!downBtn) return
   downBtn.href = `https://fourpetal.com/go/?post_id=${downBtn.dataset.id}`
   downBtn.addEventListener('click', (e) => e.stopPropagation(), true)
+}
+
+function moveDownloadToTop() {
+  const $area = $('.sidebar-right .sidebar-column .widget-area')
+  const $down = $('#cao_widget_pay-4')
+
+  $area.prepend($down)
 }
