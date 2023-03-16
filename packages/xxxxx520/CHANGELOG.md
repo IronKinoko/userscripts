@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.0.3
+
+### Patch Changes
+
+- a704eec: feat: add favicon
+
 ## 1.0.2
 
 ### Patch Changes
