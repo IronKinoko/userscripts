@@ -6,7 +6,7 @@
 // @description  #description#
 // @author       IronKinoko
 // @match        https://kakuyomu.jp/*
-// @icon         https://www.google.com/s2/favicons?domain=
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=kakuyomu.jp
 // @grant        none
 // @noframes
 // @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js

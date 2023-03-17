@@ -6,6 +6,11 @@ type Payload =
   | { type: 'jump'; href: string }
 
 export default async function main() {
+  autoScrollIntoView()
+  broadcastHoverText()
+}
+
+function broadcastHoverText() {
   let channel = new BroadcastChannel('kakuyomu-translate')
 
   $('.widget-episodeBody')
@@ -49,4 +54,22 @@ async function handleMessage(channel: BroadcastChannel) {
       window.location.href = data.href
     }
   })
+}
+
+async function autoScrollIntoView() {
+  const asideEl = await waitDOM('#contentAside')
+
+  const detect = () => {
+    const activeEpisodeEl = asideEl.querySelector<HTMLDivElement>(
+      '.widget-toc-main .widget-toc-items .widget-toc-episode.isHighlighted'
+    )
+
+    if (!activeEpisodeEl) return
+
+    activeEpisodeEl.scrollIntoView({ block: 'center' })
+    ob.disconnect()
+  }
+
+  const ob = new MutationObserver(detect)
+  ob.observe(asideEl, { childList: true })
 }
