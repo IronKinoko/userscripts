@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.0.4
+
+### Patch Changes
+
+- 254bd47: feat: support new domain
+
 ## 1.0.3
 
 ### Patch Changes
