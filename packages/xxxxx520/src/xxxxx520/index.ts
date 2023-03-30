@@ -2,7 +2,11 @@ import { Cookie, router } from 'shared'
 import { detail } from './detail'
 
 function skipModal() {
-  Cookie.set('cao_notice_cookie', 1, 365)
+  Cookie.set({
+    name: 'cao_notice_cookie',
+    value: '1',
+    maxAge: 24 * 60 * 60 * 999,
+  })
 }
 
 router({

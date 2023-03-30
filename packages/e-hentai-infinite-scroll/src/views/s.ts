@@ -36,11 +36,12 @@ function setupInfiniteScroll() {
       xhr.open('POST', window.api_url)
       xhr.setRequestHeader('Content-Type', 'application/json')
       xhr.withCredentials = true
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === xhr.DONE) {
-          resolve(JSON.parse(xhr.responseText))
-        }
-      }
+      xhr.addEventListener('loadend', () => {
+        if (200 <= xhr.status && xhr.status <= 300)
+          resolve(JSON.parse(xhr.response))
+        else reject(xhr.response)
+      })
+
       xhr.send(
         JSON.stringify({
           method: 'showpage',
