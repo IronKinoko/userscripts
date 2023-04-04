@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.0
+
+### Minor Changes
+
+- a40342f: feat: add cookie check
+
 ## 1.2.0
 
 ### Minor Changes

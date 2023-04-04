@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.0
+
+### Minor Changes
+
+- 7d0cd5e: feat: auto complete baiducloud link
+
 ## 1.0.4
 
 ### Patch Changes
