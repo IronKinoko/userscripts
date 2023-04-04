@@ -199,16 +199,34 @@ const updateCurrentInfo = debounce(function () {
 }, 30)
 
 function setupBottomInfo() {
-  $(`<div class="ehis-gallery-info">
-    <span>
-      <span id="ehis-current"></span>
-      <span>/</span>
-      <span id="ehis-total"></span>
-    </span>
-    <span>Search</span>
-    <span>Reload</span>
-    <span>Download</span>
-  </div>`).appendTo('body')
+  const $root = document.querySelector('#i1')!
+
+  const $wrapper = document.createElement('div')
+  $wrapper.className = 'ehis-bottom-info-wrapper'
+  $root.insertBefore($wrapper, document.querySelector('#i4'))
+
+  const $container = document.createElement('div')
+  $container.className = 'ehis-bottom-info-container'
+  $container.style.background = getComputedStyle($root).background
+  $wrapper.append($container)
+
+  $container.append(...document.querySelectorAll('#i4,#i5,#i6,#i7'))
+
+  const calcSticky = () => {
+    const dom = document.scrollingElement!
+
+    if (isLoadEnd) {
+      if (dom.scrollHeight <= dom.scrollTop + dom.clientHeight + 200) {
+        $wrapper.classList.add('static')
+      } else {
+        $wrapper.classList.remove('static')
+      }
+    }
+  }
+  calcSticky()
+  document.addEventListener('scroll', () => {
+    calcSticky()
+  })
 }
 
 export function setup() {
