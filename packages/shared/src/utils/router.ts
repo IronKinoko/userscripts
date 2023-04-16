@@ -12,7 +12,7 @@ function matcher(source: string, regexp: MatcherInput) {
   return !!source.match(regexp)
 }
 export type RouterOptions = {
-  domain: MatcherInput
+  domain: MatcherInput | MatcherInput[]
   routes: Route | Route[] | (() => void)
 }
 export function router(config: RouterOptions): void
@@ -31,7 +31,10 @@ export function router(config: RouterOptions | Route | Route[]) {
   }
 
   if (opts.domain) {
-    const match = matcher(window.location.origin, opts.domain)
+    const domains = Array.isArray(opts.domain) ? opts.domain : [opts.domain]
+    const match = domains.some((domain) =>
+      matcher(window.location.origin, domain)
+    )
     if (!match) return
   }
 
