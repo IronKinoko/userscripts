@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.1
+
+### Patch Changes
+
+- a40572c: feat: support new domain
+
 ## 1.1.0
 
 ### Minor Changes
