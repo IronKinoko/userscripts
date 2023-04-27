@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.2
+
+### Patch Changes
+
+- 1821070: feat: support new domain
+
 ## 1.1.1
 
 ### Patch Changes
