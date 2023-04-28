@@ -1,5 +1,11 @@
 # kakuyomu-translate
 
+## 2.1.3
+
+### Patch Changes
+
+- a5ce829: fix: remove ruby selectable
+
 ## 2.1.2
 
 ### Patch Changes
