@@ -1,5 +1,11 @@
 # kakuyomu-translate
 
+## 2.1.2
+
+### Patch Changes
+
+- 40001e2: fix: remove unused require
+
 ## 2.1.1
 
 ### Patch Changes
