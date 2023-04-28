@@ -1,5 +1,11 @@
 # kakuyomu-translate
 
+## 2.1.5
+
+### Patch Changes
+
+- 7082d4c: fix: remove ruby selectable
+
 ## 2.1.4
 
 ### Patch Changes
