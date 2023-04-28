@@ -10,8 +10,6 @@
 // @grant        none
 // @noframes
 // @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
-// @require      https://unpkg.com/kuroshiro@1.2.0/dist/kuroshiro.min.js
-// @require      https://unpkg.com/kuroshiro-analyzer-kuromoji@1.1.0/dist/kuroshiro-analyzer-kuromoji.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/kakuyomu-translate.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/kakuyomu-translate.user.js
 // ==/UserScript==
