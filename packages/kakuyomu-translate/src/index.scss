@@ -9,5 +9,12 @@ html[lang='zh-CN'] {
 }
 
 ruby rt {
+  -webkit-user-select: none;
   user-select: none;
+}
+
+.ruby-hidden {
+  ruby rt {
+    display: none;
+  }
 }

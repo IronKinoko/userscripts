@@ -80,6 +80,10 @@ async function autoFurigana() {
 
   if (article) {
     document.querySelector('#contentMain-inner')!.outerHTML = article
+
+    document.body.addEventListener('dblclick', () => {
+      $('body').toggleClass('ruby-hidden')
+    })
   }
 }
 
