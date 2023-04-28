@@ -8,6 +8,7 @@ type Payload =
 export default async function main() {
   autoScrollIntoView()
   broadcastHoverText()
+  autoFurigana()
 }
 
 function broadcastHoverText() {
@@ -72,4 +73,30 @@ async function autoScrollIntoView() {
 
   const ob = new MutationObserver(detect)
   ob.observe(asideEl, { childList: true })
+}
+
+async function autoFurigana() {
+  const article = await queryArticleFurigana()
+
+  if (article) {
+    document.querySelector('#contentMain-inner')!.outerHTML = article
+  }
+}
+
+async function queryArticleFurigana() {
+  const [, workId, episodeId] = window.location.pathname.match(
+    /works\/(.*)\/episodes\/(.*)/
+  )!
+
+  const url = `https://userscripts-proxy.vercel.app/api/kakuyomu/furigana?workId=${workId}&episodeId=${episodeId}`
+
+  try {
+    const data = await fetch(url).then((r) => r.json())
+    if (!data.ok) throw new Error(data.message)
+    return data.html as string
+  } catch (error: any) {
+    console.error(error)
+    alert(`接口调用失败 ${error.message}`)
+    return null
+  }
 }
