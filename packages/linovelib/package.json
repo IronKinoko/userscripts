@@ -18,7 +18,7 @@
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
   "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/linovelib#readme",
-  "devDependencies": {
+  "dependencies": {
     "shared": "workspace:*"
   }
 }

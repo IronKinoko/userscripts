@@ -42,7 +42,7 @@ importers:
   packages/copymanga:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/e-hentai-infinite-scroll:
@@ -54,25 +54,25 @@ importers:
   packages/esjzone:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/kakuyomu-translate:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/linovelib:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/manhuagui:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/shared:
@@ -86,13 +86,13 @@ importers:
   packages/xxxxx520:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
   packages/zelda-map:
     specifiers:
       shared: workspace:*
-    devDependencies:
+    dependencies:
       shared: link:../shared
 
 packages:
