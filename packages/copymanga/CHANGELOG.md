@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.11
+
+### Patch Changes
+
+- 24bd3ac: fix: support new domain
+
 ## 1.4.10
 
 ### Patch Changes
