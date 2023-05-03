@@ -6,6 +6,7 @@
 // @description  #description#
 // @author       IronKinoko
 // @match        https://www.copymanga.org/*
+// @match        https://www.copymanga.tv/*
 // @match        https://www.copymanga.site/*
 // @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
 // @grant        none
