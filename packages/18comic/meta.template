@@ -1,0 +1,17 @@
+// ==UserScript==
+// @name         18comic
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/18comic
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://18comic.vip/*
+// @match        https://18comic.org/*
+// @match        https://jmcomic.me/*
+// @match        https://jmcomic1.me/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=18comic.vip
+// @grant        none
+// @noframes
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/18comic.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/18comic.user.js
+// ==/UserScript==

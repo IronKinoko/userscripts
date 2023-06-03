@@ -39,6 +39,12 @@ importers:
       pretty-quick: 3.1.3_prettier@2.7.1
       typescript: 4.9.3
 
+  packages/18comic:
+    specifiers:
+      shared: workspace:*
+    devDependencies:
+      shared: link:../shared
+
   packages/copymanga:
     specifiers:
       shared: workspace:*

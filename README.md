@@ -13,6 +13,7 @@
 | [esjzone](/packages/esjzone)                                     | 增加 esjzone 阅读体验                                                                    | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/esjzone.user.js)                                                                         |
 | [kakuyomu-translate](/packages/kakuyomu-translate)               | 增加 kakuyomu 阅读体验                                                                   | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/kakuyomu-translate.user.js)                                                              |
 | [xxxxx520](/packages/xxxxx520)                                   | 优化 xxxxx520 体验                                                                       | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js)                                                                        |
+| [18comic](/packages/18comic)                                     | 优化 18comic 体验                                                                        | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/18comic.user.js)                                                                         |
 
 ## iOS & Mac safari install
 
