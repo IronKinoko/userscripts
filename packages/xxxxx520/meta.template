@@ -7,9 +7,10 @@
 // @author       IronKinoko
 // @match        https://xxxxx520.com/*
 // @match        https://xxxxx525.com/*
+// @match        https://xxxxx528.com/*
 // @match        https://xxxxx520.cam/*
 // @match        https://*.fourpetal.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=xxxxx520.com
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=xxxxx528.com
 // @grant        none
 // @noframes
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js
