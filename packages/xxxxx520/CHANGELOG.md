@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.3
+
+### Patch Changes
+
+- 8914ab4: chore: release
+
 ## 1.1.2
 
 ### Patch Changes
