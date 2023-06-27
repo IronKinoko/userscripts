@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.12
+
+### Patch Changes
+
+- 578670d: feat: restore tab idx
+
 ## 1.4.11
 
 ### Patch Changes
