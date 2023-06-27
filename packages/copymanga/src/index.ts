@@ -8,6 +8,9 @@ ImgLazySetup()
 
 document.body.classList.add('k-copymanga')
 
+if (window.aboutBlank) {
+  window.aboutBlank = () => {}
+}
 router([
   { pathname: /^\/h5/, run: h5 },
   { pathname: /^(?!\/h5)/, run: pc },

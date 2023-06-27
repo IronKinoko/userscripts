@@ -1,5 +1,5 @@
 import { getFullImages } from './utils'
-import { sleep, throttle, waitDOM } from 'shared'
+import { local, sleep, throttle, waitDOM } from 'shared'
 
 async function openControl() {
   const li = await waitDOM('li.comicContentPopupImageItem')
@@ -31,9 +31,67 @@ async function currentPage() {
   } catch (e) {}
 }
 
+async function restoreTabIdx() {
+  if (!/h5\/details\/comic\/.*/.test(location.pathname)) return
+  const LocalKey = 'k-copymanga-tab-store'
+  const [, id] = location.pathname.match(/h5\/details\/comic\/(.*)/)!
+  const store = local.getItem<Record<string, number[]>>(LocalKey, {})
+
+  await waitDOM(
+    '.detailsTextContentTabs.van-tabs.van-tabs--line .van-tab:nth-child(2).van-tab--active'
+  )
+  const root = await waitDOM('.van-tabs')
+  ;(async () => {
+    const prevActiveIdx = store[id]
+    if (prevActiveIdx) {
+      const [navIdx, itemIdx] = prevActiveIdx
+      if (navIdx) {
+        const nav = await waitDOM<HTMLDivElement>('.van-tabs__nav')
+        ;(nav.children.item(navIdx) as HTMLDivElement)?.click()
+
+        if (itemIdx) {
+          const nav = await waitDOM<HTMLDivElement>(
+            `.van-tabs__content div:nth-child(${navIdx + 1}) .van-tabs__nav`
+          )
+          if (nav) {
+            ;(nav.children.item(navIdx) as HTMLDivElement)?.click()
+          }
+        }
+      }
+    }
+  })()
+
+  function getActiveIdx() {
+    let idx: number[] = []
+    const list = root.querySelectorAll('.van-tabs__nav')
+    list.forEach((nav, navIdx) => {
+      Array.from(nav.children).forEach((item, itemIdx) => {
+        if (item.classList.contains('van-tab--active')) {
+          idx[navIdx] = itemIdx
+        }
+      })
+    })
+
+    return idx
+  }
+
+  const ob = new MutationObserver(() => {
+    const idx = getActiveIdx()
+    store[id] = idx
+    local.setItem(LocalKey, store)
+  })
+  ob.observe(root, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+}
+
 let trackId = { current: 0 }
 async function runH5main() {
   try {
+    restoreTabIdx()
+
     if (!/h5\/comicContent\/.*/.test(location.href)) return
     let runTrackId = ++trackId.current
     const ulDom = await waitDOM<HTMLUListElement>('.comicContentPopupImageList')
