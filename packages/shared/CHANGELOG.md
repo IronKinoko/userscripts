@@ -1,5 +1,11 @@
 # shared
 
+## 1.0.4
+
+### Patch Changes
+
+- 77e5e46: feat: img lazy add timeout
+
 ## 1.0.3
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # e-hentai-infinite-scroll
 
+## 1.3.2
+
+### Patch Changes
+
+- Updated dependencies [77e5e46]
+  - shared@1.0.4
+
 ## 1.3.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # linovelib
 
+## 1.4.3
+
+### Patch Changes
+
+- Updated dependencies [77e5e46]
+  - shared@1.0.4
+
 ## 1.4.2
 
 ### Patch Changes

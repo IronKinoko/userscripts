@@ -1,5 +1,12 @@
 # manhuagui
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [77e5e46]
+  - shared@1.0.4
+
 ## 1.0.4
 
 ### Patch Changes
