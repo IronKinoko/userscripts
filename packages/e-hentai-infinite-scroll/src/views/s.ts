@@ -66,29 +66,35 @@ function setupInfiniteScroll() {
 
   let isLoading = false
   async function loadImgInfo() {
-    if (maxPageSize < page) {
-      isLoadEnd = true
-      return
+    try {
+      if (maxPageSize < page) {
+        isLoadEnd = true
+        return
+      }
+      if (isLoading) return
+      isLoading = true
+      const res = await api_call(page, nextImgKey)
+      isLoading = false
+      const groups = parseI3(res.i3)
+
+      const info: Info = {
+        key: res.k,
+        nl: groups.nl,
+        src: groups.src.slice(0, -1),
+        source: res.s[0] === '/' ? res.s : '/' + res.s,
+      }
+
+      store[res.k] = { info, res }
+
+      renderImg(page, info)
+
+      nextImgKey = groups.key
+      page++
+    } catch (error) {
+      isLoading = false
+      console.error(error)
+      await loadImgInfo()
     }
-    if (isLoading) return
-    isLoading = true
-    const res = await api_call(page, nextImgKey)
-    isLoading = false
-    const groups = parseI3(res.i3)
-
-    const info: Info = {
-      key: res.k,
-      nl: groups.nl,
-      src: groups.src.slice(0, -1),
-      source: res.s[0] === '/' ? res.s : '/' + res.s,
-    }
-
-    store[res.k] = { info, res }
-
-    renderImg(page, info)
-
-    nextImgKey = groups.key
-    page++
   }
 
   function renderImg(page: number, info: Info) {

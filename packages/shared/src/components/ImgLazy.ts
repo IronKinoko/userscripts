@@ -4,7 +4,7 @@ export default function setup() {
     class ImgLazy extends HTMLElement {
       img: HTMLImageElement
       ob: IntersectionObserver
-      timeout = 10000
+      timeout = 6000
       timeoutId?: number
 
       constructor() {
@@ -12,7 +12,7 @@ export default function setup() {
 
         this.timeout = this.getAttribute('timeout')
           ? parseInt(this.getAttribute('timeout')!)
-          : 10000
+          : this.timeout
 
         const shadow = this.attachShadow({ mode: 'open' })
 
@@ -29,19 +29,20 @@ export default function setup() {
         }
 
         this.ob = new IntersectionObserver(
-          ([e]) => {
-            if (!e.isIntersecting) return
-            const src = this.getAttribute('src')
-            if (!src) return
-            this.img.src = src
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return
+              const src = this.getAttribute('src')
+              if (!src) return
+              this.img.src = src
+              this.timeoutId = window.setTimeout(() => {
+                this.refreshImg()
+              }, this.timeout)
 
-            this.timeoutId = window.setTimeout(() => {
-              this.refreshImg()
-            }, this.timeout)
-
-            this.ob.unobserve(this)
+              this.ob.unobserve(this)
+            })
           },
-          { rootMargin: '2000px 0px' }
+          { rootMargin: '2000px 0px', threshold: [0, 1] }
         )
 
         const style = document.createElement('style')
@@ -80,6 +81,7 @@ export default function setup() {
         let v = parseInt(url.searchParams.get('v')!) || 0
         v++
         url.searchParams.set('v', v + '')
+        this.img.src = ''
         this.img.src = url.toString()
         this.img.alt = `图片加载出错 [${v}]`
         this.timeoutId = window.setTimeout(() => {
