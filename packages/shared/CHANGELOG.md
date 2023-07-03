@@ -1,5 +1,11 @@
 # shared
 
+## 1.0.5
+
+### Patch Changes
+
+- 7b2fa9c: fix: img lazy loading error
+
 ## 1.0.4
 
 ### Patch Changes

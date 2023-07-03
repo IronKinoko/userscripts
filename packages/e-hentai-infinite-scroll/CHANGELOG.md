@@ -1,5 +1,13 @@
 # e-hentai-infinite-scroll
 
+## 1.3.3
+
+### Patch Changes
+
+- 7b2fa9c: fix: retry when api call fail
+- Updated dependencies [7b2fa9c]
+  - shared@1.0.5
+
 ## 1.3.2
 
 ### Patch Changes

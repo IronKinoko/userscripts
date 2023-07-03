@@ -1,6 +1,6 @@
 {
   "name": "copymanga",
-  "version": "1.4.13",
+  "version": "1.4.14",
   "description": "处理图片资源加载失败时自动重新加载",
   "main": "index.js",
   "scripts": {

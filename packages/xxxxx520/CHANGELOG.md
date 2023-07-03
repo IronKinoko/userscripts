@@ -1,5 +1,12 @@
 # xxxxx520
 
+## 1.1.5
+
+### Patch Changes
+
+- Updated dependencies [7b2fa9c]
+  - shared@1.0.5
+
 ## 1.1.4
 
 ### Patch Changes

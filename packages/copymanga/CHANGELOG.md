@@ -1,5 +1,13 @@
 # copymanga
 
+## 1.4.14
+
+### Patch Changes
+
+- 7b2fa9c: fix: img lazy loading error
+- Updated dependencies [7b2fa9c]
+  - shared@1.0.5
+
 ## 1.4.13
 
 ### Patch Changes
