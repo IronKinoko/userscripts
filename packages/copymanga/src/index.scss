@@ -7,22 +7,30 @@
   }
   .next-part-btn-fixed {
     position: fixed;
-    right: 0;
-    top: 25vh;
     font-size: 16px;
     background: white;
     padding: 8px;
     writing-mode: vertical-lr;
+    white-space: nowrap;
     box-shadow: rgba(0, 0, 0, 0.2) -1px 1px 10px 0px;
     transition: all 0.2s ease;
     transform: translateX(0);
-    border-radius: 4px 0 0 4px;
+    border-radius: 4px;
     opacity: 1;
+    box-sizing: border-box;
 
+    &.left {
+      border-radius: 0 4px 4px 0;
+      --transform-x: -100%;
+    }
+    &.right {
+      border-radius: 4px 0 0 4px;
+      --transform-x: 100%;
+    }
     &.hide {
       opacity: 0;
       pointer-events: none;
-      transform: translateX(100%);
+      transform: translateX(var(--transform-x));
     }
   }
 

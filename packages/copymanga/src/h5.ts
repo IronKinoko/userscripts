@@ -159,6 +159,79 @@ async function createNextPartDom() {
 
     let prevY = 0
     let storeY = 0
+    const key = 'next-part-btn-fixed-position'
+    let position = local.getItem(key, {
+      top: document.documentElement.clientHeight / 4,
+      left: document.documentElement.clientWidth,
+    })
+
+    const size = fixedNextBtn!.getBoundingClientRect()
+    // safe position area
+    const safeArea = {
+      top: (y: number) =>
+        Math.min(
+          Math.max(y, 0),
+          document.documentElement.clientHeight - size.height
+        ),
+      left: (x: number) =>
+        Math.min(
+          Math.max(x, 0),
+          document.documentElement.clientWidth - size.width
+        ),
+    }
+
+    // set fixedNextBtn position
+    const setPosition = (
+      position: { left: number; top: number },
+      isMoving: boolean
+    ) => {
+      fixedNextBtn!.classList.remove('left', 'right')
+      fixedNextBtn!.style.transition = isMoving ? 'none' : ''
+      fixedNextBtn!.style.top = `${position.top}px`
+      fixedNextBtn!.style.left = `${position.left}px`
+
+      if (!isMoving) {
+        const halfScreenWidth = document.documentElement.clientWidth / 2
+        fixedNextBtn!.classList.add(
+          position.left > halfScreenWidth ? 'right' : 'left'
+        )
+        fixedNextBtn!.style.left =
+          position.left > halfScreenWidth
+            ? `${document.documentElement.clientWidth - size.width}px`
+            : '0px'
+      }
+    }
+
+    setPosition(position, false)
+
+    // remember fixedNextBtn move position
+    fixedNextBtn.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0]
+      const { clientX, clientY } = touch
+      const { top, left } = fixedNextBtn!.getBoundingClientRect()
+      const diffX = clientX - left
+      const diffY = clientY - top
+      const move = (e: TouchEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const touch = e.touches[0]
+        const { clientX, clientY } = touch
+        const x = safeArea.left(clientX - diffX)
+        const y = safeArea.top(clientY - diffY)
+        position = { top: y, left: x }
+        setPosition(position, true)
+      }
+      const end = () => {
+        local.setItem(key, position)
+        setPosition(position, false)
+        fixedNextBtn!.style.removeProperty('transition')
+        window.removeEventListener('touchmove', move)
+        window.removeEventListener('touchend', end)
+      }
+      window.addEventListener('touchmove', move, { passive: false })
+      window.addEventListener('touchend', end)
+    })
+
     window.addEventListener(
       'scroll',
       throttle(() => {
