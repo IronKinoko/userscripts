@@ -1,0 +1,14 @@
+// ==UserScript==
+// @name         mikanani
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/mikanani
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://mikanani.me/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=mikanani.me
+// @grant        none
+// @noframes
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/mikanani.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/mikanani.user.js
+// ==/UserScript==

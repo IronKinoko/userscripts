@@ -81,6 +81,12 @@ importers:
     dependencies:
       shared: link:../shared
 
+  packages/mikanani:
+    specifiers:
+      shared: workspace:*
+    devDependencies:
+      shared: link:../shared
+
   packages/shared:
     specifiers:
       copy-to-clipboard: ^3.3.1
