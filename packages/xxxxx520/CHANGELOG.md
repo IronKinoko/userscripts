@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.6
+
+### Patch Changes
+
+- efb3cf5: feat: support new domain
+
 ## 1.1.5
 
 ### Patch Changes
