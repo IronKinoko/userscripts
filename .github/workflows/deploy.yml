@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - uses: pnpm/action-setup@v2.2.2
+      - uses: pnpm/action-setup@v2
         with:
           version: 7
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: deploy dist
         # You may pin to the exact commit or the version.
-        uses: crazy-max/ghaction-github-pages@v3.0.0
+        uses: crazy-max/ghaction-github-pages@v3
         with:
           target_branch: dist
           build_dir: dist
