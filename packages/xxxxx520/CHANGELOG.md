@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.1.7
+
+### Patch Changes
+
+- 1f131d1: fix: support new domain
+
 ## 1.1.6
 
 ### Patch Changes
