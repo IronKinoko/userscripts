@@ -10,6 +10,6 @@ function skipModal() {
 }
 
 router({
-  domain: ['xxxxx520', 'xxxxx525', 'xxxxx528'],
+  domain: ['xxxxx', 'gamer'],
   routes: [{ run: skipModal }, { pathname: /.*\.html/, run: detail }],
 })
