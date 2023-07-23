@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.15
+
+### Patch Changes
+
+- 3ade19f: feat: add loading status
+
 ## 1.4.14
 
 ### Patch Changes
