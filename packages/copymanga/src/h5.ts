@@ -295,7 +295,9 @@ const _historyWrap = function (type: 'pushState' | 'replaceState') {
 }
 
 async function injectImageData() {
+  $('.comicContentPopup .comicFixed').addClass('loading')
   const data = await getFullImages()
+  $('.comicContentPopup .comicFixed').removeClass('loading')
 
   let html = ''
   data.forEach(({ url }, idx) => {

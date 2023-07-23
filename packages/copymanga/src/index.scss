@@ -46,4 +46,14 @@
       }
     }
   }
+  .comicContentPopup .comicFixed.loading {
+    width: auto;
+    min-width: 1.4rem;
+    padding: 0 1em;
+
+    &::before {
+      content: 'Loading...';
+      padding-right: 1em;
+    }
+  }
 }
