@@ -4,7 +4,7 @@ export default function setup() {
     class ImgLazy extends HTMLElement {
       img: HTMLImageElement
       ob: IntersectionObserver
-      timeout = 6000
+      timeout = 12000
       timeoutId?: number
 
       constructor() {
@@ -86,6 +86,7 @@ export default function setup() {
         this.img.alt = `图片加载出错 [${v}]`
         this.timeoutId = window.setTimeout(() => {
           this.refreshImg()
+          this.timeout = Math.max(this.timeout * 2, 60000)
         }, this.timeout)
       }
     }
