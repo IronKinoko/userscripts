@@ -1,5 +1,12 @@
 # esjzone
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [545887c]
+  - shared@1.0.6
+
 ## 1.1.0
 
 ### Minor Changes

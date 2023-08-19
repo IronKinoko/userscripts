@@ -1,5 +1,12 @@
 # zelda-map
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [545887c]
+  - shared@1.0.6
+
 ## 1.0.2
 
 ### Patch Changes

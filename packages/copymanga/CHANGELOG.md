@@ -1,5 +1,12 @@
 # copymanga
 
+## 1.4.16
+
+### Patch Changes
+
+- Updated dependencies [545887c]
+  - shared@1.0.6
+
 ## 1.4.15
 
 ### Patch Changes

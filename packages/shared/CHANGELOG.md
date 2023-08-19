@@ -1,5 +1,11 @@
 # shared
 
+## 1.0.6
+
+### Patch Changes
+
+- 545887c: enhance: refator timeout logic
+
 ## 1.0.5
 
 ### Patch Changes

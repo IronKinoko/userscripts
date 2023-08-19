@@ -1,5 +1,12 @@
 # kakuyomu-translate
 
+## 2.1.8
+
+### Patch Changes
+
+- Updated dependencies [545887c]
+  - shared@1.0.6
+
 ## 2.1.7
 
 ### Patch Changes
