@@ -54,7 +54,7 @@ async function restoreTabIdx() {
             `.van-tabs__content div:nth-child(${navIdx + 1}) .van-tabs__nav`
           )
           if (nav) {
-            ;(nav.children.item(navIdx) as HTMLDivElement)?.click()
+            ;(nav.children.item(itemIdx) as HTMLDivElement)?.click()
           }
         }
       }
