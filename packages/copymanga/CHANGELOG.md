@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.4.17
+
+### Patch Changes
+
+- aa1b17f: fix: restore tab index error
+
 ## 1.4.16
 
 ### Patch Changes
