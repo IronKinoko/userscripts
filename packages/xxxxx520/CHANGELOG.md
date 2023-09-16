@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.0
+
+### Minor Changes
+
+- 6eeca49: feat: support new domain
+
 ## 1.1.8
 
 ### Patch Changes
