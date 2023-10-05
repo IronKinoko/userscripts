@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.2
+
+### Patch Changes
+
+- 8fad158: feat: support new domain
+
 ## 1.2.1
 
 ### Patch Changes
