@@ -167,55 +167,6 @@ async function initSplitEvent() {
       }
     }
   })
-
-  // merge
-  let activeArr: HTMLLIElement[] = []
-
-  function run(e: Event) {
-    e.stopPropagation()
-    e.stopImmediatePropagation()
-    const li = e.currentTarget as HTMLLIElement
-    const isActive = li.classList.toggle('merge-active')
-    if (isActive) {
-      activeArr.push(li)
-    } else {
-      activeArr = activeArr.filter((item) => item !== li)
-    }
-
-    if (activeArr.length === 2) {
-      const [first, second] = activeArr
-      $(second).find('img-lazy').prependTo($(first))
-      $(first).css({ display: 'flex' })
-      $(first).find('img-lazy').css({ width: '50%' })
-
-      cleanup()
-      $('.k-merge').removeClass('active')
-    }
-  }
-
-  function setup() {
-    document.querySelectorAll('[data-k]').forEach((item) => {
-      item.addEventListener('click', run, { capture: true })
-    })
-  }
-
-  function cleanup() {
-    activeArr = []
-    document.querySelectorAll('[data-k]').forEach((item) => {
-      item.removeEventListener('click', run, { capture: true })
-      item.classList.remove('merge-active')
-    })
-  }
-
-  $('.k-merge').on('click', (e) => {
-    const isActive = e.currentTarget.classList.toggle('active')
-
-    cleanup()
-
-    if (isActive) {
-      setup()
-    }
-  })
 }
 
 async function initMergeEvent() {
