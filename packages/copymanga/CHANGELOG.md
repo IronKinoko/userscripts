@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.1
+
+### Patch Changes
+
+- 7f51a06: fix: remove duplicate merge event
+
 ## 1.5.0
 
 ### Minor Changes
