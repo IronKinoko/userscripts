@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.0
+
+### Minor Changes
+
+- cb1fbdf: feat: support split and merge manga
+
 ## 1.4.17
 
 ### Patch Changes
