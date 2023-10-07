@@ -1,5 +1,6 @@
 import { getFullImages } from './utils'
 import { local, sleep, throttle, waitDOM } from 'shared'
+import T from './h5.template.html'
 
 async function openControl() {
   const li = await waitDOM('li.comicContentPopupImageItem')
@@ -109,20 +110,171 @@ async function runH5main() {
     main.style.position = 'unset'
     main.style.overflowY = 'unset'
 
-    createNextPartDom()
+    createActionsUI()
   } catch (error) {
     throw error
   }
 }
 
-async function createNextPartDom() {
-  let nextPartDom = document.querySelector<HTMLDivElement>(
-    '#comicContentMain .next-part-btn'
-  )
-  let nextButton = document.querySelector<HTMLSpanElement>(
-    '.comicControlBottomTop > div:nth-child(3) > span'
-  )
-  if (!nextPartDom) {
+async function createActionsUI() {
+  let actionsDom = document.querySelector<HTMLDivElement>('.k-actions')
+
+  if (!actionsDom) {
+    actionsDom = $(T.Actions)[0] as HTMLDivElement
+    document.body.appendChild(actionsDom)
+    addDragEvent(actionsDom)
+    intiNextPartEvent()
+    initSplitEvent()
+    initMergeEvent()
+  }
+
+  if (!/h5\/comicContent\/.*/.test(location.href)) {
+    actionsDom?.classList.add('hide')
+    return
+  } else {
+    actionsDom.classList.remove('hide')
+    $('.k-icon').removeClass('active')
+  }
+}
+
+async function initSplitEvent() {
+  $('.k-split').on('click', (e) => {
+    const isActive = e.currentTarget.classList.toggle('active')
+    const list = $('[data-k]')
+    for (const item of list) {
+      item.style.overflowX = 'hidden'
+      const imgs = $(item).find('img-lazy')
+      if (isActive) {
+        const url = imgs.attr('src')!
+
+        imgs.last().css({
+          clipPath: 'polygon(50% 0%, 50% 100%, 0% 100%, 0% 0%)',
+          width: '200%',
+          display: 'block',
+        })
+        $('<img-lazy/>')
+          .attr('src', url)
+          .css({
+            clipPath: 'polygon(100% 0%, 100% 100%, 50% 100%, 50% 0%)',
+            width: '200%',
+            display: 'block',
+            transform: 'translateX(-50%)',
+          })
+          .prependTo(item)
+      } else {
+        imgs.last().removeAttr('style')
+        imgs.first().remove()
+      }
+    }
+  })
+
+  // merge
+  let activeArr: HTMLLIElement[] = []
+
+  function run(e: Event) {
+    e.stopPropagation()
+    e.stopImmediatePropagation()
+    const li = e.currentTarget as HTMLLIElement
+    const isActive = li.classList.toggle('merge-active')
+    if (isActive) {
+      activeArr.push(li)
+    } else {
+      activeArr = activeArr.filter((item) => item !== li)
+    }
+
+    if (activeArr.length === 2) {
+      const [first, second] = activeArr
+      $(second).find('img-lazy').prependTo($(first))
+      $(first).css({ display: 'flex' })
+      $(first).find('img-lazy').css({ width: '50%' })
+
+      cleanup()
+      $('.k-merge').removeClass('active')
+    }
+  }
+
+  function setup() {
+    document.querySelectorAll('[data-k]').forEach((item) => {
+      item.addEventListener('click', run, { capture: true })
+    })
+  }
+
+  function cleanup() {
+    activeArr = []
+    document.querySelectorAll('[data-k]').forEach((item) => {
+      item.removeEventListener('click', run, { capture: true })
+      item.classList.remove('merge-active')
+    })
+  }
+
+  $('.k-merge').on('click', (e) => {
+    const isActive = e.currentTarget.classList.toggle('active')
+
+    cleanup()
+
+    if (isActive) {
+      setup()
+    }
+  })
+}
+
+async function initMergeEvent() {
+  let activeArr: HTMLLIElement[] = []
+
+  function run(e: Event) {
+    e.stopPropagation()
+    e.stopImmediatePropagation()
+    const li = e.currentTarget as HTMLLIElement
+    const isActive = li.classList.toggle('merge-active')
+    if (isActive) {
+      activeArr.push(li)
+    } else {
+      activeArr = activeArr.filter((item) => item !== li)
+    }
+
+    if (activeArr.length === 2) {
+      const [first, second] = activeArr
+      $(second).find('img-lazy').prependTo($(first))
+      $(first).css({ display: 'flex' })
+      $(first).find('img-lazy').css({ width: '50%' })
+
+      cleanup()
+      $('.k-merge').removeClass('active')
+    }
+  }
+
+  function setup() {
+    document.querySelectorAll('[data-k]').forEach((item) => {
+      item.addEventListener('click', run, { capture: true })
+    })
+  }
+
+  function cleanup() {
+    activeArr = []
+    document.querySelectorAll('[data-k]').forEach((item) => {
+      item.removeEventListener('click', run, { capture: true })
+      item.classList.remove('merge-active')
+    })
+  }
+
+  $('.k-merge').on('click', (e) => {
+    const isActive = e.currentTarget.classList.toggle('active')
+
+    cleanup()
+
+    if (isActive) {
+      setup()
+    }
+  })
+}
+
+async function intiNextPartEvent() {
+  let fixedNextBtn = document.querySelector<HTMLDivElement>('.k-next')!
+  fixedNextBtn.onclick = async (e) => {
+    e.stopPropagation()
+    let nextButton = document.querySelector<HTMLSpanElement>(
+      '.comicControlBottomTop > div:nth-child(3) > span'
+    )
     if (!nextButton) {
       await openControl()
       nextButton = document.querySelector(
@@ -130,140 +282,115 @@ async function createNextPartDom() {
       )
     }
 
-    nextPartDom = document.createElement('div')
-    nextPartDom.className = 'next-part-btn'
-    nextPartDom.textContent = '下一话'
-
-    nextPartDom.onclick = async (e) => {
-      e.stopPropagation()
-      nextButton && nextButton.click()
-      document.scrollingElement!.scrollTop = 0
-    }
-
-    document.getElementById('comicContentMain')!.appendChild(nextPartDom)
+    nextButton && nextButton.click()
+    document.scrollingElement!.scrollTop = 0
   }
-  nextPartDom.style.display = nextButton!.parentElement!.classList.contains(
-    'noneUuid'
-  )
-    ? 'none'
-    : 'block'
+}
 
-  let fixedNextBtn = document.querySelector<HTMLDivElement>(
-    '.next-part-btn-fixed'
-  )
-  if (!fixedNextBtn) {
-    fixedNextBtn = document.createElement('div')
-    fixedNextBtn.className = 'next-part-btn-fixed'
-    fixedNextBtn.textContent = '下一话'
-    document.body.appendChild(fixedNextBtn)
+function addDragEvent(fxiedDom: HTMLDivElement) {
+  let prevY = 0
+  let storeY = 0
+  const key = 'next-part-btn-fixed-position'
+  let position = local.getItem(key, {
+    top: document.documentElement.clientHeight / 4,
+    left: document.documentElement.clientWidth,
+  })
 
-    let prevY = 0
-    let storeY = 0
-    const key = 'next-part-btn-fixed-position'
-    let position = local.getItem(key, {
-      top: document.documentElement.clientHeight / 4,
-      left: document.documentElement.clientWidth,
-    })
+  const size = fxiedDom!.getBoundingClientRect()
+  // safe position area
+  const safeArea = {
+    top: (y: number) =>
+      Math.min(
+        Math.max(y, 0),
+        document.documentElement.clientHeight - size.height
+      ),
+    left: (x: number) =>
+      Math.min(
+        Math.max(x, 0),
+        document.documentElement.clientWidth - size.width
+      ),
+  }
 
-    const size = fixedNextBtn!.getBoundingClientRect()
-    // safe position area
-    const safeArea = {
-      top: (y: number) =>
-        Math.min(
-          Math.max(y, 0),
-          document.documentElement.clientHeight - size.height
-        ),
-      left: (x: number) =>
-        Math.min(
-          Math.max(x, 0),
-          document.documentElement.clientWidth - size.width
-        ),
+  // set fixedNextBtn position
+  const setPosition = (
+    position: { left: number; top: number },
+    isMoving: boolean
+  ) => {
+    fxiedDom!.classList.remove('left', 'right')
+    fxiedDom!.style.transition = isMoving ? 'none' : ''
+    fxiedDom!.style.top = `${position.top}px`
+    fxiedDom!.style.left = `${position.left}px`
+
+    if (!isMoving) {
+      const halfScreenWidth = document.documentElement.clientWidth / 2
+      fxiedDom!.classList.add(
+        position.left > halfScreenWidth ? 'right' : 'left'
+      )
+      fxiedDom!.style.left =
+        position.left > halfScreenWidth
+          ? `${document.documentElement.clientWidth - size.width}px`
+          : '0px'
     }
+  }
 
-    // set fixedNextBtn position
-    const setPosition = (
-      position: { left: number; top: number },
-      isMoving: boolean
-    ) => {
-      fixedNextBtn!.classList.remove('left', 'right')
-      fixedNextBtn!.style.transition = isMoving ? 'none' : ''
-      fixedNextBtn!.style.top = `${position.top}px`
-      fixedNextBtn!.style.left = `${position.left}px`
+  setPosition(position, false)
 
-      if (!isMoving) {
-        const halfScreenWidth = document.documentElement.clientWidth / 2
-        fixedNextBtn!.classList.add(
-          position.left > halfScreenWidth ? 'right' : 'left'
-        )
-        fixedNextBtn!.style.left =
-          position.left > halfScreenWidth
-            ? `${document.documentElement.clientWidth - size.width}px`
-            : '0px'
-      }
-    }
-
-    setPosition(position, false)
-
-    // remember fixedNextBtn move position
-    fixedNextBtn.addEventListener('touchstart', (e) => {
+  // remember fixedNextBtn move position
+  fxiedDom.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0]
+    const { clientX, clientY } = touch
+    const { top, left } = fxiedDom!.getBoundingClientRect()
+    const diffX = clientX - left
+    const diffY = clientY - top
+    const move = (e: TouchEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
       const touch = e.touches[0]
       const { clientX, clientY } = touch
-      const { top, left } = fixedNextBtn!.getBoundingClientRect()
-      const diffX = clientX - left
-      const diffY = clientY - top
-      const move = (e: TouchEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-        const touch = e.touches[0]
-        const { clientX, clientY } = touch
-        const x = safeArea.left(clientX - diffX)
-        const y = safeArea.top(clientY - diffY)
-        position = { top: y, left: x }
-        setPosition(position, true)
+      const x = safeArea.left(clientX - diffX)
+      const y = safeArea.top(clientY - diffY)
+      position = { top: y, left: x }
+      setPosition(position, true)
+    }
+    const end = () => {
+      local.setItem(key, position)
+      setPosition(position, false)
+      fxiedDom!.style.removeProperty('transition')
+      window.removeEventListener('touchmove', move)
+      window.removeEventListener('touchend', end)
+    }
+    window.addEventListener('touchmove', move, { passive: false })
+    window.addEventListener('touchend', end)
+  })
+
+  window.addEventListener(
+    'scroll',
+    throttle(() => {
+      if (!/h5\/comicContent\/.*/.test(location.href)) {
+        fxiedDom?.classList.add('hide')
+        return
       }
-      const end = () => {
-        local.setItem(key, position)
-        setPosition(position, false)
-        fixedNextBtn!.style.removeProperty('transition')
-        window.removeEventListener('touchmove', move)
-        window.removeEventListener('touchend', end)
+
+      const dom = document.scrollingElement!
+
+      const currentY = dom.scrollTop
+      let diffY = currentY - storeY
+      if (
+        currentY < 50 ||
+        currentY + dom.clientHeight > dom.scrollHeight - 800 ||
+        diffY < -30
+      ) {
+        fxiedDom?.classList.remove('hide')
+      } else {
+        fxiedDom?.classList.add('hide')
       }
-      window.addEventListener('touchmove', move, { passive: false })
-      window.addEventListener('touchend', end)
-    })
 
-    window.addEventListener(
-      'scroll',
-      throttle(() => {
-        if (!/h5\/comicContent\/.*/.test(location.href)) {
-          fixedNextBtn?.classList.add('hide')
-          return
-        }
-
-        const dom = document.scrollingElement!
-
-        const currentY = dom.scrollTop
-        let diffY = currentY - storeY
-        if (
-          currentY < 50 ||
-          currentY + dom.clientHeight > dom.scrollHeight - 800 ||
-          diffY < -30
-        ) {
-          fixedNextBtn?.classList.remove('hide')
-        } else {
-          fixedNextBtn?.classList.add('hide')
-        }
-
-        if (currentY > prevY) {
-          storeY = currentY
-        }
-        prevY = currentY
-      }, 100)
-    )
-  }
-
-  fixedNextBtn.onclick = nextPartDom.onclick
-  fixedNextBtn.style.display = nextPartDom.style.display
+      if (currentY > prevY) {
+        storeY = currentY
+      }
+      prevY = currentY
+    }, 100)
+  )
 }
 
 function getComicId() {

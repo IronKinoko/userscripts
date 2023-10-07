@@ -1,23 +1,31 @@
 .k-copymanga {
-  .next-part-btn {
-    height: 150px;
-    line-height: 50px;
-    text-align: center;
-    font-size: 16px;
-  }
-  .next-part-btn-fixed {
+  .k-actions {
     position: fixed;
     font-size: 16px;
-    background: white;
-    padding: 8px;
-    writing-mode: vertical-lr;
-    white-space: nowrap;
-    box-shadow: rgba(0, 0, 0, 0.2) -1px 1px 10px 0px;
     transition: all 0.2s ease;
     transform: translateX(0);
     border-radius: 4px;
     opacity: 1;
     box-sizing: border-box;
+
+    box-shadow: rgba(0, 0, 0, 0.2) -1px 1px 10px 0px;
+    border-radius: 4px;
+    background: white;
+
+    .k-icon {
+      padding: 8px;
+      svg {
+        display: block;
+        fill: currentColor;
+      }
+    }
+    .k-icon.active {
+      background: rgb(44, 174, 254);
+      color: white;
+    }
+    .k-icon + .k-icon {
+      border-top: 1px solid #eee;
+    }
 
     &.left {
       border-radius: 0 4px 4px 0;
@@ -34,6 +42,10 @@
     }
   }
 
+  .merge-active {
+    opacity: 0.5;
+    border: 1px solid red;
+  }
   .comicContentPopup .comicContentPopupImageList {
     .comicContentPopupImageItem img {
       display: block;
