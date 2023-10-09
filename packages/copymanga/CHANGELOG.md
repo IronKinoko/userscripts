@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.2
+
+### Patch Changes
+
+- ca2d0f9: feat: reset scroll position
+
 ## 1.5.1
 
 ### Patch Changes
