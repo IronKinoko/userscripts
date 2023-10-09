@@ -13,25 +13,29 @@ function fakeClickEvent() {
   return new MouseEvent('click', { clientX: width / 2, clientY: height / 2 })
 }
 
-async function currentPage() {
+function getCurrentPage() {
+  const scrollHeight = document.scrollingElement!.scrollTop
+  const list = document.querySelectorAll('li.comicContentPopupImageItem')
+  let height = 0
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i]
+    height += item.getBoundingClientRect().height
+    if (height > scrollHeight) {
+      return i
+    }
+  }
+  return 0
+}
+async function updatePageIndicator() {
   try {
     if (!/h5\/comicContent\/.*/.test(location.href)) return
-    const scrollHeight = document.scrollingElement!.scrollTop
     const list = document.querySelectorAll('li.comicContentPopupImageItem')
-    let height = 0
-    for (let i = 0; i < list.length; i++) {
-      const item = list[i]
-      height += item.getBoundingClientRect().height
-      if (height > scrollHeight) {
-        const dom = document.querySelector('.comicContentPopup .comicFixed')!
-        dom.textContent = `${i + 1}/${list.length}`
-        break
-      }
-    }
+    const currentPage = getCurrentPage()
+    const dom = document.querySelector('.comicContentPopup .comicFixed')!
+    dom.textContent = `${currentPage + 1}/${list.length}`
     // eslint-disable-next-line no-empty
   } catch (e) {}
 }
-
 async function restoreTabIdx() {
   if (!/h5\/details\/comic\/.*/.test(location.pathname)) return
   const LocalKey = 'k-copymanga-tab-store'
@@ -141,6 +145,7 @@ async function initSplitEvent() {
   $('.k-split').on('click', (e) => {
     const isActive = e.currentTarget.classList.toggle('active')
     const list = $('[data-k]')
+    const currentPage = getCurrentPage()
     for (const item of list) {
       item.style.overflowX = 'hidden'
       const imgs = $(item).find('img-lazy')
@@ -166,6 +171,9 @@ async function initSplitEvent() {
         imgs.first().remove()
       }
     }
+
+    // reset scroll position
+    $(`[data-idx="${currentPage}"]`).get(0)?.scrollIntoView()
   })
 }
 
@@ -356,7 +364,7 @@ async function addH5HistoryListener() {
   window.addEventListener('pushState', runH5main)
   window.addEventListener('replaceState', runH5main)
   window.addEventListener('popstate', runH5main)
-  window.addEventListener('scroll', throttle(currentPage, 100))
+  window.addEventListener('scroll', throttle(updatePageIndicator, 100))
 
   runH5main()
 }
@@ -404,7 +412,7 @@ async function injectImageData() {
       li?.dispatchEvent(fakeClickEvent())
     }
   })
-  currentPage()
+  updatePageIndicator()
 }
 
 export default function () {
