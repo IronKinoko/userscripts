@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.3
+
+### Patch Changes
+
+- 52f7ab9: feat: last next part return to comic detail page
+
 ## 1.5.2
 
 ### Patch Changes
