@@ -241,7 +241,14 @@ async function intiNextPartEvent() {
       )
     }
 
-    nextButton && nextButton.click()
+    if (nextButton?.parentElement?.classList.contains('noneUuid')) {
+      const comicHomeBtn = document.querySelector<HTMLDivElement>(
+        '.comicControlBottomBottom > .comicControlBottomBottomItem:nth-child(1)'
+      )
+      comicHomeBtn?.click()
+    } else {
+      nextButton?.click()
+    }
     document.scrollingElement!.scrollTop = 0
   }
 }
