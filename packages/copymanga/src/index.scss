@@ -60,6 +60,11 @@
       }
     }
   }
+  .comicContentPopup .comicFixed {
+    position: fixed;
+    top: unset;
+    bottom: env(safe-area-inset-bottom);
+  }
   .comicContentPopup .comicFixed.loading {
     width: auto;
     min-width: 1.4rem;
