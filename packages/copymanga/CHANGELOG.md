@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.4
+
+### Patch Changes
+
+- 767acff: feat: move page indicator from top to bottom
+
 ## 1.5.3
 
 ### Patch Changes
