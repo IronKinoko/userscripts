@@ -116,6 +116,12 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
 
+  packages/twitter:
+    devDependencies:
+      shared:
+        specifier: workspace:*
+        version: link:../shared
+
   packages/xxxxx520:
     dependencies:
       shared:

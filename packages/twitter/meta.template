@@ -1,0 +1,14 @@
+// ==UserScript==
+// @name         twitter
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/twitter
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://twitter.com/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
+// @grant        none
+// @noframes
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/twitter.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/twitter.user.js
+// ==/UserScript==
