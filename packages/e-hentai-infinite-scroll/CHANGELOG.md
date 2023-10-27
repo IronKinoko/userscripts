@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.5
+
+### Patch Changes
+
+- 059984b: fix: watch tag no work & title copyable now
+
 ## 1.3.4
 
 ### Patch Changes
