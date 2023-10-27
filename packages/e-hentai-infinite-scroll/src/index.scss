@@ -1,4 +1,8 @@
 .e-hentai-infinite-scroll {
+  #gn,
+  #gl {
+    cursor: pointer;
+  }
   #gdt::after {
     content: '';
     display: block;

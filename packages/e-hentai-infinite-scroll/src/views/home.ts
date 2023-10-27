@@ -2,11 +2,15 @@ import { Cookie } from 'shared'
 
 export function checkCookie() {
   const igneous = Cookie.get('igneous')
-  const yay = Cookie.get('yay')
 
-  if (!igneous && yay && document.body.innerHTML === '') {
+  if (!igneous || igneous === 'mystery') {
     $('<button>refresh</button>').on('click', refresh).appendTo('body')
     $('<button>login</button>').on('click', login).appendTo('body')
+  }
+  if (igneous === 'mystery') {
+    $(
+      '<h2>[Cookie] igneous error! Change system proxy and reload page</h2>'
+    ).appendTo('body')
   }
 }
 

@@ -1,4 +1,4 @@
-import { session, debounce, waitDOM } from 'shared'
+import { session, debounce, waitDOM, copy } from 'shared'
 
 const $ = <T extends Element = Element>(selector: string) =>
   document.querySelector<T>(selector)!
@@ -195,8 +195,8 @@ async function injectWatchTag() {
 
     a.addEventListener('click', (e) => {
       e.preventDefault()
-      if (window.selected_tag) {
-        addWatchTag(window.selected_tag)
+      if (window.selected_tagname) {
+        addWatchTag(window.selected_tagname)
           .then(() => {
             alert('success')
           })
@@ -215,8 +215,15 @@ async function injectWatchTag() {
   })
   ob.observe(node, { attributes: true })
 }
+
+function addTitleCopyEvent() {
+  $<HTMLDivElement>('#gn,#gj').addEventListener('click', function () {
+    if (this.textContent) copy(this.textContent)
+  })
+}
 export async function setup() {
   injectWatchTag()
+  addTitleCopyEvent()
 
   const info = getPageInfo()
   $('body').classList.add('e-hentai-infinite-scroll')
