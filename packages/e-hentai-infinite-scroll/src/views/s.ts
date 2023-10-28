@@ -12,7 +12,6 @@ interface ApiRes {
   i3: string
   i5: string
   i6: string
-  i7: string
 }
 type Info = {
   key: string
@@ -124,7 +123,6 @@ function setupInfiniteScroll() {
         n: document.querySelector('#i4 > .sn')!.outerHTML,
         i5: document.querySelector('#i5')!.innerHTML,
         i6: document.querySelector('#i6')!.innerHTML,
-        i7: document.querySelector('#i7')!.innerHTML,
         k: window.startkey,
         s: location.pathname,
       },
@@ -189,7 +187,6 @@ function updateBottomInfo($img: HTMLImageElement) {
   document.querySelector('#i4')!.innerHTML = res.i + res.n
   document.querySelector('#i5')!.innerHTML = res.i5
   document.querySelector('#i6')!.innerHTML = res.i6
-  document.querySelector('#i7')!.innerHTML = res.i7
   removeSnAnchor()
 }
 
