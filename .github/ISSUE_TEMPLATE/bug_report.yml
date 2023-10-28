@@ -2,15 +2,11 @@ name: Bug 报告
 description: 出现什么问题了快提交给我吧，以便改进脚本体验
 labels: [bug]
 body:
-  - type: dropdown
+  - type: input
     id: package
     attributes:
       label: 脚本名称
-      description: 哪个脚本出毛病了，请选择脚本名字
-      options:
-        - copymanga
-        - e-hentai-infinite-scroll
-        - manhuagui
+      description: 哪个脚本出毛病了，请输入脚本名字（不用全名，能理解就行）
     validations:
       required: true
   - type: textarea
