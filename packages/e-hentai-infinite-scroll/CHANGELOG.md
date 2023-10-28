@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.6
+
+### Patch Changes
+
+- 4756a5a: fix: adapter exhentai logic
+
 ## 1.3.5
 
 ### Patch Changes
