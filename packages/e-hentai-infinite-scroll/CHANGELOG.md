@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.7
+
+### Patch Changes
+
+- bbf62e7: fix: page g logic error
+
 ## 1.3.6
 
 ### Patch Changes
