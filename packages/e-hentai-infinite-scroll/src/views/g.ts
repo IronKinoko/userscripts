@@ -6,7 +6,6 @@ const $$ = <T extends Element = Element>(selector: string) =>
   document.querySelectorAll<T>(selector)!
 
 interface Info {
-  rows: number
   mode: 'normal' | 'large'
   url: URL
   total: number
@@ -17,9 +16,8 @@ interface Info {
   childrenClass: string
 }
 function getPageInfo(): Info {
-  const rows = +$('#gdo2 .ths').textContent!.replace(' rows', '')
-  const mode = $('#gdo4 .ths').textContent!.toLowerCase() as Info['mode']
-  const pageSize = (mode === 'normal' ? 10 : 5) * rows
+  const mode = $('#gdt .gdtl') ? 'large' : 'normal'
+  const pageSize = mode === 'normal' ? 40 : 20
   const total = +$('.gtb p.gpc').textContent!.match(
     /of\s(?<total>[0-9,]+)\simages/
   )!.groups!.total
@@ -41,7 +39,6 @@ function getPageInfo(): Info {
     })
 
   return {
-    rows,
     mode,
     url,
     total,
@@ -117,7 +114,7 @@ function tinyGallery() {
 function largeGallery() {
   const info = getPageInfo()
 
-  $('#gdt').classList.add('g-scroll-body')
+  $('#gdt').classList.add('g-scroll-body', info.mode)
   $$(info.childrenClass).forEach((node) => {
     node.setAttribute('data-page', info.currentPage + '')
   })
@@ -217,8 +214,10 @@ async function injectWatchTag() {
 }
 
 function addTitleCopyEvent() {
-  $<HTMLDivElement>('#gn,#gj').addEventListener('click', function () {
-    if (this.textContent) copy(this.textContent)
+  $$<HTMLDivElement>('#gd2>*').forEach(function (node) {
+    node.addEventListener('click', function () {
+      if (this.textContent) copy(this.textContent)
+    })
   })
 }
 export async function setup() {
@@ -226,7 +225,7 @@ export async function setup() {
   addTitleCopyEvent()
 
   const info = getPageInfo()
-  $('body').classList.add('e-hentai-infinite-scroll')
+  $('body').classList.add('e-hentai-infinite-scroll', 'g')
 
   if (!info.unloadPageLinks.length) return
 

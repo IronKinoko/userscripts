@@ -1,21 +1,21 @@
 .e-hentai-infinite-scroll {
-  #gn,
-  #gl {
-    cursor: pointer;
-  }
-  #gdt::after {
-    content: '';
-    display: block;
-    clear: both;
-  }
-  .g-scroll-body {
-    overflow: auto;
-    max-height: 80vh;
-    &::-webkit-scrollbar {
-      width: 0;
+  &.g {
+    #gd2 > * {
+      cursor: pointer;
+      &:active {
+        color: #2af;
+        text-decoration: underline;
+      }
     }
-    @supports (overflow: overlay) {
-      overflow: overlay;
+    #gdt::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    .g-scroll-body {
+      display: grid;
+      overflow: hidden auto;
+      max-height: 80vh;
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -23,22 +23,45 @@
         background-color: rgba($color: white, $alpha: 0.15);
         border-radius: 2px;
       }
+
+      &.large {
+        grid-template-columns: repeat(5, 1fr);
+        @media screen and (max-width: 1230px) {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media screen and (max-width: 990px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      &.normal {
+        grid-template-columns: repeat(10, 1fr);
+        @media screen and (max-width: 1230px) {
+          grid-template-columns: repeat(8, 1fr);
+        }
+
+        @media screen and (max-width: 990px) {
+          grid-template-columns: repeat(6, 1fr);
+        }
+      }
     }
-  }
-  .g-scroll-page-index {
-    clear: both;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    &::before,
-    &::after {
-      display: block;
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: #ddd;
-      margin: 0 10px;
+
+    .g-scroll-page-index {
+      clear: both;
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      &::before,
+      &::after {
+        display: block;
+        content: '';
+        width: 40px;
+        height: 1px;
+        background: #ddd;
+        margin: 0 10px;
+      }
     }
   }
 

@@ -1,7 +1,7 @@
 import { ImgLazySetup, router } from 'shared'
 import './index.scss'
 import { setup as g } from './views/g'
-import { checkCookie } from './views/home'
+import { checkCookie } from './views/checkCookie'
 import { setup as s } from './views/s'
 
 ImgLazySetup()
@@ -12,6 +12,6 @@ router({
 })
 
 router([
-  { pathname: /\/g\/.*\/.*/, run: g },
-  { pathname: /\/s\/.*\/.*/, run: s },
+  { pathname: /^\/g\//, run: g },
+  { pathname: /^\/s\//, run: s },
 ])
