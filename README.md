@@ -15,6 +15,7 @@
 | [xxxxx520](/packages/xxxxx520)                                   | 优化 xxxxx520 体验                                                                       | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/xxxxx520.user.js)                                                                        |
 | [18comic](/packages/18comic)                                     | 优化 18comic 体验                                                                        | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/18comic.user.js)                                                                         |
 | [twitter](/packages/twitter)                                     | 优化 twitter 体验，点赞的同时复制图片与分享链接                                          | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/twitter.user.js)                                                                         |
+| [bilixs](/packages/bilixs)                                       | 优化 bilixs 体验，点赞的同时复制图片与分享链接                                           | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bilixs.user.js)                                                                          |
 
 ## iOS & Mac safari install
 
