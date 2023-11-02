@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.4.6
+
+### Patch Changes
+
+- 59190d9: chore: remove unused code
+
 ## 1.4.5
 
 ### Patch Changes
