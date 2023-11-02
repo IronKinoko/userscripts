@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.5
+
+### Patch Changes
+
+- 7176ec8: feat: support prefetch
+
 ## 1.5.4
 
 ### Patch Changes
