@@ -1,6 +1,6 @@
 {
-  "name": "zelda-map",
-  "version": "1.0.3",
+  "name": "bilixs",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
   "bugs": {
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
-  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/zelda-map#readme",
-  "dependencies": {
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/bilixs#readme",
+  "devDependencies": {
     "shared": "workspace:*"
   }
 }

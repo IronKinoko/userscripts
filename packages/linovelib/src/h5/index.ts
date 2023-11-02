@@ -1,89 +1,11 @@
 import { isMobile, keybind, router } from 'shared'
 
 export default async function main() {
-  router([{ pathname: /novel\/\d+\/catalog/, run: injectDownloadSection }])
-
   if (!window.ReadTools) return
   resetPageEvent()
 
   if (isMobile()) injectMovePageEvent()
   else injectShortcuts()
-}
-
-export interface SyncProgressEvent {
-  total: number
-  loaded: number
-  progress: number
-}
-export interface SyncProgress {
-  status: 'chapter' | 'asset' | 'done'
-  id?: string
-  chapter: SyncProgressEvent
-  asset: SyncProgressEvent
-}
-
-type SyncResult = {
-  code: number
-  progress: SyncProgress
-  message: string
-  done: boolean
-  downloadURL: string
-}
-
-function injectDownloadSection() {
-  const bookId = window.location.pathname.match(/\d+/)![0]
-
-  document
-    .querySelectorAll<HTMLDivElement>('#volumes .chapter-bar')
-    .forEach((node, idx) => {
-      const api = `https://www.zhidianbao.cn:8443/qs_xq_epub/api/catalog/${bookId}/${idx}/sync`
-
-      node.innerHTML = `
-        <span>${node.textContent}</span>
-        <button class="download-btn"></button>
-        <div class="progress">
-          <div hidden></div>
-        </div>
-      `
-
-      const $btn = node.querySelector<HTMLButtonElement>('.download-btn')!
-      const $progress = node.querySelector<HTMLDivElement>('.progress div')!
-
-      const setProgress = (progress?: SyncProgress) => {
-        if (progress) {
-          $progress.hidden = false
-          const { asset, chapter } = progress
-          $progress.style.width =
-            ((chapter.progress + asset.progress) * 100) / 2 + '%'
-        } else {
-          $progress.hidden = true
-          $progress.style.width = '0'
-        }
-      }
-      $btn.onclick = () => {
-        $btn.disabled = true
-        ;(async function fn() {
-          const res: SyncResult = await fetch(api).then((res) => res.json())
-          setProgress(res.progress)
-
-          if (res.code !== 0) {
-            alert(res.message)
-            $btn.disabled = false
-          } else {
-            if (res.done) {
-              window.location.href = new URL(
-                res.downloadURL,
-                'https://www.zhidianbao.cn:8443'
-              ).toString()
-              setTimeout(() => setProgress(undefined), 100)
-              $btn.disabled = false
-            } else {
-              setTimeout(fn, 300)
-            }
-          }
-        })()
-      }
-    })
 }
 
 function resetPageEvent() {

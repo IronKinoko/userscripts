@@ -59,6 +59,12 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  packages/bilixs:
+    devDependencies:
+      shared:
+        specifier: workspace:*
+        version: link:../shared
+
   packages/copymanga:
     dependencies:
       shared:
@@ -117,12 +123,6 @@ importers:
         version: link:../shared
 
   packages/xxxxx520:
-    dependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/zelda-map:
     dependencies:
       shared:
         specifier: workspace:*
