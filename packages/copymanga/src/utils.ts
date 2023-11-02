@@ -22,18 +22,27 @@ function h5URLToPC(href: string) {
   return null
 }
 
-export async function getFullImages() {
+type ChapterInfo = {
+  ok: boolean
+  message?: string
+  manga: { url: string }[]
+  next?: {
+    comicId: string
+    chapterId: string
+  }
+}
+export async function getChapterInfo() {
   const url = h5URLToPC(window.location.href)
 
   if (!url) throw new Error('请在移动端运行')
 
   try {
-    const data = await fetch(url).then((r) => r.json())
+    const data = await fetch(url).then<ChapterInfo>((r) => r.json())
     if (!data.ok) throw new Error(data.message)
-    return data.manga as { url: string }[]
+    return data
   } catch (error: any) {
     console.error(error)
     alert(`接口调用失败 ${error.message}`)
-    return []
+    return { ok: false, manga: [] } as ChapterInfo
   }
 }

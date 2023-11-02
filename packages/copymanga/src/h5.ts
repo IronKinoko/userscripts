@@ -1,4 +1,4 @@
-import { getFullImages } from './utils'
+import { getChapterInfo } from './utils'
 import { local, sleep, throttle, waitDOM } from 'shared'
 import T from './h5.template.html'
 
@@ -389,17 +389,28 @@ const _historyWrap = function (type: 'pushState' | 'replaceState') {
 
 async function injectImageData() {
   $('.comicContentPopup .comicFixed').addClass('loading')
-  const data = await getFullImages()
+  const info = await getChapterInfo()
+
   $('.comicContentPopup .comicFixed').removeClass('loading')
 
   let html = ''
-  data.forEach(({ url }, idx) => {
+  info.manga.forEach(({ url }, idx) => {
     html += `
     <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
       <img-lazy src="${url}" />
     </li>
     `
   })
+
+  if (info.next) {
+    const { comicId, chapterId } = info.next
+    const prefetchURLs = [
+      `https://userscripts-proxy.vercel.app/api/copymanga/comic/${comicId}/chapter/${chapterId}`,
+    ]
+    prefetchURLs.forEach((url) => {
+      $('head').append(`<link rel="prefetch" href="${url}" data-k-prefetch />`)
+    })
+  }
 
   await waitDOM('.comicContentPopupImageList .comicContentPopupImageItem')
   $('.comicContentPopupImageItem').attr('class', 'k-open-control-item').hide()
