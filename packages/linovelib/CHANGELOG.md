@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.4.7
+
+### Patch Changes
+
+- 9a0899c: fix: support new domain
+
 ## 1.4.6
 
 ### Patch Changes
