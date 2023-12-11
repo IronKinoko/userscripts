@@ -53,12 +53,9 @@ function updateClipboard() {
     '<meta charset="UTF-8" />' +
     cache
       .map(({ href, imgs }) => {
-        return (
-          imgs.map((img) => `<img src="${img}">`).join('') +
-          `<br/><a href="${href}">${href}</a>`
-        )
+        return imgs.map((img) => `<img src="${img}">`).join('')
       })
-      .join('<br/><br/>')
+      .join('')
 
   navigator.clipboard
     .write([
