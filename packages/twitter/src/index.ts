@@ -65,8 +65,13 @@ async function makeWaterMark() {
   canvas.height = img.naturalHeight
   ctx.drawImage(img, 0, 0)
 
-  ctx.font = '16px sans-serif'
-
+  const fontSize = Math.max(16, canvas.width / 40)
+  ctx.font = `${fontSize}px sans-serif`
+  console.log(
+    ctx.measureText(author).width,
+    author.length,
+    ctx.measureText(author).width / author.length
+  )
   ctx.save()
   ctx.fillStyle = 'rgba(255,255,255,0.3)'
   ctx.shadowColor = 'black'

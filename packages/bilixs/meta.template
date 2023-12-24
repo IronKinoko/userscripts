@@ -10,7 +10,6 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=www.bilixs.com
 // @grant        none
 // @noframes
-// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/bilixs.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/bilixs.user.js
 // ==/UserScript==
