@@ -40,10 +40,9 @@ function handleLike(e: MouseEvent) {
   if (!href) href = window.location.href
   href = href.replace(/\/photo\/.*$/, '').replace('twitter.com', 'x.com')
 
-  if (cache.some((item) => item.href === href)) return
-  cache.push({ href, imgs })
+  cache = [{ href, imgs }]
 
-  updateClipboard()
+  updateClipboard(likeDom)
 }
 
 async function makeWaterMark() {
@@ -67,11 +66,7 @@ async function makeWaterMark() {
 
   const fontSize = Math.max(16, canvas.width / 40)
   ctx.font = `${fontSize}px sans-serif`
-  console.log(
-    ctx.measureText(author).width,
-    author.length,
-    ctx.measureText(author).width / author.length
-  )
+
   ctx.save()
   ctx.fillStyle = 'rgba(255,255,255,0.3)'
   ctx.shadowColor = 'black'
@@ -97,15 +92,29 @@ async function makeWaterMark() {
   })
 }
 
-async function updateClipboard() {
+function toast(target: HTMLElement, text: string) {
+  const dom = document.createElement('div')
+  dom.textContent = text
+  dom.style.cssText = `position:absolute;left:50%;bottom:100%;z-index:100;
+  transform:translateX(-50%);
+  border-radius:2px;padding:4px;
+  background:rgba(0,0,0,0.60);width:max-content;
+  color:white;font-size:11px;line-height:12px;`
+  target.appendChild(dom)
+  target.style.position = 'relative'
+
+  setTimeout(() => {
+    dom.remove()
+  }, 1000)
+}
+
+async function updateClipboard(likeDom: HTMLElement) {
   if (!cache.length) return
 
-  console.time('makeWaterMark')
   const blob = await makeWaterMark()
-  console.timeEnd('makeWaterMark')
 
-  navigator.clipboard
-    .write([
+  try {
+    await navigator.clipboard.write([
       new ClipboardItem({
         'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
           type: 'text/plain',
@@ -113,7 +122,10 @@ async function updateClipboard() {
         [blob.type]: blob,
       }),
     ])
-    .catch((err) => {
-      console.error(err)
-    })
+
+    toast(likeDom, '已复制')
+  } catch (err: any) {
+    console.error(err)
+    toast(likeDom, `复制失败:${err.message}`)
+  }
 }
