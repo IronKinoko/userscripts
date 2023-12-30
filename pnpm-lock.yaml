@@ -107,6 +107,12 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  packages/novel-speech-synthesis:
+    devDependencies:
+      shared:
+        specifier: workspace:*
+        version: link:../shared
+
   packages/shared:
     dependencies:
       copy-to-clipboard:

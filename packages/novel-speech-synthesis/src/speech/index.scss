@@ -1,0 +1,51 @@
+#speech {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 16px);
+  right: 16px;
+  z-index: 999999999;
+  border-radius: 8px;
+  border: 1px solid #f5f5f5;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+
+  .speech-controls-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .speech-controls-button {
+    padding: 4px;
+  }
+
+  .speech-controls-voice {
+    width: 30px;
+  }
+
+  .speech-controls-play {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    svg:nth-child(2) {
+      display: block;
+    }
+    svg:nth-child(3) {
+      display: none;
+    }
+    input:checked ~ svg:nth-child(2) {
+      display: none;
+    }
+    input:checked ~ svg:nth-child(3) {
+      display: block;
+    }
+  }
+
+  svg {
+    display: block;
+  }
+}
+.speech-reading {
+  text-decoration: underline dotted !important;
+  text-underline-offset: 0.4em !important;
+}
