@@ -16,6 +16,7 @@
 | [18comic](/packages/18comic)                                     | 优化 18comic 体验                                                                        | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/18comic.user.js)                                                                         |
 | [twitter](/packages/twitter)                                     | 优化 twitter 体验，点赞的同时复制图片与分享链接                                          | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/twitter.user.js)                                                                         |
 | [bilixs](/packages/bilixs)                                       | 优化 bilixs 体验                                                                         | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bilixs.user.js)                                                                          |
+| [novel-speech-synthesis](/packages/novel-speech-synthesis)       | 小说语音阅读功能                                                                         | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/novel-speech-synthesis.user.js)                                                          |
 
 ## iOS & Mac safari install
 
