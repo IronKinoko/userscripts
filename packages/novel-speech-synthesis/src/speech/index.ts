@@ -48,15 +48,10 @@ export default class Speech {
               p.classList.add('speech-reading')
 
               if (scrollElement) {
-                const { y, bottom } = p.getBoundingClientRect()
-
-                let top = 0
-                if (y < 100) top = y - 100
-                else if (bottom > window.innerHeight - 100)
-                  top = bottom - window.innerHeight + 100
+                const { y } = p.getBoundingClientRect()
 
                 if (top) {
-                  scrollElement.scrollBy({ top, behavior: 'smooth' })
+                  scrollElement.scrollBy({ top: y - 100, behavior: 'smooth' })
                 }
               }
             })
