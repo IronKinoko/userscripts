@@ -4,9 +4,9 @@ import T from './ui.template.html'
 export type SpeechOptions = {
   container: string
   lang: string
-  /** 目标是给每个段落增加 */
   getParagraph: () => HTMLElement[]
   scrollElement?: string
+  nextChapter: () => void
 }
 
 export default class Speech {
@@ -14,18 +14,20 @@ export default class Speech {
     play: HTMLInputElement
     voice: HTMLSelectElement
     rate: HTMLSelectElement
+    continuous: HTMLInputElement
   } | null = null
 
   utterance = {
     rate: 1.5,
     voiceURI: null as string | null,
+    continuous: true,
   }
   voices: SpeechSynthesisVoice[] = []
 
   constructor(private opts: SpeechOptions) {
     this.loadUtterance()
-    this.createUI()
     this.washContent()
+    this.createUI()
   }
 
   private washContent() {
@@ -57,6 +59,12 @@ export default class Speech {
             })
             utterance.addEventListener('end', () => {
               p.classList.remove('speech-reading')
+              if (
+                this.utterance.continuous &&
+                index === paragraphList.length - 1
+              ) {
+                this.opts.nextChapter()
+              }
             })
             utterance.addEventListener('error', () => {
               p.classList.remove('speech-reading')
@@ -68,7 +76,7 @@ export default class Speech {
   }
 
   private getParagraph(idx: number) {
-    return document.querySelector(`[data-speech-idx="${idx}"]`)
+    return document.querySelector<HTMLElement>(`[data-speech-idx="${idx}"]`)
   }
 
   private createUI() {
@@ -86,6 +94,7 @@ export default class Speech {
       play: dom.querySelector('.speech-controls-play input')!,
       voice: dom.querySelector('.speech-controls-voice')!,
       rate: dom.querySelector('.speech-controls-rate')!,
+      continuous: dom.querySelector('.speech-controls-continuous input')!,
     }
     this.elements.play.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
@@ -97,12 +106,21 @@ export default class Speech {
     })
 
     this.onVoices((voices) => {
+      if (voices.length === 0) return
+
       this.voices = voices.filter((voice) => voice.lang === this.opts.lang)
       this.elements!.voice.innerHTML = this.voices
         .map((v) => `<option value="${v.voiceURI}">${v.name}</option>`)
         .join('')
 
-      this.elements!.voice.value = this.utterance.voiceURI || ''
+      if (this.utterance.voiceURI) {
+        this.elements!.voice.value = this.utterance.voiceURI
+        this.refreshSpeech()
+      }
+
+      if (this.utterance.continuous) {
+        this.getParagraph(0)?.click()
+      }
     })
 
     this.elements.voice.value = this.utterance.voiceURI || ''
@@ -112,6 +130,7 @@ export default class Speech {
       if (find) {
         this.utterance.voiceURI = find.voiceURI
         this.saveUtterance()
+        this.refreshSpeech()
       }
     })
 
@@ -120,7 +139,23 @@ export default class Speech {
       const target = e.target as HTMLSelectElement
       this.utterance.rate = Number(target.value)
       this.saveUtterance()
+      this.refreshSpeech()
     })
+
+    this.elements.continuous.checked = this.utterance.continuous
+    this.elements.continuous.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement
+      this.utterance.continuous = target.checked
+      this.saveUtterance()
+    })
+  }
+
+  private refreshSpeech() {
+    const dom = document.querySelector('.speech-reading')
+    if (!dom) return
+    const idx = Number(dom.getAttribute('data-speech-idx'))
+    const p = this.getParagraph(idx)
+    p?.click()
   }
 
   private saveUtterance() {

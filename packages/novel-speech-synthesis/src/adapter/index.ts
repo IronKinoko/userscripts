@@ -10,5 +10,9 @@ export const adapter: Record<string, SpeechOptions> = {
 
       return Array.from(content.querySelectorAll('p'))
     },
+    nextChapter() {
+      const dom = document.querySelector<HTMLAnchorElement>('.footer .f-right')
+      dom?.click()
+    },
   },
 }
