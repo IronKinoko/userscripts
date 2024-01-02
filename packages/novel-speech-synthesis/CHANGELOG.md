@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.4
+
+### Patch Changes
+
+- 720e302: fix: safari error
+
 ## 1.0.3
 
 ### Patch Changes
