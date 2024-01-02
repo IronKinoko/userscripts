@@ -1,3 +1,4 @@
+import { keybind } from 'shared'
 import './index.scss'
 import T from './ui.template.html'
 
@@ -17,12 +18,15 @@ export default class Speech {
     continuous: HTMLInputElement
   } | null = null
 
-  utterance = {
+  private utterance = {
     rate: 1.5,
     voiceURI: null as string | null,
     continuous: true,
   }
-  voices: SpeechSynthesisVoice[] = []
+  private voices: SpeechSynthesisVoice[] = []
+  private paragraphList = [] as HTMLElement[]
+
+  private speakDispose: (() => void) | null = null
 
   constructor(private opts: SpeechOptions) {
     this.loadUtterance()
@@ -31,52 +35,30 @@ export default class Speech {
   }
 
   private washContent() {
-    const paragraphList = this.opts.getParagraph()
-    paragraphList.forEach((p, idx) => {
+    this.paragraphList = this.opts.getParagraph()
+    this.paragraphList.forEach((p, idx) => {
       p.setAttribute('data-speech-idx', idx.toString())
 
       p.addEventListener('click', () => {
-        window.speechSynthesis.cancel()
-        this.elements!.play.checked = true
-        const scrollElement = this.opts.scrollElement
-          ? document.querySelector(this.opts.scrollElement)
-          : document.scrollingElement
+        let current = idx
+        let cancel = false
+        this.speakDispose?.()
 
-        for (let index = idx; index < paragraphList.length; index++) {
-          const p = this.getParagraph(index)
-          if (p && p.textContent) {
-            const utterance = this.speak(p.textContent)
-            utterance.addEventListener('start', () => {
-              p.classList.add('speech-reading')
+        const speak = async () => {
+          if (cancel) return
+          await this.speakParagraph(current)
 
-              if (scrollElement) {
-                const { y } = p.getBoundingClientRect()
-
-                if (top) {
-                  scrollElement.scrollBy({ top: y - 100, behavior: 'smooth' })
-                }
-              }
-            })
-            utterance.addEventListener('end', () => {
-              p.classList.remove('speech-reading')
-              if (
-                this.utterance.continuous &&
-                index === paragraphList.length - 1
-              ) {
-                this.opts.nextChapter()
-              }
-            })
-            utterance.addEventListener('error', () => {
-              p.classList.remove('speech-reading')
-            })
+          if (current < this.paragraphList.length) {
+            current++
+            speak()
           }
         }
+        this.speakDispose = () => {
+          cancel = true
+        }
+        speak()
       })
     })
-  }
-
-  private getParagraph(idx: number) {
-    return document.querySelector<HTMLElement>(`[data-speech-idx="${idx}"]`)
   }
 
   private createUI() {
@@ -119,7 +101,7 @@ export default class Speech {
       }
 
       if (this.utterance.continuous) {
-        this.getParagraph(0)?.click()
+        this.paragraphList[0]?.click()
       }
     })
 
@@ -148,13 +130,17 @@ export default class Speech {
       this.utterance.continuous = target.checked
       this.saveUtterance()
     })
+
+    keybind(['space'], (e) => {
+      e.preventDefault()
+      this.elements!.play.click()
+    })
   }
 
   private refreshSpeech() {
-    const dom = document.querySelector('.speech-reading')
-    if (!dom) return
-    const idx = Number(dom.getAttribute('data-speech-idx'))
-    const p = this.getParagraph(idx)
+    const idx = this.currentSpeakingParagraphIdx
+    if (idx === null) return
+    const p = this.paragraphList[idx]
     p?.click()
   }
 
@@ -175,15 +161,65 @@ export default class Speech {
     }
   }
 
-  speak(text: string) {
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = this.opts.lang
-    utterance.rate = this.utterance.rate
-    utterance.voice =
-      this.voices.find((voice) => this.utterance.voiceURI === voice.voiceURI) ||
-      null
-    window.speechSynthesis.speak(utterance)
-    return utterance
+  private speakParagraph(index: number) {
+    return new Promise<void>((resolve, reject) => {
+      window.speechSynthesis.cancel()
+      this.elements!.play.checked = true
+      const scrollElement = this.opts.scrollElement
+        ? document.querySelector(this.opts.scrollElement)
+        : document.scrollingElement
+
+      document.querySelectorAll('.speech-reading').forEach((p) => {
+        p.classList.remove('speech-reading')
+      })
+
+      const p = this.paragraphList[index]
+      if (p && p.textContent) {
+        const utterance = new SpeechSynthesisUtterance(p.textContent)
+        utterance.lang = this.opts.lang
+        utterance.rate = this.utterance.rate
+        utterance.voice =
+          this.voices.find(
+            (voice) => this.utterance.voiceURI === voice.voiceURI
+          ) || null
+
+        utterance.onstart = (e) => {
+          console.log('start', e)
+          p.classList.add('speech-reading')
+
+          if (scrollElement) {
+            const { y } = p.getBoundingClientRect()
+
+            if (top) {
+              scrollElement.scrollBy({ top: y - 100, behavior: 'smooth' })
+            }
+          }
+        }
+        utterance.onend = (e) => {
+          console.log('end', e)
+          p.classList.remove('speech-reading')
+
+          if (
+            this.utterance.continuous &&
+            index === this.paragraphList.length - 1
+          ) {
+            this.opts.nextChapter()
+          }
+          resolve()
+        }
+        utterance.onerror = (e) => {
+          console.error('error', e)
+          p.classList.remove('speech-reading')
+          console.error(e)
+          reject(e)
+        }
+
+        console.log('utterance', utterance)
+        window.speechSynthesis.speak(utterance)
+      } else {
+        resolve()
+      }
+    })
   }
 
   resume() {
@@ -202,5 +238,10 @@ export default class Speech {
   }
   get pending() {
     return window.speechSynthesis.pending
+  }
+  get currentSpeakingParagraphIdx() {
+    const dom = document.querySelector('.speech-reading')
+    if (!dom) return null
+    return Number(dom.getAttribute('data-speech-idx'))
   }
 }
