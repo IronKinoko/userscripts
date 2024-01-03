@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.5
+
+### Patch Changes
+
+- e737fb4: feat: support bilinovel
+
 ## 1.0.4
 
 ### Patch Changes
