@@ -7,6 +7,8 @@
 // @author       IronKinoko
 // @match        https://hans.bilixs.com/*
 // @match        https://www.bilixs.com/*
+// @match        https://www.bilinovel.com/*
+// @match        https://www.linovelib.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=
 // @grant        none
 // @noframes

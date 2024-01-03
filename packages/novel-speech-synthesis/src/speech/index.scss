@@ -14,7 +14,7 @@
   .speech-controls-buttons {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     font-size: 16px;
   }
@@ -24,15 +24,21 @@
     width: 35px;
     text-align: center;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .speech-controls-button + .speech-controls-button {
     border-left: 1px solid #ddd;
   }
 
-  .speech-controls-voice,
-  .speech-controls-rate {
-    width: 100%;
+  select {
     text-align: center;
+    appearance: none;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: inherit;
   }
 
   .speech-controls-play {
