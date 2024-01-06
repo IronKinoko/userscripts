@@ -1,5 +1,44 @@
+import { local, wait } from 'shared'
+
+const LocalKey = 'k-x-mode'
+
 window.addEventListener('click', handleClick, { capture: true })
 window.addEventListener('blur', () => (cache = []))
+;(async function createUI() {
+  {
+    await wait(
+      () =>
+        document.querySelectorAll('[role="navigation"] > div > span').length > 0
+    )
+    const doms = document.querySelectorAll('[role="navigation"] > div > span')
+    for (const dom of doms) {
+      if (dom.textContent?.match(/x corp/i)) {
+        const switchDom =
+          dom.parentNode!.previousSibling!.previousSibling!.cloneNode(
+            true
+          ) as HTMLAnchorElement
+
+        switchDom.addEventListener('click', () => {
+          const mode = local.getItem(LocalKey)
+          local.setItem(LocalKey, mode === 'watermark' ? 'normal' : 'watermark')
+          updateText()
+        })
+
+        const updateText = () => {
+          switchDom.children[0].textContent = `M: ${
+            local.getItem(LocalKey) === 'watermark' ? 'PNG' : 'HTML'
+          }`
+        }
+        updateText()
+
+        switchDom.removeAttribute('href')
+
+        dom.parentNode!.parentNode!.append(switchDom)
+        break
+      }
+    }
+  }
+})()
 
 function handleClick(e: MouseEvent) {
   handleLike(e)
@@ -40,7 +79,7 @@ function handleLike(e: MouseEvent) {
   if (!href) href = window.location.href
   href = href.replace(/\/photo\/.*$/, '').replace('twitter.com', 'x.com')
 
-  cache = [{ href, imgs }]
+  cache.push({ href, imgs })
 
   updateClipboard(likeDom)
 }
@@ -111,17 +150,31 @@ function toast(target: HTMLElement, text: string) {
 async function updateClipboard(likeDom: HTMLElement) {
   if (!cache.length) return
 
-  const blob = await makeWaterMark()
-
   try {
-    await navigator.clipboard.write([
-      new ClipboardItem({
-        'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
-          type: 'text/plain',
+    if (local.getItem('k-x-mode') === 'watermark') {
+      const blob = await makeWaterMark()
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
+            type: 'text/plain',
+          }),
+          [blob.type]: blob,
         }),
-        [blob.type]: blob,
-      }),
-    ])
+      ])
+    } else {
+      let html = cache
+        .map((item) => item.imgs.map((img) => `<img src="${img}" />`).join(''))
+        .join('')
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
+            type: 'text/plain',
+          }),
+          'text/html': new Blob([html], { type: 'text/html' }),
+        }),
+      ])
+    }
 
     toast(likeDom, '已复制')
   } catch (err: any) {
