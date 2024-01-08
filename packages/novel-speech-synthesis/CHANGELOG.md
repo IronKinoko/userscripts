@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.6
+
+### Patch Changes
+
+- d3c4dde: feat: support syosetu
+
 ## 1.0.5
 
 ### Patch Changes
