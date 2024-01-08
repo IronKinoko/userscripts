@@ -1,6 +1,7 @@
 import { keybind, local, throttle } from 'shared'
 import './index.scss'
 import T from './ui.template.html'
+import { Drag } from './Drag'
 
 export type SpeechOptions = {
   container: string
@@ -30,6 +31,7 @@ export default class Speech {
   private paragraphList = [] as HTMLElement[]
 
   private speakDispose: (() => void) | null = null
+  drag!: Drag
 
   constructor(private opts: SpeechOptions) {
     this.loadUtterance()
@@ -83,6 +85,8 @@ export default class Speech {
       continuous: root.querySelector('.speech-controls-continuous input')!,
       menu: root.querySelector('.speech-controls-menu input')!,
     }
+    this.drag = new Drag(root)
+
     this.elements.play.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
       if (target.checked) {
@@ -146,12 +150,35 @@ export default class Speech {
 
     this.updateMenuUI()
 
-    this.addDragEvent(root)
-
     keybind(['space'], (e) => {
       e.preventDefault()
       this.elements!.play.click()
     })
+  }
+  // set fixedNextBtn position
+  private setPosition(
+    fxiedDom: HTMLDivElement,
+    position: { left: number; top: number },
+    isMoving: boolean
+  ): void {
+    fxiedDom!.classList.remove('left', 'right')
+    fxiedDom!.style.transition = isMoving ? 'none' : ''
+    fxiedDom!.style.top = `${position.top}px`
+    fxiedDom!.style.left = `${position.left}px`
+
+    if (!isMoving) {
+      const halfScreenWidth = document.documentElement.clientWidth / 2
+      fxiedDom!.classList.add(
+        position.left > halfScreenWidth ? 'right' : 'left'
+      )
+      fxiedDom!.style.left =
+        position.left > halfScreenWidth
+          ? `${
+              document.documentElement.clientWidth -
+              fxiedDom!.getBoundingClientRect().width
+            }px`
+          : '0px'
+    }
   }
 
   private addDragEvent(fxiedDom: HTMLDivElement) {
@@ -179,34 +206,8 @@ export default class Speech {
         ),
     }
 
-    // set fixedNextBtn position
-    const setPosition = (
-      position: { left: number; top: number },
-      isMoving: boolean
-    ) => {
-      fxiedDom!.classList.remove('left', 'right')
-      fxiedDom!.style.transition = isMoving ? 'none' : ''
-      fxiedDom!.style.top = `${position.top}px`
-      fxiedDom!.style.left = `${position.left}px`
+    this.setPosition(fxiedDom, position, false)
 
-      if (!isMoving) {
-        const halfScreenWidth = document.documentElement.clientWidth / 2
-        fxiedDom!.classList.add(
-          position.left > halfScreenWidth ? 'right' : 'left'
-        )
-        fxiedDom!.style.left =
-          position.left > halfScreenWidth
-            ? `${
-                document.documentElement.clientWidth -
-                fxiedDom!.getBoundingClientRect().width
-              }px`
-            : '0px'
-      }
-    }
-
-    setPosition(position, false)
-
-    // remember fixedNextBtn move position
     fxiedDom.addEventListener('touchstart', (e) => {
       const touch = e.touches[0]
       const { clientX, clientY } = touch
@@ -221,11 +222,11 @@ export default class Speech {
         const x = safeArea.left(clientX - diffX)
         const y = safeArea.top(clientY - diffY)
         position = { top: y, left: x }
-        setPosition(position, true)
+        this.setPosition(fxiedDom, position, true)
       }
       const end = () => {
         local.setItem(key, position)
-        setPosition(position, false)
+        this.setPosition(fxiedDom, position, false)
         fxiedDom!.style.removeProperty('transition')
         window.removeEventListener('touchmove', move)
         window.removeEventListener('touchend', end)
@@ -270,6 +271,13 @@ export default class Speech {
           dom.classList.add('speech-controls-hide')
         }
       }
+    )
+    this.drag.setPosition(
+      {
+        left: Number(this.elements!.root.style.left.replace('px', '')),
+        top: Number(this.elements!.root.style.top.replace('px', '')),
+      },
+      false
     )
   }
 

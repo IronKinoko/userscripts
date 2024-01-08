@@ -2,6 +2,7 @@
   position: fixed;
   z-index: 999999999;
   border: 1px solid #ddd;
+  border-radius: 8px;
   transition: all 0.2s ease;
   transform: translateX(0);
   opacity: 1;
@@ -25,6 +26,7 @@
 
   * {
     box-sizing: border-box;
+    user-select: none;
   }
 
   .speech-controls-buttons {
