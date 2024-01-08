@@ -37,3 +37,15 @@ router({
     },
   ],
 })
+
+router({
+  domain: ['novel18.syosetu.com'],
+  routes: [
+    {
+      pathname: /^\/([^/]+?)\/([^/]+?)\/?$/,
+      run: () => {
+        new Speech(adapter['novel18.syosetu'])
+      },
+    },
+  ],
+})

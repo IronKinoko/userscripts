@@ -49,4 +49,25 @@ export const adapter: Record<string, SpeechOptions> = {
         ?.click()
     },
   },
+  'novel18.syosetu': {
+    container: 'body',
+    lang: 'ja-JP',
+    getParagraph: () => {
+      const content = document.querySelector('#novel_honbun')
+      if (!content) throw new Error('content not found')
+
+      return Array.from(content.querySelectorAll('p'))
+    },
+    nextChapter: () => {
+      let dom = document.querySelector<HTMLAnchorElement>(
+        '.novel_bn a[rel="next"]'
+      )
+      if (!dom) {
+        dom = document.querySelector<HTMLAnchorElement>(
+          '.novel_bn a:last-child'
+        )
+      }
+      dom?.click()
+    },
+  },
 }

@@ -1,4 +1,4 @@
-import { keybind } from 'shared'
+import { keybind, local, throttle } from 'shared'
 import './index.scss'
 import T from './ui.template.html'
 
@@ -12,16 +12,19 @@ export type SpeechOptions = {
 
 export default class Speech {
   private elements: {
+    root: HTMLDivElement
     play: HTMLInputElement
     voice: HTMLSelectElement
     rate: HTMLSelectElement
     continuous: HTMLInputElement
+    menu: HTMLInputElement
   } | null = null
 
   private utterance = {
     rate: 1.5,
     voiceURI: null as string | null,
     continuous: true,
+    menu: true,
   }
   private voices: SpeechSynthesisVoice[] = []
   private paragraphList = [] as HTMLElement[]
@@ -62,21 +65,23 @@ export default class Speech {
   }
 
   private createUI() {
-    const dom = new DOMParser().parseFromString(T.speech, 'text/html').body
-      .children[0]
+    const root = new DOMParser().parseFromString(T.speech, 'text/html').body
+      .children[0] as HTMLDivElement
     const container = document.querySelector(this.opts.container)
     if (!container) throw new Error('container not found')
-    container.appendChild(dom)
+    container.appendChild(root)
 
     window.addEventListener('beforeunload', () => {
       this.cancel()
     })
 
     this.elements = {
-      play: dom.querySelector('.speech-controls-play input')!,
-      voice: dom.querySelector('.speech-controls-voice')!,
-      rate: dom.querySelector('.speech-controls-rate')!,
-      continuous: dom.querySelector('.speech-controls-continuous input')!,
+      root,
+      play: root.querySelector('.speech-controls-play input')!,
+      voice: root.querySelector('.speech-controls-voice')!,
+      rate: root.querySelector('.speech-controls-rate')!,
+      continuous: root.querySelector('.speech-controls-continuous input')!,
+      menu: root.querySelector('.speech-controls-menu input')!,
     }
     this.elements.play.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
@@ -131,10 +136,141 @@ export default class Speech {
       this.saveUtterance()
     })
 
+    this.elements.menu.checked = this.utterance.menu
+    this.elements.menu.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement
+      this.utterance.menu = target.checked
+      this.updateMenuUI()
+      this.saveUtterance()
+    })
+
+    this.updateMenuUI()
+
+    this.addDragEvent(root)
+
     keybind(['space'], (e) => {
       e.preventDefault()
       this.elements!.play.click()
     })
+  }
+
+  private addDragEvent(fxiedDom: HTMLDivElement) {
+    let prevY = 0
+    let storeY = 0
+    const key = 'speech-fixed-position'
+    let position = local.getItem(key, {
+      top: document.documentElement.clientHeight / 4,
+      left: document.documentElement.clientWidth,
+    })
+
+    // safe position area
+    const safeArea = {
+      top: (y: number) =>
+        Math.min(
+          Math.max(y, 0),
+          document.documentElement.clientHeight -
+            fxiedDom!.getBoundingClientRect().height
+        ),
+      left: (x: number) =>
+        Math.min(
+          Math.max(x, 0),
+          document.documentElement.clientWidth -
+            fxiedDom!.getBoundingClientRect().width
+        ),
+    }
+
+    // set fixedNextBtn position
+    const setPosition = (
+      position: { left: number; top: number },
+      isMoving: boolean
+    ) => {
+      fxiedDom!.classList.remove('left', 'right')
+      fxiedDom!.style.transition = isMoving ? 'none' : ''
+      fxiedDom!.style.top = `${position.top}px`
+      fxiedDom!.style.left = `${position.left}px`
+
+      if (!isMoving) {
+        const halfScreenWidth = document.documentElement.clientWidth / 2
+        fxiedDom!.classList.add(
+          position.left > halfScreenWidth ? 'right' : 'left'
+        )
+        fxiedDom!.style.left =
+          position.left > halfScreenWidth
+            ? `${
+                document.documentElement.clientWidth -
+                fxiedDom!.getBoundingClientRect().width
+              }px`
+            : '0px'
+      }
+    }
+
+    setPosition(position, false)
+
+    // remember fixedNextBtn move position
+    fxiedDom.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0]
+      const { clientX, clientY } = touch
+      const { top, left } = fxiedDom!.getBoundingClientRect()
+      const diffX = clientX - left
+      const diffY = clientY - top
+      const move = (e: TouchEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const touch = e.touches[0]
+        const { clientX, clientY } = touch
+        const x = safeArea.left(clientX - diffX)
+        const y = safeArea.top(clientY - diffY)
+        position = { top: y, left: x }
+        setPosition(position, true)
+      }
+      const end = () => {
+        local.setItem(key, position)
+        setPosition(position, false)
+        fxiedDom!.style.removeProperty('transition')
+        window.removeEventListener('touchmove', move)
+        window.removeEventListener('touchend', end)
+      }
+      window.addEventListener('touchmove', move, { passive: false })
+      window.addEventListener('touchend', end)
+    })
+
+    window.addEventListener(
+      'scroll',
+      throttle(() => {
+        const dom = document.scrollingElement!
+
+        const currentY = dom.scrollTop
+        let diffY = currentY - storeY
+        if (
+          currentY < 50 ||
+          currentY + dom.clientHeight > dom.scrollHeight - 800 ||
+          diffY < -30
+        ) {
+          fxiedDom?.classList.remove('hide')
+        } else {
+          fxiedDom?.classList.add('hide')
+        }
+
+        if (currentY > prevY) {
+          storeY = currentY
+        }
+        prevY = currentY
+      }, 100)
+    )
+  }
+
+  private updateMenuUI() {
+    this.elements!.root.querySelectorAll('.speech-controls-button').forEach(
+      (dom) => {
+        if (dom.classList.contains('speech-controls-menu')) return
+
+        if (this.utterance.menu) {
+          dom.classList.remove('speech-controls-hide')
+        } else {
+          dom.classList.add('speech-controls-hide')
+        }
+      }
+    )
   }
 
   private refreshSpeech() {

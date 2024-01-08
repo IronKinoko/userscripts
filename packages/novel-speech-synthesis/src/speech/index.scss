@@ -1,11 +1,27 @@
 #speech {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 16px);
-  right: 16px;
   z-index: 999999999;
-  border-radius: 8px;
   border: 1px solid #ddd;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  transform: translateX(0);
+  opacity: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.2) -1px 1px 10px 0px;
+
+  &.left {
+    border-radius: 0 8px 8px 0;
+    --transform-x: -100%;
+  }
+  &.right {
+    border-radius: 8px 0 0 8px;
+    --transform-x: 100%;
+  }
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(var(--transform-x));
+  }
 
   * {
     box-sizing: border-box;
@@ -22,11 +38,13 @@
   .speech-controls-button {
     padding: 0 4px;
     width: 35px;
+    height: 28px;
     text-align: center;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
   }
   .speech-controls-button + .speech-controls-button {
     border-left: 1px solid #ddd;
@@ -64,6 +82,14 @@
     input:checked + span {
       color: #1890ff;
     }
+  }
+  .speech-controls-menu {
+    input:checked + svg {
+      color: #1890ff;
+    }
+  }
+  .speech-controls-hide {
+    display: none !important;
   }
 }
 .speech-reading {
