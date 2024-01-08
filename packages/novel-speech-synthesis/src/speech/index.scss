@@ -85,7 +85,8 @@
       color: #1890ff;
     }
   }
-  .speech-controls-menu {
+  .speech-controls-menu,
+  .speech-controls-disabled {
     input:checked + svg {
       color: #1890ff;
     }

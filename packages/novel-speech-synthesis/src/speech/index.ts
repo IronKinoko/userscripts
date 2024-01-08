@@ -19,6 +19,7 @@ export default class Speech {
     rate: HTMLSelectElement
     continuous: HTMLInputElement
     menu: HTMLInputElement
+    disabled: HTMLInputElement
   } | null = null
 
   private utterance = {
@@ -26,6 +27,7 @@ export default class Speech {
     voiceURI: null as string | null,
     continuous: true,
     menu: true,
+    disabled: false,
   }
   private voices: SpeechSynthesisVoice[] = []
   private paragraphList = [] as HTMLElement[]
@@ -45,6 +47,8 @@ export default class Speech {
       p.setAttribute('data-speech-idx', idx.toString())
 
       p.addEventListener('click', () => {
+        if (this.utterance.disabled) return
+
         let current = idx
         let cancel = false
         this.speakDispose?.()
@@ -84,6 +88,7 @@ export default class Speech {
       rate: root.querySelector('.speech-controls-rate')!,
       continuous: root.querySelector('.speech-controls-continuous input')!,
       menu: root.querySelector('.speech-controls-menu input')!,
+      disabled: root.querySelector('.speech-controls-disabled input')!,
     }
     this.drag = new Drag(root)
 
@@ -137,6 +142,14 @@ export default class Speech {
     this.elements.continuous.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
       this.utterance.continuous = target.checked
+      this.saveUtterance()
+    })
+
+    this.elements.disabled.checked = this.utterance.disabled
+    this.elements.disabled.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement
+      this.utterance.disabled = target.checked
+      window.speechSynthesis.cancel()
       this.saveUtterance()
     })
 
