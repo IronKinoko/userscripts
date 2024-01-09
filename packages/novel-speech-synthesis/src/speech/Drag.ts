@@ -53,15 +53,12 @@ export class Drag {
     this.fxiedDom!.style.left = `${left}px`
 
     if (!isMoving) {
-      const halfScreenWidth = document.documentElement.clientWidth / 2
-      this.fxiedDom!.classList.add(left > halfScreenWidth ? 'right' : 'left')
-      this.fxiedDom!.style.left =
-        left > halfScreenWidth
-          ? `${
-              document.documentElement.clientWidth -
-              this.fxiedDom!.getBoundingClientRect().width
-            }px`
-          : '0px'
+      const screenWidth = document.documentElement.clientWidth
+      const halfScreenWidth = screenWidth / 2
+      const width = this.fxiedDom!.getBoundingClientRect().width
+      const isRight = left + width / 2 > halfScreenWidth
+      this.fxiedDom!.classList.add(isRight ? 'right' : 'left')
+      this.fxiedDom!.style.left = isRight ? `${screenWidth - width}px` : '0px'
     }
   }
 
@@ -91,8 +88,6 @@ export class Drag {
         this.setPosition(position, true)
       }
       const end = (e: Event) => {
-        e.preventDefault()
-        e.stopPropagation()
         local.setItem(key, position)
         this.setPosition(position, false)
         this.fxiedDom!.style.removeProperty('transition')

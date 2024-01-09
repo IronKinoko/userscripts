@@ -1,5 +1,5 @@
-type MatcherInput = string | RegExp
-type Route = {
+export type MatcherInput = string | RegExp
+export type Route = {
   path?: MatcherInput
   pathname?: MatcherInput
   search?: MatcherInput
