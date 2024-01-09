@@ -32,7 +32,21 @@ function customizerEnhance() {
   })
 }
 
+function enhanceBackground() {
+  const nav = document.querySelector<HTMLDivElement>('.navbar')!
+
+  const fn = () => {
+    document.body.id = nav.id
+    document.querySelector('.page-title')!.id = nav.id
+  }
+
+  fn()
+  const observer = new MutationObserver(fn)
+  observer.observe(nav, { attributes: true })
+}
+
 export function main() {
   removeLoveEmoji()
   customizerEnhance()
+  enhanceBackground()
 }
