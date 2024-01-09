@@ -1,5 +1,11 @@
 # esjzone
 
+## 1.1.2
+
+### Patch Changes
+
+- f5c95b3: feat: support backgroundcolor
+
 ## 1.1.1
 
 ### Patch Changes
