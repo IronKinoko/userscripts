@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.8
+
+### Patch Changes
+
+- 61e4d83: fix: refresh paragragh
+
 ## 1.0.7
 
 ### Patch Changes
