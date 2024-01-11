@@ -9,8 +9,9 @@ adapters.forEach((adapter) => {
       return {
         ...route,
         run: () => {
-          route.run?.()
-          if (route.speech) new Speech(route.speech)
+          if (route.run) {
+            route.run()
+          } else if (route.speech) new Speech(route.speech)
         },
       }
     }),

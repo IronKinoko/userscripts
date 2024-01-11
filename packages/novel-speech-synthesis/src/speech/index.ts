@@ -30,23 +30,29 @@ export default class Speech {
     disabled: false,
   }
   private voices: SpeechSynthesisVoice[] = []
-  private paragraphList = [] as HTMLElement[]
+  paragraphList: HTMLElement[] = []
+  private paragraphDisposeList: (() => void)[] = []
 
   private speakDispose: (() => void) | null = null
-  drag!: Drag
+  private drag!: Drag
 
-  constructor(private opts: SpeechOptions) {
+  constructor(public opts: SpeechOptions) {
     this.loadUtterance()
-    this.washContent()
+    this.setupParagraph()
     this.createUI()
   }
 
-  private washContent() {
+  setupParagraph() {
+    if (this.paragraphDisposeList.length) {
+      this.paragraphDisposeList.forEach((fn) => fn())
+      this.paragraphDisposeList = []
+    }
+
     this.paragraphList = this.opts.getParagraph()
-    this.paragraphList.forEach((p, idx) => {
+    this.paragraphDisposeList = this.paragraphList.map((p, idx) => {
       p.setAttribute('data-speech-idx', idx.toString())
 
-      p.addEventListener('click', () => {
+      const fn = () => {
         if (this.utterance.disabled) return
 
         let current = idx
@@ -66,7 +72,14 @@ export default class Speech {
           cancel = true
         }
         speak()
-      })
+      }
+
+      p.addEventListener('click', fn)
+
+      return () => {
+        p.removeAttribute('data-speech-idx')
+        p.removeEventListener('click', fn)
+      }
     })
   }
 

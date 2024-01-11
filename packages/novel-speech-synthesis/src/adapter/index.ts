@@ -1,5 +1,5 @@
 import { Route, RouterOptions } from 'shared'
-import { SpeechOptions } from '../speech'
+import Speech, { SpeechOptions } from '../speech'
 
 type Adapter = Omit<RouterOptions, 'routes'> & {
   routes: (Partial<Route> & { speech?: SpeechOptions })[]
@@ -54,6 +54,21 @@ export const adapters: Adapter[] = [
               ?.click()
           },
         },
+        run() {
+          const speech = new Speech(this.speech!)
+
+          const ob = new MutationObserver(() => {
+            if (
+              speech.paragraphList.length !== speech.opts.getParagraph().length
+            ) {
+              speech.setupParagraph()
+            }
+          })
+
+          ob.observe(document.querySelector('.read-content')!, {
+            childList: true,
+          })
+        },
       },
     ],
   },
@@ -76,6 +91,21 @@ export const adapters: Adapter[] = [
               .querySelector<HTMLAnchorElement>('#footlink > a:last-child')
               ?.click()
           },
+        },
+        run() {
+          const speech = new Speech(this.speech!)
+
+          const ob = new MutationObserver(() => {
+            if (
+              speech.paragraphList.length !== speech.opts.getParagraph().length
+            ) {
+              speech.setupParagraph()
+            }
+          })
+
+          ob.observe(document.querySelector('#acontentz')!, {
+            childList: true,
+          })
         },
       },
     ],
