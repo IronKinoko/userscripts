@@ -1,5 +1,11 @@
 # twitter
 
+## 1.0.5
+
+### Patch Changes
+
+- 9034d7b: feat: support photo page
+
 ## 1.0.4
 
 ### Patch Changes
