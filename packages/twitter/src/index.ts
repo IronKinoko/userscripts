@@ -4,19 +4,20 @@ const LocalKey = 'k-x-mode'
 
 window.addEventListener('click', handleClick, { capture: true })
 window.addEventListener('blur', () => (cache = []))
-;(async function createUI() {
+
+async function createUI() {
   {
-    await wait(
-      () =>
-        document.querySelectorAll('[role="navigation"] > div > span').length > 0
-    )
+    if (document.querySelector('#k-x-mode')) return
     const doms = document.querySelectorAll('[role="navigation"] > div > span')
+
     for (const dom of doms) {
       if (dom.textContent?.match(/x corp/i)) {
         const switchDom =
           dom.parentNode!.previousSibling!.previousSibling!.cloneNode(
             true
           ) as HTMLAnchorElement
+
+        switchDom.id = 'k-x-mode'
 
         switchDom.addEventListener('click', () => {
           const mode = local.getItem(LocalKey)
@@ -38,7 +39,10 @@ window.addEventListener('blur', () => (cache = []))
       }
     }
   }
-})()
+}
+
+const ob = new MutationObserver(createUI)
+ob.observe(document.body, { childList: true, subtree: true })
 
 function handleClick(e: MouseEvent) {
   handleLike(e)
@@ -61,11 +65,16 @@ function handleLike(e: MouseEvent) {
   const likeDom = queryParent(e.target as HTMLElement, '[data-testid="like"]')
   if (!likeDom) return
 
-  const tweet = queryParent<HTMLDivElement>(likeDom, '[data-testid="tweet"]')
+  const tweet = queryParent<HTMLDivElement>(
+    likeDom,
+    '[role="dialog"]>div>div,[data-testid="tweet"]'
+  )
   if (!tweet) return
 
   const photos = Array.from(
-    tweet.querySelectorAll<HTMLDivElement>('[data-testid="tweetPhoto"]')
+    tweet.querySelectorAll<HTMLDivElement>(
+      '[data-testid="tweetPhoto"],[data-testid="swipe-to-dismiss"]'
+    )
   )
   if (!photos.length) return
 
@@ -149,18 +158,12 @@ function toast(target: HTMLElement, text: string) {
 
 async function updateClipboard(likeDom: HTMLElement) {
   if (!cache.length) return
-
   try {
     if (local.getItem('k-x-mode') === 'watermark') {
       const blob = await makeWaterMark()
 
       await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
-            type: 'text/plain',
-          }),
-          [blob.type]: blob,
-        }),
+        new ClipboardItem({ [blob.type]: blob }),
       ])
     } else {
       let html = cache
@@ -168,9 +171,6 @@ async function updateClipboard(likeDom: HTMLElement) {
         .join('')
       await navigator.clipboard.write([
         new ClipboardItem({
-          'text/plain': new Blob(['请粘贴到支持富文本的地方'], {
-            type: 'text/plain',
-          }),
           'text/html': new Blob([html], { type: 'text/html' }),
         }),
       ])
