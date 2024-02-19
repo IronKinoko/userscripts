@@ -161,4 +161,28 @@ export const adapters: Adapter[] = [
       },
     ],
   },
+  {
+    domain: ['kakuyomu.jp'],
+    routes: [
+      {
+        pathname: /^\/works\/\d+\/episodes\/\d+$/,
+        speech: {
+          container: 'body',
+          lang: 'ja-JP',
+          getParagraph: () => {
+            const content = document.querySelector('.widget-episodeBody')
+            if (!content) throw new Error('content not found')
+
+            return Array.from(content.querySelectorAll('p'))
+          },
+          nextChapter() {
+            const dom = document.querySelector<HTMLAnchorElement>(
+              '#contentMain-readNextEpisode'
+            )
+            dom?.click()
+          },
+        },
+      },
+    ],
+  },
 ]
