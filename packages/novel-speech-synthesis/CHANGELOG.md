@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.9
+
+### Patch Changes
+
+- 4889e38: feat: support kakuyomu
+
 ## 1.0.8
 
 ### Patch Changes

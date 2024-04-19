@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.3
+
+### Patch Changes
+
+- 2b61554: fix: support new domain
+
 ## 1.2.2
 
 ### Patch Changes
