@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.4
+
+### Patch Changes
+
+- b252ce9: feat: support new domain
+
 ## 1.2.3
 
 ### Patch Changes
