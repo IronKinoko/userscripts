@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.5
+
+### Patch Changes
+
+- 9af7de3: feat: update domain match for espartasr.com
+
 ## 1.2.4
 
 ### Patch Changes
