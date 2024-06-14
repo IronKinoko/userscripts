@@ -116,6 +116,7 @@ async function runH5main() {
 
     createActionsUI()
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -401,16 +402,6 @@ async function injectImageData() {
     </li>
     `
   })
-
-  if (info.next) {
-    const { comicId, chapterId } = info.next
-    const prefetchURLs = [
-      `https://userscripts-proxy.vercel.app/api/copymanga/comic/${comicId}/chapter/${chapterId}`,
-    ]
-    prefetchURLs.forEach((url) => {
-      $('head').append(`<link rel="prefetch" href="${url}" data-k-prefetch />`)
-    })
-  }
 
   await waitDOM('.comicContentPopupImageList .comicContentPopupImageItem')
   $('.comicContentPopupImageItem').attr('class', 'k-open-control-item').hide()

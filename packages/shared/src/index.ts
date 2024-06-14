@@ -1,5 +1,4 @@
-export { default as debounce } from 'lodash-es/debounce'
-export { default as throttle } from 'lodash-es/throttle'
+export { debounce, throttle, memoize } from 'lodash-es'
 
 export { default as ImgLazySetup } from './components/ImgLazy'
 export { Cookie } from './utils/cookie'

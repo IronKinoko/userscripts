@@ -1,3 +1,5 @@
+import { gm, memoize } from 'shared'
+
 export function addErrorListener(img: HTMLImageElement) {
   if (img.dataset.errorFix === 'true') return
   img.dataset.errorFix = 'true'
@@ -31,14 +33,28 @@ type ChapterInfo = {
     chapterId: string
   }
 }
+
+const getChapterInfoFromURL = memoize(async (url: string) => {
+  const res = await gm.request<ChapterInfo>({ url })
+  return res.response
+})
+
 export async function getChapterInfo() {
   const url = h5URLToPC(window.location.href)
 
   if (!url) throw new Error('请在移动端运行')
 
   try {
-    const data = await fetch(url).then<ChapterInfo>((r) => r.json())
+    const data = await getChapterInfoFromURL(url)
     if (!data.ok) throw new Error(data.message)
+
+    if (data.next) {
+      const { comicId, chapterId } = data.next
+      const url = `https://userscripts-proxy.vercel.app/api/copymanga/comic/${comicId}/chapter/${chapterId}`
+      // prefetch
+      getChapterInfoFromURL(url)
+    }
+
     return data
   } catch (error: any) {
     console.error(error)

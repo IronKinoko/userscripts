@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.6
+
+### Patch Changes
+
+- feat: Add GM_xmlhttpRequest and @connect for userscripts-proxy.vercel.app
+
 ## 1.5.5
 
 ### Patch Changes
