@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.8
+
+### Patch Changes
+
+- bbc66c3: fix: safari display error & remove img-lazy component
+
 ## 1.3.7
 
 ### Patch Changes

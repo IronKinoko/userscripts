@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.7
+
+### Patch Changes
+
+- bbc66c3: fix: safari display error & remove img-lazy component
+
 ## 1.5.6
 
 ### Patch Changes
