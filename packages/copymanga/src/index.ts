@@ -1,16 +1,16 @@
 import h5 from './h5'
 import pc from './pc'
 import './index.scss'
-import { router } from 'shared'
-import { ImgLazySetup } from 'shared'
-
-ImgLazySetup()
+import { execInUnsafeWindow, router, wait } from 'shared'
 
 document.body.classList.add('k-copymanga')
 
-if (window.aboutBlank) {
-  window.aboutBlank = () => {}
-}
+wait(() => execInUnsafeWindow(() => !!window.aboutBlank)).then(() => {
+  execInUnsafeWindow(() => {
+    window.aboutBlank = () => {}
+  })
+})
+
 router([
   { pathname: /^\/h5/, run: h5 },
   { pathname: /^(?!\/h5)/, run: pc },

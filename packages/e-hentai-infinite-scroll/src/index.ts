@@ -1,10 +1,8 @@
-import { ImgLazySetup, router } from 'shared'
+import { router } from 'shared'
 import './index.scss'
 import { setup as g } from './views/g'
 import { checkCookie } from './views/checkCookie'
 import { setup as s } from './views/s'
-
-ImgLazySetup()
 
 router({
   domain: 'exhentai.org',

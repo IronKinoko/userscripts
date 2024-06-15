@@ -27,7 +27,6 @@ function parseI3(i3: string) {
     .groups!
 }
 
-let isLoadEnd = false
 function setupInfiniteScroll() {
   function api_call(page: number, nextImgKey: string) {
     return new Promise<ApiRes>((resolve, reject) => {
@@ -67,7 +66,6 @@ function setupInfiniteScroll() {
   async function loadImgInfo() {
     try {
       if (maxPageSize < page) {
-        isLoadEnd = true
         return
       }
       if (isLoading) return
@@ -98,12 +96,13 @@ function setupInfiniteScroll() {
 
   function renderImg(page: number, info: Info) {
     const { key, source, src } = info
-    const img = document.createElement('img-lazy')
+    const img = document.createElement('img')
     img.setAttribute('src', src)
     img.dataset.imgKey = key
     img.dataset.page = page + ''
     img.dataset.source = source
     img.classList.add('auto-load-img')
+    img.loading = 'lazy'
 
     document.getElementById('i3')!.append(img)
   }
@@ -160,9 +159,7 @@ function removeSnAnchor() {
   })
 }
 function getCurrentActiveImg() {
-  const imgs = document.querySelectorAll<HTMLImageElement>(
-    '#i3 img,#i3 img-lazy'
-  )
+  const imgs = document.querySelectorAll<HTMLImageElement>('#i3 img,#i3 img')
   for (const img of imgs) {
     const { top, bottom } = img.getBoundingClientRect()
     const base = 200
@@ -201,38 +198,6 @@ const updateCurrentInfo = debounce(function () {
   updateBottomInfo($img)
 }, 30)
 
-function setupBottomInfo() {
-  const $root = document.querySelector('#i1')!
-
-  const $wrapper = document.createElement('div')
-  $wrapper.className = 'ehis-bottom-info-wrapper'
-  $root.insertBefore($wrapper, document.querySelector('#i4'))
-
-  const $container = document.createElement('div')
-  $container.className = 'ehis-bottom-info-container'
-  $container.style.background = getComputedStyle($root).background
-  $wrapper.append($container)
-
-  $container.append(...document.querySelectorAll('#i4,#i5,#i6,#i7'))
-
-  const calcSticky = () => {
-    const dom = document.scrollingElement!
-
-    if (isLoadEnd) {
-      if (dom.scrollHeight <= dom.scrollTop + dom.clientHeight + 200) {
-        $wrapper.classList.add('static')
-      } else {
-        $wrapper.classList.remove('static')
-      }
-    }
-  }
-  calcSticky()
-  document.addEventListener('scroll', () => {
-    calcSticky()
-  })
-}
-
 export function setup() {
   setupInfiniteScroll()
-  setupBottomInfo()
 }

@@ -1,5 +1,5 @@
 import { getChapterInfo } from './utils'
-import { local, sleep, throttle, waitDOM } from 'shared'
+import { execInUnsafeWindow, local, sleep, throttle, waitDOM } from 'shared'
 import T from './h5.template.html'
 
 async function openControl() {
@@ -149,7 +149,7 @@ async function initSplitEvent() {
     const currentPage = getCurrentPage()
     for (const item of list) {
       item.style.overflowX = 'hidden'
-      const imgs = $(item).find('img-lazy')
+      const imgs = $(item).find('[data-img-lazy]')
       if (isActive) {
         const url = imgs.attr('src')!
 
@@ -158,7 +158,7 @@ async function initSplitEvent() {
           width: '200%',
           display: 'block',
         })
-        $('<img-lazy/>')
+        $('<img data-img-lazy loading="lazy"/>')
           .attr('src', url)
           .css({
             clipPath: 'polygon(100% 0%, 100% 100%, 50% 100%, 50% 0%)',
@@ -194,9 +194,9 @@ async function initMergeEvent() {
 
     if (activeArr.length === 2) {
       const [first, second] = activeArr
-      $(second).find('img-lazy').prependTo($(first))
+      $(second).find('[data-img-lazy]').prependTo($(first))
       $(first).css({ display: 'flex' })
-      $(first).find('img-lazy').css({ width: '50%' })
+      $(first).find('[data-img-lazy]').css({ width: '50%' })
 
       cleanup()
       $('.k-merge').removeClass('active')
@@ -366,8 +366,21 @@ function getComicId() {
 }
 
 async function addH5HistoryListener() {
-  history.pushState = _historyWrap('pushState')
-  history.replaceState = _historyWrap('replaceState')
+  execInUnsafeWindow(() => {
+    const _historyWrap = function (type: 'pushState' | 'replaceState') {
+      const orig = history[type]
+      const e = new Event(type)
+      return function () {
+        // @ts-ignore
+        const rv = orig.apply(this, arguments)
+        window.dispatchEvent(e)
+        return rv
+      }
+    }
+
+    history.pushState = _historyWrap('pushState')
+    history.replaceState = _historyWrap('replaceState')
+  })
 
   window.addEventListener('pushState', runH5main)
   window.addEventListener('replaceState', runH5main)
@@ -375,17 +388,6 @@ async function addH5HistoryListener() {
   window.addEventListener('scroll', throttle(updatePageIndicator, 100))
 
   runH5main()
-}
-
-const _historyWrap = function (type: 'pushState' | 'replaceState') {
-  const orig = history[type]
-  const e = new Event(type)
-  return function () {
-    // @ts-ignore
-    const rv = orig.apply(this, arguments)
-    window.dispatchEvent(e)
-    return rv
-  }
 }
 
 async function injectImageData() {
@@ -398,7 +400,7 @@ async function injectImageData() {
   info.manga.forEach(({ url }, idx) => {
     html += `
     <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
-      <img-lazy src="${url}" />
+      <img src="${url}" data-img-lazy loading="lazy" />
     </li>
     `
   })
