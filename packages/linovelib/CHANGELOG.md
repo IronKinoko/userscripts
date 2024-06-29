@@ -1,5 +1,11 @@
 # linovelib
 
+## 1.4.8
+
+### Patch Changes
+
+- 105ebe2: fix: adblock
+
 ## 1.4.7
 
 ### Patch Changes
