@@ -1,4 +1,4 @@
-import { isMobile, keybind, router } from 'shared'
+import { isMobile, keybind, router, waitDOM } from 'shared'
 
 export default async function main() {
   if (!window.ReadTools) return
@@ -6,6 +6,23 @@ export default async function main() {
 
   if (isMobile()) injectMovePageEvent()
   else injectShortcuts()
+}
+
+export async function fixADBlock() {
+  const res = await fetch(window.location.href)
+  const text = await res.text()
+  const html = new DOMParser().parseFromString(text, 'text/html')
+  const volumes = html.querySelector('#volumes')
+  if (!volumes) return
+
+  document.querySelector('#volumes')?.replaceWith(volumes)
+
+  try {
+    document.getElementById(
+      'bookmarkX'
+      // @ts-ignore
+    )!.innerHTML = `<div class="chapter-bar">阅读进度</div><span class="historyChapter"><a href="/novel/${targetRecord.articleid}/${targetRecord.chapterid}_${targetRecord.page}.html" class="chapter-li-a "><span class="chapter-index blue">${targetRecord.chaptername}</span></a></span>`
+  } catch (error) {}
 }
 
 function resetPageEvent() {
