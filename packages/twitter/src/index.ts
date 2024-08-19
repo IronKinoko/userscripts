@@ -1,4 +1,4 @@
-import { local, wait } from 'shared'
+import { local, sleep, wait } from 'shared'
 
 const LocalKey = 'k-x-mode'
 
@@ -156,24 +156,36 @@ function toast(target: HTMLElement, text: string) {
   }, 1000)
 }
 
+async function retry<T>(fn: () => Promise<T>) {
+  while (true) {
+    try {
+      return await fn()
+    } catch (err: any) {
+      await sleep(300)
+    }
+  }
+}
+
 async function updateClipboard(likeDom: HTMLElement) {
   if (!cache.length) return
   try {
     if (local.getItem('k-x-mode') === 'watermark') {
       const blob = await makeWaterMark()
 
-      await navigator.clipboard.write([
-        new ClipboardItem({ [blob.type]: blob }),
-      ])
+      await retry(() =>
+        navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })])
+      )
     } else {
       let html = cache
         .map((item) => item.imgs.map((img) => `<img src="${img}" />`).join(''))
         .join('')
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/html': new Blob([html], { type: 'text/html' }),
-        }),
-      ])
+      await retry(() =>
+        navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' }),
+          }),
+        ])
+      )
     }
 
     toast(likeDom, '已复制')
