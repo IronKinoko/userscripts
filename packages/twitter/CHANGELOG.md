@@ -1,5 +1,11 @@
 # twitter
 
+## 1.0.7
+
+### Patch Changes
+
+- 2554729: feat: retry until success
+
 ## 1.0.6
 
 ### Patch Changes
