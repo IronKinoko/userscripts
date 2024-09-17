@@ -14,6 +14,7 @@
 // @match        https://download.gamer520.com/*
 // @match        https://*.espartasr.com/*
 // @match        https://*.fourpetal.com/*
+// @match        https://pan.baidu.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gamer520.com
 // @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @grant        none
