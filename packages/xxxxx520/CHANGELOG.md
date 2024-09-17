@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.6
+
+### Patch Changes
+
+- 5732b67: feat: support baidu pan auto submit password
+
 ## 1.2.5
 
 ### Patch Changes
