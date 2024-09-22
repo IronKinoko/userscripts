@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.7
+
+### Patch Changes
+
+- 7697913: fix: update Baidu Pan match URL to restrict to specific page
+
 ## 1.2.6
 
 ### Patch Changes
