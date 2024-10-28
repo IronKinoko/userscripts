@@ -16,7 +16,7 @@ interface Info {
   childrenClass: string
 }
 function getPageInfo(): Info {
-  const mode = $('#gdt .gdtl') ? 'large' : 'normal'
+  const mode = $('#gdt').className.includes('gt200') ? 'large' : 'normal'
   const pageSize = mode === 'normal' ? 40 : 20
   const total = +$('.gtb p.gpc').textContent!.match(
     /of\s(?<total>[0-9,]+)\simages/
@@ -46,7 +46,7 @@ function getPageInfo(): Info {
     pageSize,
     pageCount,
     unloadPageLinks,
-    childrenClass: mode === 'normal' ? '#gdt .gdtm' : '#gdt .gdtl',
+    childrenClass: '#gdt > a',
   }
 }
 
@@ -79,9 +79,7 @@ async function loadNextPage(info: Info, mode: 'tiny' | 'large') {
     isLoading = false
 
     if (items) {
-      if (mode === 'large') {
-        createPageIndex(info.currentPage)
-      }
+      createPageIndex(info.currentPage)
       $('#gdt').append(...items)
       $$('#gdt .c').forEach((node) => node.remove())
     }
