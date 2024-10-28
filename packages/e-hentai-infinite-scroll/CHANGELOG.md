@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.9
+
+### Patch Changes
+
+- 31a5a19: fix: update page info logic for e-hentai infinite scroll
+
 ## 1.3.8
 
 ### Patch Changes
