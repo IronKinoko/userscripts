@@ -63,8 +63,6 @@ export class Drag {
   }
 
   private addDragEvent() {
-    let prevY = 0
-    let storeY = 0
     const key = 'speech-fixed-position'
     let position = local.getItem(key, {
       top: document.documentElement.clientHeight / 4,
@@ -98,28 +96,20 @@ export class Drag {
       window.addEventListener(EventMap.Up, end)
     })
 
+    let prevY = 0
     window.addEventListener(
       'scroll',
       throttle(() => {
         const dom = document.scrollingElement!
 
         const currentY = dom.scrollTop
-        let diffY = currentY - storeY
-        if (
-          currentY < 50 ||
-          currentY + dom.clientHeight > dom.scrollHeight - 800 ||
-          diffY < -30
-        ) {
-          this.fxiedDom?.classList.remove('hide')
-        } else {
-          this.fxiedDom?.classList.add('hide')
-        }
+        let diffY = currentY - prevY
 
-        if (currentY > prevY) {
-          storeY = currentY
+        if (Math.abs(diffY) > 30) {
+          this.fxiedDom?.classList.toggle('hide', diffY > 0)
+          prevY = currentY
         }
-        prevY = currentY
-      }, 100)
+      }, 16)
     )
   }
 }

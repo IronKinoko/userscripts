@@ -18,7 +18,6 @@ export default class Speech {
     voice: HTMLSelectElement
     rate: HTMLSelectElement
     continuous: HTMLInputElement
-    menu: HTMLInputElement
     disabled: HTMLInputElement
   } | null = null
 
@@ -26,7 +25,6 @@ export default class Speech {
     rate: 1.5,
     voiceURI: null as string | null,
     continuous: true,
-    menu: true,
     disabled: false,
   }
   private voices: SpeechSynthesisVoice[] = []
@@ -100,7 +98,6 @@ export default class Speech {
       voice: root.querySelector('.speech-controls-voice')!,
       rate: root.querySelector('.speech-controls-rate')!,
       continuous: root.querySelector('.speech-controls-continuous input')!,
-      menu: root.querySelector('.speech-controls-menu input')!,
       disabled: root.querySelector('.speech-controls-disabled input')!,
     }
     this.drag = new Drag(root)
@@ -166,14 +163,6 @@ export default class Speech {
       this.saveUtterance()
     })
 
-    this.elements.menu.checked = this.utterance.menu
-    this.elements.menu.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement
-      this.utterance.menu = target.checked
-      this.updateMenuUI()
-      this.saveUtterance()
-    })
-
     this.updateMenuUI()
 
     keybind(['space'], (e) => {
@@ -186,12 +175,6 @@ export default class Speech {
     this.elements!.root.querySelectorAll('.speech-controls-button').forEach(
       (dom) => {
         if (dom.classList.contains('speech-controls-menu')) return
-
-        if (this.utterance.menu) {
-          dom.classList.remove('speech-controls-hide')
-        } else {
-          dom.classList.add('speech-controls-hide')
-        }
       }
     )
     this.drag.setPosition(
