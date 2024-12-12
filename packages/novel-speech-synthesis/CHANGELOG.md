@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.10
+
+### Patch Changes
+
+- b2131a4: refactor: update speech control styles
+
 ## 1.0.9
 
 ### Patch Changes
