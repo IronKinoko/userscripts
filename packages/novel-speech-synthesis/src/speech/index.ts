@@ -28,7 +28,6 @@ export default class Speech {
     disabled: false,
   }
   private voices: SpeechSynthesisVoice[] = []
-  paragraphList: HTMLElement[] = []
   private paragraphDisposeList: (() => void)[] = []
 
   private speakDispose: (() => void) | null = null
@@ -40,13 +39,16 @@ export default class Speech {
     this.createUI()
   }
 
+  get paragraphList() {
+    return this.opts.getParagraph()
+  }
+
   setupParagraph() {
     if (this.paragraphDisposeList.length) {
       this.paragraphDisposeList.forEach((fn) => fn())
       this.paragraphDisposeList = []
     }
 
-    this.paragraphList = this.opts.getParagraph()
     this.paragraphDisposeList = this.paragraphList.map((p, idx) => {
       p.setAttribute('data-speech-idx', idx.toString())
 
@@ -124,7 +126,10 @@ export default class Speech {
         this.refreshSpeech()
       }
 
-      if (this.utterance.continuous) {
+      if (
+        this.utterance.continuous &&
+        this.currentSpeakingParagraphIdx === null
+      ) {
         this.paragraphList[0]?.click()
       }
     })
@@ -232,7 +237,7 @@ export default class Speech {
             (voice) => this.utterance.voiceURI === voice.voiceURI
           ) || null
 
-        utterance.onstart = (e) => {
+        utterance.addEventListener('start', (e) => {
           console.log('start', e)
           p.classList.add('speech-reading')
 
@@ -243,8 +248,8 @@ export default class Speech {
               scrollElement.scrollBy({ top: y - 100, behavior: 'smooth' })
             }
           }
-        }
-        utterance.onend = (e) => {
+        })
+        utterance.addEventListener('end', (e) => {
           console.log('end', e)
           p.classList.remove('speech-reading')
 
@@ -255,13 +260,13 @@ export default class Speech {
             this.opts.nextChapter()
           }
           resolve()
-        }
-        utterance.onerror = (e) => {
+        })
+        utterance.addEventListener('error', (e) => {
           console.error('error', e)
           p.classList.remove('speech-reading')
           console.error(e)
           reject(e)
-        }
+        })
 
         console.log('utterance', utterance)
         window.speechSynthesis.speak(utterance)
