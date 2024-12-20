@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.11
+
+### Patch Changes
+
+- 73b9488: refactor: improve speech synthesis functionality and styles
+
 ## 1.0.10
 
 ### Patch Changes
