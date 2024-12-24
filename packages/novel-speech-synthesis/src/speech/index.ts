@@ -32,6 +32,7 @@ export default class Speech {
 
   private speakDispose: (() => void) | null = null
   private drag!: Drag
+  paragraphList: HTMLElement[] = []
 
   constructor(public opts: SpeechOptions) {
     this.loadUtterance()
@@ -39,11 +40,9 @@ export default class Speech {
     this.createUI()
   }
 
-  get paragraphList() {
-    return this.opts.getParagraph()
-  }
-
   setupParagraph() {
+    this.paragraphList = this.opts.getParagraph()
+
     if (this.paragraphDisposeList.length) {
       this.paragraphDisposeList.forEach((fn) => fn())
       this.paragraphDisposeList = []

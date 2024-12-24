@@ -185,4 +185,41 @@ export const adapters: Adapter[] = [
       },
     ],
   },
+  {
+    domain: ['piaotia.com'],
+    routes: [
+      {
+        path: /html\/[^/]+\/[^/]+\/[^/]+\.html/,
+        speech: {
+          container: 'body',
+          lang: 'zh-CN',
+          getParagraph: () => {
+            const content = document.querySelector('#content')
+            if (!content) throw new Error('content not found')
+            content.querySelectorAll('br').forEach((o) => o.remove())
+            return Array.from(content.childNodes)
+              .filter(
+                (o) => o.nodeType === Node.TEXT_NODE && o.textContent!.trim()
+              )
+              .map((o) => {
+                const p = document.createElement('p')
+                p.textContent = o.textContent!.trim()
+                p.style.textIndent = '2em'
+                p.style.marginBottom = '1em'
+
+                o.replaceWith(p)
+                return p
+              })
+          },
+          nextChapter() {
+            document
+              .querySelector<HTMLAnchorElement>(
+                '#content > div > a:nth-child(3)'
+              )
+              ?.click()
+          },
+        },
+      },
+    ],
+  },
 ]

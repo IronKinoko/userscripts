@@ -12,6 +12,7 @@
 // @match        https://novel18.syosetu.com/*
 // @match        https://kakuyomu.jp/*
 // @match        https://www.esjzone.cc/*
+// @match        https://www.piaotia.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=
 // @grant        none
 // @noframes
