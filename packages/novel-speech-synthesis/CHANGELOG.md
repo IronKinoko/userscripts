@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.12
+
+### Patch Changes
+
+- 46abd6f: feat: add support for piaotia.com
+
 ## 1.0.11
 
 ### Patch Changes
