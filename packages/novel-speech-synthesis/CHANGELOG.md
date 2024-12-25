@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.13
+
+### Patch Changes
+
+- 43a9343: fix: update drag position handling and improve event propagation
+
 ## 1.0.12
 
 ### Patch Changes
