@@ -68,8 +68,12 @@ export class Drag {
       top: document.documentElement.clientHeight / 4,
       left: document.documentElement.clientWidth,
     })
+    const resetPosition = () => {
+      this.setPosition(position, false)
+    }
 
-    this.setPosition(position, false)
+    window.addEventListener('resize', resetPosition)
+    resetPosition()
 
     this.fxiedDom.addEventListener(EventMap.Down, (e) => {
       const { clientX, clientY } = getPoint(e)
