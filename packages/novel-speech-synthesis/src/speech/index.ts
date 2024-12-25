@@ -51,7 +51,8 @@ export default class Speech {
     this.paragraphDisposeList = this.paragraphList.map((p, idx) => {
       p.setAttribute('data-speech-idx', idx.toString())
 
-      const fn = () => {
+      const fn = (e: MouseEvent) => {
+        e.stopPropagation()
         if (this.utterance.disabled) return
 
         let current = idx
@@ -172,6 +173,22 @@ export default class Speech {
     keybind(['space'], (e) => {
       e.preventDefault()
       this.elements!.play.click()
+    })
+    keybind(['w'], (e) => {
+      e.preventDefault()
+      if (this.currentSpeakingParagraphIdx !== null) {
+        this.paragraphList[this.currentSpeakingParagraphIdx - 1].click()
+      }
+    })
+    keybind(['s'], (e) => {
+      e.preventDefault()
+      if (this.currentSpeakingParagraphIdx !== null) {
+        this.paragraphList[this.currentSpeakingParagraphIdx + 1].click()
+      }
+    })
+    keybind(['d'], (e) => {
+      e.preventDefault()
+      this.opts.nextChapter()
     })
   }
 

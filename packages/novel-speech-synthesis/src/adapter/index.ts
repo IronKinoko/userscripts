@@ -205,7 +205,7 @@ export const adapters: Adapter[] = [
                 const p = document.createElement('p')
                 p.textContent = o.textContent!.trim()
                 p.style.textIndent = '2em'
-                p.style.marginBottom = '1em'
+                p.style.paddingBottom = '1em'
 
                 o.replaceWith(p)
                 return p

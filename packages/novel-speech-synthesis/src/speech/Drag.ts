@@ -12,6 +12,11 @@ const touchEvent = {
 }
 const EventMap = 'ontouchstart' in window ? touchEvent : mouseEvent
 
+interface Position {
+  top: number
+  left: number
+}
+
 // 适配 TouchEvent and MouseEvent
 function getPoint(e: Event) {
   return 'ontouchstart' in window
@@ -20,15 +25,17 @@ function getPoint(e: Event) {
 }
 
 export class Drag {
+  private key = 'speech-fixed-position'
+  position: Position
   constructor(private fxiedDom: HTMLDivElement) {
+    this.position = local.getItem(this.key, {
+      top: document.documentElement.clientHeight / 4,
+      left: document.documentElement.clientWidth,
+    })
     this.addDragEvent()
   }
 
-  // set fixedNextBtn position
-  setPosition(
-    position: { left: number; top: number },
-    isMoving: boolean
-  ): void {
+  setPosition(position: Position, isMoving: boolean) {
     // safe position area
     const safeArea = {
       top: (y: number) =>
@@ -57,19 +64,17 @@ export class Drag {
       const halfScreenWidth = screenWidth / 2
       const width = this.fxiedDom!.getBoundingClientRect().width
       const isRight = left + width / 2 > halfScreenWidth
+      const last = isRight ? screenWidth - width : 0
       this.fxiedDom!.classList.add(isRight ? 'right' : 'left')
-      this.fxiedDom!.style.left = isRight ? `${screenWidth - width}px` : '0px'
+      this.fxiedDom!.style.left = last + 'px'
+      this.position = { top, left: last }
+      local.setItem(this.key, this.position)
     }
   }
 
   private addDragEvent() {
-    const key = 'speech-fixed-position'
-    let position = local.getItem(key, {
-      top: document.documentElement.clientHeight / 4,
-      left: document.documentElement.clientWidth,
-    })
     const resetPosition = () => {
-      this.setPosition(position, false)
+      this.setPosition(this.position, false)
     }
 
     window.addEventListener('resize', resetPosition)
@@ -86,12 +91,11 @@ export class Drag {
         const { clientX, clientY } = getPoint(e)
         const x = clientX - diffX
         const y = clientY - diffY
-        position = { top: y, left: x }
-        this.setPosition(position, true)
+        this.position = { top: y, left: x }
+        this.setPosition(this.position, true)
       }
       const end = (e: Event) => {
-        local.setItem(key, position)
-        this.setPosition(position, false)
+        this.setPosition(this.position, false)
         this.fxiedDom!.style.removeProperty('transition')
         window.removeEventListener(EventMap.Move, move)
         window.removeEventListener(EventMap.Up, end)
