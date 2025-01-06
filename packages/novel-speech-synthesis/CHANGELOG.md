@@ -1,5 +1,11 @@
 # novel-speech-synthesis
 
+## 1.0.14
+
+### Patch Changes
+
+- 0ef48b0: feat: implement deep parsing for paragraphs and remove drag functionality
+
 ## 1.0.13
 
 ### Patch Changes
