@@ -1,115 +1,87 @@
 #speech {
-  $border-color: #444;
-
-  position: fixed;
-  z-index: 999999999;
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  transform: translateX(0);
-  opacity: 1;
-  box-sizing: border-box;
-  overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.2) -1px 1px 10px 0px;
-  background: #16161a;
-  color: white;
-  text-align: center;
-
-  &.left {
-    border-radius: 0 8px 8px 0;
-    --transform-x: -100%;
-  }
-
-  &.right {
-    border-radius: 8px 0 0 8px;
-    --transform-x: 100%;
-  }
-  &.hide {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(var(--transform-x));
-  }
-
-  * {
-    box-sizing: border-box;
-    user-select: none;
-  }
-
-  .speech-controls-buttons {
-    font-size: 16px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .speech-controls-button {
-    padding: 0 4px;
-    width: 35px;
-    height: 28px;
-    text-align: center;
+  user-select: none;
+  .speech-handler {
+    position: absolute;
+    right: 24px;
+    bottom: 100%;
+    padding: 4px 8px;
+    background: #222;
+    border-radius: 8px 8px 0 0;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
+    svg {
+      transform: rotate(180deg);
+      transition: trasnform 0.3s ease;
+    }
   }
-  .speech-controls-button:nth-child(-n + 3) {
-    border-right: 1px solid $border-color;
+  .speech-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    transition: transform 0.3s ease;
+    transform: translateY(100%);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #222;
+    color: #fff;
+    z-index: 99999999;
+    line-height: 1;
+    svg {
+      display: block;
+    }
   }
 
-  select {
+  .speech-controls-show {
+    transform: translateY(0%);
+    .speech-handler svg {
+      transform: rotate(0);
+    }
+  }
+
+  .speech-controls-voice {
+    flex: 1;
+    min-width: 0;
+  }
+  .speech-checkbox {
+    padding: 8px;
+    margin: 0;
+    background: #333;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:not(.speech-checkbox-icon-switch) input:checked ~ * {
+      color: #349bdb;
+    }
+
+    &.speech-checkbox-icon-switch {
+      input:checked + * {
+        display: none;
+      }
+      input:not(:checked) + * + * {
+        display: none;
+      }
+    }
+  }
+
+  .speech-select {
     text-align: center;
     appearance: none;
     border: none;
     background: transparent;
     outline: none;
     color: inherit;
-  }
-  select option {
-    color: initial; // 使用默认颜色
-  }
-
-  .speech-controls-play {
     cursor: pointer;
-    svg {
-      margin: 0 auto;
-    }
-    svg:nth-child(2) {
-      display: block;
-    }
-    svg:nth-child(3) {
-      display: none;
-    }
-    input:checked ~ svg:nth-child(2) {
-      display: none;
-    }
-    input:checked ~ svg:nth-child(3) {
-      display: block;
-    }
-  }
 
-  .speech-controls-continuous {
-    input:checked + span {
-      color: #1890ff;
-    }
+    padding: 8px;
+    margin: 0;
+    background: #333;
+    border-radius: 8px;
   }
-  .speech-controls-disabled {
-    input:checked + svg {
-      color: #1890ff;
-    }
-  }
-  .speech-controls-hide {
-    display: none !important;
-  }
-
-  .speech-controls-voice {
-    grid-column: span 4;
-    width: 100%;
-    max-width: 35 * 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-top: 1px solid $border-color;
-    min-width: 0;
+  .speech-select option {
+    color: initial; // 使用默认颜色
   }
 }
 .speech-reading {

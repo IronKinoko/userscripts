@@ -1,7 +1,6 @@
 import { keybind, local, throttle } from 'shared'
 import './index.scss'
 import T from './ui.template.html'
-import { Drag } from './Drag'
 
 export type SpeechOptions = {
   container: string
@@ -19,6 +18,7 @@ export default class Speech {
     rate: HTMLSelectElement
     continuous: HTMLInputElement
     disabled: HTMLInputElement
+    handler: HTMLDivElement
   } | null = null
 
   private utterance = {
@@ -26,16 +26,16 @@ export default class Speech {
     voiceURI: null as string | null,
     continuous: true,
     disabled: false,
+    show: true,
   }
   private voices: SpeechSynthesisVoice[] = []
   private paragraphDisposeList: (() => void)[] = []
 
   private speakDispose: (() => void) | null = null
-  private drag!: Drag
   paragraphList: HTMLElement[] = []
 
   constructor(public opts: SpeechOptions) {
-    this.loadUtterance()
+    this.loadLocalConfig()
     this.setupParagraph()
     this.createUI()
   }
@@ -86,6 +86,7 @@ export default class Speech {
   private createUI() {
     const root = new DOMParser().parseFromString(T.speech, 'text/html').body
       .children[0] as HTMLDivElement
+    const controls = root.querySelector('.speech-controls')!
     const container = document.querySelector(this.opts.container)
     if (!container) throw new Error('container not found')
     container.appendChild(root)
@@ -101,8 +102,15 @@ export default class Speech {
       rate: root.querySelector('.speech-controls-rate')!,
       continuous: root.querySelector('.speech-controls-continuous input')!,
       disabled: root.querySelector('.speech-controls-disabled input')!,
+      handler: root.querySelector('.speech-handler')!,
     }
-    this.drag = new Drag(root)
+
+    this.elements.handler.addEventListener('click', () => {
+      this.utterance.show = !this.utterance.show
+      controls.classList.toggle('speech-controls-show', this.utterance.show)
+      this.saveLocalConfig()
+    })
+    controls.classList.toggle('speech-controls-show', this.utterance.show)
 
     this.elements.play.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
@@ -140,7 +148,7 @@ export default class Speech {
       const find = this.voices.find((voice) => voice.voiceURI === target.value)
       if (find) {
         this.utterance.voiceURI = find.voiceURI
-        this.saveUtterance()
+        this.saveLocalConfig()
         this.refreshSpeech()
       }
     })
@@ -149,7 +157,7 @@ export default class Speech {
     this.elements.rate.addEventListener('change', (e) => {
       const target = e.target as HTMLSelectElement
       this.utterance.rate = Number(target.value)
-      this.saveUtterance()
+      this.saveLocalConfig()
       this.refreshSpeech()
     })
 
@@ -157,7 +165,7 @@ export default class Speech {
     this.elements.continuous.addEventListener('change', (e) => {
       const target = e.target as HTMLInputElement
       this.utterance.continuous = target.checked
-      this.saveUtterance()
+      this.saveLocalConfig()
     })
 
     this.elements.disabled.checked = this.utterance.disabled
@@ -165,10 +173,8 @@ export default class Speech {
       const target = e.target as HTMLInputElement
       this.utterance.disabled = target.checked
       window.speechSynthesis.cancel()
-      this.saveUtterance()
+      this.saveLocalConfig()
     })
-
-    this.updateMenuUI()
 
     keybind(['space'], (e) => {
       e.preventDefault()
@@ -192,21 +198,6 @@ export default class Speech {
     })
   }
 
-  private updateMenuUI() {
-    this.elements!.root.querySelectorAll('.speech-controls-button').forEach(
-      (dom) => {
-        if (dom.classList.contains('speech-controls-menu')) return
-      }
-    )
-    this.drag.setPosition(
-      {
-        left: Number(this.elements!.root.style.left.replace('px', '')),
-        top: Number(this.elements!.root.style.top.replace('px', '')),
-      },
-      false
-    )
-  }
-
   private refreshSpeech() {
     const idx = this.currentSpeakingParagraphIdx
     if (idx === null) return
@@ -214,10 +205,10 @@ export default class Speech {
     p?.click()
   }
 
-  private saveUtterance() {
+  private saveLocalConfig() {
     localStorage.setItem('speech-utterance', JSON.stringify(this.utterance))
   }
-  private loadUtterance() {
+  private loadLocalConfig() {
     const utterance = localStorage.getItem('speech-utterance')
     if (utterance) {
       this.utterance = JSON.parse(utterance)

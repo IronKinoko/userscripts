@@ -5,6 +5,41 @@ type Adapter = Omit<RouterOptions, 'routes'> & {
   routes: (Partial<Route> & { speech?: SpeechOptions })[]
 }
 
+function deepParseParagraph(content: Element) {
+  content.querySelectorAll('br').forEach((el) => el.remove())
+  const deep = (node: Node) => {
+    const els = Array.from(node.childNodes)
+    els.forEach((el) => {
+      if (el.nodeType === Node.TEXT_NODE) {
+        const p = document.createElement('p')
+        p.textContent = el.textContent!.trim()
+        p.style.textIndent = '2em'
+        p.style.paddingBottom = '1em'
+
+        if (!p.textContent) el.remove()
+        else el.replaceWith(p)
+      } else if (el.nodeType === Node.ELEMENT_NODE) {
+        deep(el)
+      }
+    })
+  }
+
+  deep(content)
+
+  let checking = true
+  while (checking) {
+    checking = Array.from(content.querySelectorAll('p')).some((p) => {
+      if (p.querySelector('p')) {
+        const div = document.createElement('div')
+        div.innerHTML = p.innerHTML
+        p.replaceWith(div)
+        return true
+      }
+      return false
+    })
+  }
+}
+
 export const adapters: Adapter[] = [
   {
     domain: ['bilixs.com'],
@@ -151,6 +186,7 @@ export const adapters: Adapter[] = [
             const content = document.querySelector('.forum-content')
             if (!content) throw new Error('content not found')
 
+            deepParseParagraph(content)
             return Array.from(content.querySelectorAll('p'))
           },
           nextChapter() {
