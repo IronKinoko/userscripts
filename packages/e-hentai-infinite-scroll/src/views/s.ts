@@ -102,9 +102,16 @@ function setupInfiniteScroll() {
     img.dataset.page = page + ''
     img.dataset.source = source
     img.classList.add('auto-load-img')
-    img.loading = 'lazy'
 
     document.getElementById('i3')!.append(img)
+  }
+
+  function detectShouldLoadNextPage() {
+    const dom = document.scrollingElement!
+
+    if (dom.scrollHeight <= dom.scrollTop + dom.clientHeight + 2000) {
+      loadImgInfo()
+    }
   }
 
   function resetDefaultImgDOM() {
@@ -141,15 +148,20 @@ function setupInfiniteScroll() {
   document.body.classList.add('e-hentai-infinite-scroll', 's')
 
   resetDefaultImgDOM()
-  loadImgInfo()
+  detectShouldLoadNextPage()
   document.addEventListener('scroll', () => {
-    const dom = document.scrollingElement!
-
-    if (dom.scrollHeight <= dom.scrollTop + dom.clientHeight + 2000) {
-      loadImgInfo()
-    }
-
+    detectShouldLoadNextPage()
     updateCurrentInfo()
+  })
+
+  const ob = new MutationObserver(() => {
+    detectShouldLoadNextPage()
+  })
+
+  ob.observe(document.querySelector('#i3')!, {
+    childList: true,
+    subtree: true,
+    attributes: true,
   })
 }
 
