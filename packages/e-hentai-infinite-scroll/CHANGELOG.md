@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.3.10
+
+### Patch Changes
+
+- 601501e: feat: implement lazy loading for images in infinite scroll and optimize scroll detection
+
 ## 1.3.9
 
 ### Patch Changes
