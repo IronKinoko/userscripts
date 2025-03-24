@@ -5,10 +5,9 @@
 // @license      MIT
 // @description  #description#
 // @author       IronKinoko
-// @match        https://www.copymanga.org/*
+// @match        https://www.copymanga.com/*
 // @match        https://www.copymanga.tv/*
-// @match        https://www.copymanga.site/*
-// @icon         https://www.google.com/s2/favicons?domain=www.copymanga.org
+// @icon         https://www.google.com/s2/favicons?domain=www.copymanga.com
 // @grant        GM_xmlhttpRequest
 // @connect      userscripts-proxy.vercel.app
 // @noframes
