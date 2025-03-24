@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.8
+
+### Patch Changes
+
+- deed528: fix: update domains
+
 ## 1.5.7
 
 ### Patch Changes
