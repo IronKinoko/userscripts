@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.9
+
+### Patch Changes
+
+- 7e2bed6: fix: update domains
+
 ## 1.5.8
 
 ### Patch Changes
