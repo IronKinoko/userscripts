@@ -1,5 +1,11 @@
 # xxxxx520
 
+## 1.2.8
+
+### Patch Changes
+
+- 02e4ee4: fix: 调整运行环境，避免 jquery 冲突
+
 ## 1.2.7
 
 ### Patch Changes
