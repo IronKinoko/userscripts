@@ -59,6 +59,12 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  packages/bili-live:
+    devDependencies:
+      shared:
+        specifier: workspace:*
+        version: link:../shared
+
   packages/bilixs:
     devDependencies:
       shared:

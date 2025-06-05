@@ -1,0 +1,13 @@
+// ==UserScript==
+// @name         bili-live
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/bili-live
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://link.bilibili.com/*
+// @icon         https://www.bilibili.com/favicon.ico
+// @grant        none
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/bili-live.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/bili-live.user.js
+// ==/UserScript==

@@ -18,6 +18,7 @@
 | [bilixs](/packages/bilixs)                                       | 优化 bilixs 体验                                                                         | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bilixs.user.js)                                                                          |
 | [novel-speech-synthesis](/packages/novel-speech-synthesis)       | 小说语音阅读功能                                                                         | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/novel-speech-synthesis.user.js)                                                          |
 | [steam-multisell](/packages/steam-multisell)                     | Steam 批量出售                                                                           | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/steam-multisell.user.js)                                                                 |
+| [bili-live](/packages/bili-live)                                 | bilibili 直播间优化                                                                      | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bili-live.user.js)                                                                       |
 
 ## iOS & Mac safari install
 
