@@ -4,7 +4,8 @@ export type Route = {
   pathname?: MatcherInput
   search?: MatcherInput
   hash?: MatcherInput
-  run: () => void
+  setup?: () => void
+  run?: () => void
 }
 
 function matcher(source: string, regexp: MatcherInput) {
@@ -47,7 +48,7 @@ export function router(config: RouterOptions | Route | Route[]) {
   }
 
   const routes = Array.isArray(opts.routes) ? opts.routes : [opts.routes]
-  routes.forEach((route) => {
+  const runRoutes = routes.filter((route) => {
     let match = true
 
     if (route.path) {
@@ -63,6 +64,21 @@ export function router(config: RouterOptions | Route | Route[]) {
       match = matcher(window.location.hash, route.hash)
     }
 
-    if (match) route.run()
+    return match
   })
+
+  runRoutes.forEach((route) => {
+    if (route.setup) route.setup()
+  })
+
+  function run() {
+    runRoutes.forEach((route) => {
+      if (route.run) route.run()
+    })
+  }
+  if (window.document.readyState === 'complete') {
+    run()
+  } else {
+    window.addEventListener('load', run)
+  }
 }

@@ -1,0 +1,16 @@
+// ==UserScript==
+// @name         Steam 批量出售
+// @namespace    https://github.com/IronKinoko/userscripts/tree/master/packages/steam-multisell
+// @version      #version#
+// @license      MIT
+// @description  #description#
+// @author       IronKinoko
+// @match        https://steamcommunity.com/market/listings/*
+// @match        https://steamcommunity.com/market/multisell*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com
+// @grant        none
+// @run-at       document-start
+// @noframes
+// @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/steam-multisell.user.js
+// @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/steam-multisell.user.js
+// ==/UserScript==
