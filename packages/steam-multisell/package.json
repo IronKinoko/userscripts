@@ -1,7 +1,7 @@
 {
-  "name": "stream-multisell",
+  "name": "steam-multisell",
   "version": "1.0.0",
-  "description": "",
+  "description": "修复批量出售 Steam 库存时出现“您的库存当前不可用”的问题，并且在货物详情页面增加批量出售按钮",
   "main": "index.js",
   "scripts": {
     "dev": "bocchi dev",
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
-  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/stream-multisell#readme",
+  "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/steam-multisell#readme",
   "devDependencies": {
     "shared": "workspace:*"
   }
