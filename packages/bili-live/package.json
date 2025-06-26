@@ -1,6 +1,6 @@
 {
   "name": "bili-live",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "优化直播间开播设置",
   "main": "index.js",
   "scripts": {
