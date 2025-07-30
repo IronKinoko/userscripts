@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.10
+
+### Patch Changes
+
+- 619ea3e: feat: 支持新的域名
+
 ## 1.5.9
 
 ### Patch Changes
