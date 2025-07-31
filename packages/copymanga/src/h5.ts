@@ -411,10 +411,8 @@ async function injectImageData() {
   $('.comicContentPopupImageList').prepend(html)
   $('.comicContentPopupImageItem').on('click', (e) => {
     const { innerWidth, innerHeight } = window
-    const x = e.clientX
-    const y = e.clientY
-    const xp = x / innerWidth
-    const yp = y / innerHeight
+    const xp = e.clientX / innerWidth
+    const yp = e.clientY / innerHeight
     const t = 0.3
     const h = window.innerHeight * 0.8
 
@@ -433,27 +431,8 @@ async function injectImageData() {
       return
     }
 
-    // 使用 t 参数来自定义分割位置
-    let xIdx: number
-    let yIdx: number
-
-    if (xp < t) {
-      xIdx = 0 // 左区域
-    } else if (xp > 1 - t) {
-      xIdx = 2 // 右区域
-    } else {
-      xIdx = 1 // 中间区域
-    }
-
-    if (yp < t) {
-      yIdx = 0 // 上区域
-    } else if (yp > 1 - t) {
-      yIdx = 2 // 下区域
-    } else {
-      yIdx = 1 // 中间区域
-    }
-
-    const idx = xIdx + yIdx * 3
+    const getRegionIndex = (p: number) => (p < t ? 0 : p > 1 - t ? 2 : 1)
+    const idx = getRegionIndex(xp) + getRegionIndex(yp) * 3
 
     if (idx < 0 || idx >= map.length) return
     const v = map[idx]
