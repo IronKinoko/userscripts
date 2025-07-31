@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.5.11
+
+### Patch Changes
+
+- d06a42c: feat: 支持九宫格点击翻页
+
 ## 1.5.10
 
 ### Patch Changes
