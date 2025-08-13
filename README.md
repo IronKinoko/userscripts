@@ -20,6 +20,14 @@
 | [steam-multisell](/packages/steam-multisell)                     | Steam 批量出售                                                                           | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/steam-multisell.user.js)                                                                 |
 | [bili-live](/packages/bili-live)                                 | bilibili 直播间优化                                                                      | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bili-live.user.js)                                                                       |
 
+### 其他在用的脚本
+
+| name/模块        | descprition/描述       | install/安装                                          |
+| ---------------- | ---------------------- | ----------------------------------------------------- |
+| POE2 Trade       | POE 交易繁体化         | [greasyfork](https://greasyfork.org/scripts/520190)   |
+| POE2 Trade ST    | POE 交易简体化         | [greasyfork](https://greasyfork.org/scripts/522265)   |
+| Bilibili-Evolved | 强大的哔哩哔哩增强脚本 | [GitHub](https://github.com/the1812/Bilibili-Evolved) |
+
 ## iOS & Mac safari install
 
 Use [quoid/userscripts](https://github.com/quoid/userscripts)
