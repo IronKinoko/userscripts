@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.6.0
+
+### Minor Changes
+
+- 0016c14: feat: 增加加载中高度，防止意外加载内容
+
 ## 1.5.11
 
 ### Patch Changes
