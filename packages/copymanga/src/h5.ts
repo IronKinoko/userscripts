@@ -411,14 +411,36 @@ async function injectImageData() {
   $('.comicContentPopupImageList').prepend(html)
   $('.comicContentPopupImageItem').on('click', (e) => {
     const { innerWidth, innerHeight } = window
-    const x = e.clientX
-    const y = e.clientY
-    if (
-      innerWidth / 3 < x &&
-      x < (innerWidth / 3) * 2 &&
-      innerHeight / 3 < y &&
-      y < (innerHeight / 3) * 2
-    ) {
+    const xp = e.clientX / innerWidth
+    const yp = e.clientY / innerHeight
+    const t = 0.3
+    const h = window.innerHeight * 0.8
+
+    // prettier-ignore
+    const map = [
+      -1, -1, 1,
+      -1, 0, 1,
+      -1, 1, 1,
+    ]
+
+    const isOpen =
+      $('.comicContentPopup .comicControlTop').css('display') !== 'none'
+    if (isOpen) {
+      const li = $('.k-open-control-item').get(0)
+      li?.dispatchEvent(fakeClickEvent())
+      return
+    }
+
+    const getRegionIndex = (p: number) => (p < t ? 0 : p > 1 - t ? 2 : 1)
+    const idx = getRegionIndex(xp) + getRegionIndex(yp) * 3
+
+    if (idx < 0 || idx >= map.length) return
+    const v = map[idx]
+    if (v === -1) {
+      window.scrollBy({ top: -h, behavior: 'smooth' })
+    } else if (v === 1) {
+      window.scrollBy({ top: h, behavior: 'smooth' })
+    } else {
       const li = $('.k-open-control-item').get(0)
       li?.dispatchEvent(fakeClickEvent())
     }
