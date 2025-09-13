@@ -399,8 +399,10 @@ async function injectImageData() {
   let html = ''
   info.manga.forEach(({ url }, idx) => {
     html += `
-    <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
-      <img src="${url}" data-img-lazy loading="lazy" data-idx="${idx}" class="k-loading" onload="this.classList.remove('k-loading')" />
+    <li class="comicContentPopupImageItem k-loading" data-k data-idx="${idx}">
+      <img src="${url}" data-img-lazy loading="lazy" data-idx="${
+      idx + 1
+    }" onload="this.parentElement.classList.remove('k-loading')" />
     </li>
     `
   })

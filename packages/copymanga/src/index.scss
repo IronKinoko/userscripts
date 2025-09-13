@@ -78,17 +78,32 @@
 
   .k-loading {
     position: relative;
+    img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      z-index: 2;
+    }
     &::before {
       content: '';
+      display: block;
       width: 100%;
-      padding-top: 100%;
-      background: red;
+      padding-top: calc(172 / 121 * 100%);
     }
     &::after {
       content: attr(data-idx);
       position: absolute;
-      top: 50%;
-      left: 50%;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      color: #999;
+      font-size: 80px;
     }
   }
 }
