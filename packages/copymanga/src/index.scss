@@ -75,4 +75,20 @@
       padding-right: 1em;
     }
   }
+
+  .k-loading {
+    position: relative;
+    &::before {
+      content: '';
+      width: 100%;
+      padding-top: 100%;
+      background: red;
+    }
+    &::after {
+      content: attr(data-idx);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+  }
 }

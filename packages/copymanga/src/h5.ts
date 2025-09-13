@@ -400,7 +400,7 @@ async function injectImageData() {
   info.manga.forEach(({ url }, idx) => {
     html += `
     <li class="comicContentPopupImageItem" data-k data-idx="${idx}">
-      <img src="${url}" data-img-lazy loading="lazy" />
+      <img src="${url}" data-img-lazy loading="lazy" data-idx="${idx}" class="k-loading" onload="this.classList.remove('k-loading')" />
     </li>
     `
   })
