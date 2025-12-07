@@ -20,7 +20,7 @@ function getCurrentPage() {
   for (let i = 0; i < list.length; i++) {
     const item = list[i]
     height += item.getBoundingClientRect().height
-    if (height > scrollHeight) {
+    if (height - 100 > scrollHeight) {
       return i
     }
   }
@@ -131,6 +131,7 @@ async function createActionsUI() {
     intiNextPartEvent()
     initSplitEvent()
     initMergeEvent()
+    initMagneticEvent()
   }
 
   if (!/h5\/comicContent\/.*/.test(location.href)) {
@@ -138,7 +139,7 @@ async function createActionsUI() {
     return
   } else {
     actionsDom.classList.remove('hide')
-    $('.k-icon').removeClass('active')
+    $('.k-icon').filter(':not(.k-magnetic)').removeClass('active')
   }
 }
 
@@ -226,6 +227,16 @@ async function initMergeEvent() {
       setup()
     }
   })
+}
+
+const MAGNETIC_KEY = 'k-copymanga-magnetic'
+async function initMagneticEvent() {
+  $('.k-magnetic')
+    .toggleClass('active', local.getItem(MAGNETIC_KEY, false))
+    .on('click', (e) => {
+      const isActive = e.currentTarget.classList.toggle('active')
+      local.setItem(MAGNETIC_KEY, isActive)
+    })
 }
 
 async function intiNextPartEvent() {
@@ -400,9 +411,7 @@ async function injectImageData() {
   info.manga.forEach(({ url }, idx) => {
     html += `
     <li class="comicContentPopupImageItem k-loading" data-k data-idx="${idx}">
-      <img src="${url}" data-img-lazy loading="lazy" data-idx="${
-      idx + 1
-    }" onload="this.parentElement.classList.remove('k-loading')" />
+      <img src="${url}" data-img-lazy loading="lazy" data-idx="${idx}" onload="this.parentElement.classList.remove('k-loading')" />
     </li>
     `
   })
@@ -438,10 +447,25 @@ async function injectImageData() {
 
     if (idx < 0 || idx >= map.length) return
     const v = map[idx]
+
+    const isMagnetic = local.getItem(MAGNETIC_KEY, false)
+
+    const movePage = (delta: number) => {
+      const list = document.querySelectorAll('li.comicContentPopupImageItem')
+      const current = getCurrentPage()
+
+      const next = Math.min(Math.max(current + delta, 0), list.length - 1)
+      $(`[data-idx="${next}"]`)
+        .get(0)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
     if (v === -1) {
-      window.scrollBy({ top: -h, behavior: 'smooth' })
+      if (isMagnetic) movePage(-1)
+      else window.scrollBy({ top: -h, behavior: 'smooth' })
     } else if (v === 1) {
-      window.scrollBy({ top: h, behavior: 'smooth' })
+      if (isMagnetic) movePage(1)
+      else window.scrollBy({ top: h, behavior: 'smooth' })
     } else {
       const li = $('.k-open-control-item').get(0)
       li?.dispatchEvent(fakeClickEvent())
