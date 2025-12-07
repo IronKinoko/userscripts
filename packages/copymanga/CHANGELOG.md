@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.7.0
+
+### Minor Changes
+
+- 67ec7ed: feat: 增加磁吸滚动
+
 ## 1.6.0
 
 ### Minor Changes
