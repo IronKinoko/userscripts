@@ -37,11 +37,18 @@ function createMultiCancelButton() {
   const sessionid = window.g_sessionID
 
   const cancel = async (id: string) => {
-    const res = await fetch(
-      `https://steamcommunity.com/market/removelisting/${id}`,
-      { body: new URLSearchParams({ sessionid }), method: 'POST' }
-    )
-    await sleep(200)
+    await fetch(`https://steamcommunity.com/market/removelisting/${id}`, {
+      body: new URLSearchParams({ sessionid }),
+      method: 'POST',
+    })
+
+    document.getElementById(`mylisting_${id}`)?.remove()
+
+    const countEl = document.getElementById('my_market_selllistings_number')
+    if (countEl) {
+      const count = parseInt(countEl.textContent || '0', 10) - 1
+      countEl.textContent = count.toString()
+    }
   }
 
   document
@@ -82,8 +89,16 @@ function createMultiCancelButton() {
     )
   })
 
+  let lock = false
   button.addEventListener('click', async () => {
-    await Promise.all(ids.map(cancel))
+    if (lock) return
+    lock = true
+
+    for (let i = 0, size = 3; i < ids.length; i += size) {
+      const chunk = ids.slice(i, i + size)
+      await Promise.all(chunk.map(cancel))
+      await sleep(200)
+    }
     window.location.reload()
   })
 
