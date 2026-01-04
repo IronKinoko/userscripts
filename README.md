@@ -19,6 +19,7 @@
 | [novel-speech-synthesis](/packages/novel-speech-synthesis)       | 小说语音阅读功能                                                                         | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/novel-speech-synthesis.user.js)                                                          |
 | [steam-multisell](/packages/steam-multisell)                     | Steam 批量出售                                                                           | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/steam-multisell.user.js)                                                                 |
 | [bili-live](/packages/bili-live)                                 | bilibili 直播间优化                                                                      | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/bili-live.user.js)                                                                       |
+| [miscellaneous](/packages/miscellaneous)                         | 杂项，很多乱七八糟的小功能都写这里面                                                     | [GitHub](https://github.com/IronKinoko/userscripts/raw/dist/miscellaneous.user.js)                                                                   |
 
 ### 其他在用的脚本
 
