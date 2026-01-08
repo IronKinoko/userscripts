@@ -1,7 +1,3 @@
-import { router } from 'shared'
-import qq from './qq'
-
-router({
-  domain: 'c.pc.qq.com',
-  routes: [{ run: qq }],
-})
+import './modules/acggw'
+import './modules/baidu'
+import './modules/qq'

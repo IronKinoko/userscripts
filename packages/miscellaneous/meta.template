@@ -6,10 +6,11 @@
 // @description  #description#
 // @author       IronKinoko
 // @match        https://c.pc.qq.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=qq.com
+// @match        https://pan.baidu.com/share/init*
+// @match        https://www.acggw.me/*
+// @icon         https://q.qlogo.cn/g?b=qq&nk=707819027&s=100
 // @grant        none
 // @noframes
-// @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/miscellaneous.user.js
 // @updateURL    https://github.com/IronKinoko/userscripts/raw/dist/miscellaneous.user.js
 // ==/UserScript==

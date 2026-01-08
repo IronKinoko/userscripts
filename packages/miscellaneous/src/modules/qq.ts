@@ -1,6 +1,9 @@
-export default function main() {
-  qqRedirect()
-}
+import { router } from 'shared'
+
+router({
+  domain: 'c.pc.qq.com',
+  routes: [{ run: qqRedirect }],
+})
 
 function qqRedirect() {
   const url = new URL(window.location.href)
