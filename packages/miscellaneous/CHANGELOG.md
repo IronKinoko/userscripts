@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.1.1
+
+### Patch Changes
+
+- 40bbfdb: fix: 修复 acggw 适配
+
 ## 1.1.0
 
 ### Minor Changes
