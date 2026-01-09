@@ -6,7 +6,7 @@ router({
 })
 
 async function linkMergePassword() {
-  const lines = Array.from(document.querySelectorAll('#content .single > p'))
+  const lines = Array.from(document.querySelectorAll('.content .single > p'))
 
   function makeLink(line: Element) {
     const urlMatch = line.textContent?.match(/(https?:\/\/\S+)/)
