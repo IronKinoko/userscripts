@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.1.2
+
+### Patch Changes
+
+- d5efa3e: fix: 修复百度网盘链接匹配逻辑
+
 ## 1.1.1
 
 ### Patch Changes
