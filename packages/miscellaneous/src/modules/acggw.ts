@@ -36,10 +36,11 @@ async function linkMergePassword() {
 
   // 百度网盘
   const baidu = lines.filter((line) =>
-    line.textContent.match(/百度网盘|提取码/)
+    line.textContent.match(/pan\.baidu\.com|提取码/)
   )
-  if (baidu.length === 2) {
-    const [linkLine, pwdLine] = baidu
+  if ([2, 3].includes(baidu.length)) {
+    const linkLine = baidu[0]
+    const pwdLine = baidu[baidu.length - 1]
     linkLine.textContent = `${linkLine.textContent}?pwd=${pwdLine.textContent
       .split(/：|:/)
       .pop()
