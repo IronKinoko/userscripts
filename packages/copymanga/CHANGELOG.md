@@ -1,5 +1,11 @@
 # copymanga
 
+## 1.7.1
+
+### Patch Changes
+
+- f8a8fe2: chore: 更新域名
+
 ## 1.7.0
 
 ### Minor Changes
