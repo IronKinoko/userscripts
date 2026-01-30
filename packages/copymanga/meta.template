@@ -7,6 +7,7 @@
 // @author       IronKinoko
 // @match        https://www.mangacopy.com/*
 // @match        https://www.2025copy.com/*
+// @match        https://www.2026copy.com/*
 // @icon         https://www.google.com/s2/favicons?domain=www.mangacopy.com
 // @grant        GM_xmlhttpRequest
 // @connect      userscripts-proxy.vercel.app
