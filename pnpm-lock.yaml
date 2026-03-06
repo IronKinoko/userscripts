@@ -23,8 +23,8 @@ importers:
         specifier: ^4.17.10
         version: 4.17.12
       bocchi:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.0.1
+        version: 2.0.1
       chalk:
         specifier: ^5.3.0
         version: 5.6.2
@@ -1019,10 +1019,10 @@ packages:
         integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==,
       }
 
-  bocchi@2.0.0:
+  bocchi@2.0.1:
     resolution:
       {
-        integrity: sha512-6Pl0h+rKAOl9D26In3zynUQZLstGaFOHqC0bOPS6deNf/K0PQ7nUEtdq0NL51eyLbODOQI9lZbVwatxsvw2vTA==,
+        integrity: sha512-IDsBS9Eg9CKymrk9DG1ZyoqjE8pm5h8ltxV3oJFlpt5QhxFi5kGUr5qSIbpVcmuiSh3wkngckF17bbvgTzG+Mg==,
       }
     hasBin: true
 
@@ -2742,7 +2742,7 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  bocchi@2.0.0:
+  bocchi@2.0.1:
     dependencies:
       chalk: 5.6.2
       fs-extra: 11.3.4
