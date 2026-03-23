@@ -8,7 +8,11 @@
 // @match        https://c.pc.qq.com/*
 // @match        https://pan.baidu.com/share/init*
 // @match        https://www.acggw.me/*
+// @match        https://acgxj.com/*
+// @match        https://xj.steamzg.com/*
+// @match        https://acfb.top/*
 // @icon         https://q.qlogo.cn/g?b=qq&nk=707819027&s=100
+// @require      https://unpkg.com/jsqr@1.4.0/dist/jsQR.js
 // @grant        none
 // @noframes
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/miscellaneous.user.js

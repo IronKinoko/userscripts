@@ -18,6 +18,12 @@
     "url": "https://github.com/IronKinoko/userscripts/issues"
   },
   "homepage": "https://github.com/IronKinoko/userscripts/tree/master/packages/miscellaneous#readme",
+  "globals": {
+    "jsqr": "jsQR"
+  },
+  "dependencies": {
+    "jsqr": "^1.4.0"
+  },
   "devDependencies": {
     "shared": "workspace:*"
   }

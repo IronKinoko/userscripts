@@ -53,19 +53,7 @@ importers:
         specifier: ^5.2.2
         version: 5.9.3
 
-  packages/18comic:
-    devDependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
   packages/bili-live:
-    devDependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/bilixs:
     devDependencies:
       shared:
         specifier: workspace:*
@@ -89,37 +77,11 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
-  packages/kakuyomu-translate:
-    dependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/linovelib:
-    dependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/manhuagui:
-    dependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/mikanani:
-    devDependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
   packages/miscellaneous:
-    devDependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/novel-speech-synthesis:
+    dependencies:
+      jsqr:
+        specifier: ^1.4.0
+        version: 1.4.0
     devDependencies:
       shared:
         specifier: workspace:*
@@ -135,12 +97,6 @@ importers:
         version: 4.17.23
 
   packages/steam-multisell:
-    devDependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
-  packages/twitter:
     devDependencies:
       shared:
         specifier: workspace:*
@@ -1603,6 +1559,12 @@ packages:
     resolution:
       {
         integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==,
+      }
+
+  jsqr@1.4.0:
+    resolution:
+      {
+        integrity: sha512-dxLob7q65Xg2DvstYkRpkYtmKm2sPJ9oFhrhmudT1dZvNFFTlroai3AWSpLey/w5vMcLBXRgOJsbXpdN9HzU/A==,
       }
 
   locate-path@5.0.0:
@@ -3113,6 +3075,8 @@ snapshots:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
+
+  jsqr@1.4.0: {}
 
   locate-path@5.0.0:
     dependencies:
