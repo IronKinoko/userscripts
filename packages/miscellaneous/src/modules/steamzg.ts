@@ -17,6 +17,16 @@ function parseQRCode() {
     const res = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (!res) return
+
+    if (res.data.includes('pan.baidu.com')) {
+      const matched = document.body.innerText.match(/提取码[:：]?\s*(\w{4})/)
+      if (matched) {
+        const url = new URL(res.data)
+        url.searchParams.set('pwd', matched[1])
+        res.data = url.toString()
+      }
+    }
+
     const link = document.createElement('a')
     link.href = res.data
     link.target = '_blank'
