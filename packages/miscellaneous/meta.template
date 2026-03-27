@@ -11,6 +11,7 @@
 // @match        https://acgxj.com/*
 // @match        https://xj.steamzg.com/*
 // @match        https://acfb.top/*
+// @match        https://gamers520.com/*
 // @icon         https://q.qlogo.cn/g?b=qq&nk=707819027&s=100
 // @require      https://unpkg.com/jsqr@1.4.0/dist/jsQR.js
 // @grant        none

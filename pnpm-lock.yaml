@@ -102,12 +102,6 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
-  packages/xxxxx520:
-    dependencies:
-      shared:
-        specifier: workspace:*
-        version: link:../shared
-
 packages:
   '@babel/runtime@7.28.6':
     resolution:
