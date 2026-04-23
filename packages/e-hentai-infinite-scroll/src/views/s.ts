@@ -28,6 +28,126 @@ function parseI3(i3: string) {
 }
 
 function setupInfiniteScroll() {
+  function getAspectRatioFromImg(img: HTMLImageElement | null) {
+    if (!img) return null
+
+    const width = Math.round(img.naturalWidth || img.width)
+    const height = Math.round(img.naturalHeight || img.height)
+    if (!width || !height) return null
+
+    const gcd = (a: number, b: number): number => {
+      let x = Math.abs(a)
+      let y = Math.abs(b)
+      while (y) {
+        const temp = x % y
+        x = y
+        y = temp
+      }
+      return x || 1
+    }
+
+    const divisor = gcd(width, height)
+    return `${width / divisor} / ${height / divisor}`
+  }
+
+  function getMostCommonAspectRatio() {
+    const images =
+      document.querySelectorAll<HTMLImageElement>('#i3 .auto-load-img')
+    const ratioCountMap: Record<string, number> = {}
+
+    images.forEach((img) => {
+      const ratio = getAspectRatioFromImg(img)
+      if (!ratio) return
+      ratioCountMap[ratio] = (ratioCountMap[ratio] || 0) + 1
+    })
+
+    let maxCount = 0
+    let mostCommonRatio = ''
+
+    Object.entries(ratioCountMap).forEach(([ratio, count]) => {
+      if (count > maxCount) {
+        maxCount = count
+        mostCommonRatio = ratio
+      }
+    })
+
+    return mostCommonRatio
+  }
+
+  function getPlaceholderRatio() {
+    return getMostCommonAspectRatio() || '320 / 450'
+  }
+
+  function createImgContainer(page: number) {
+    const container = document.createElement('div')
+    container.classList.add('auto-load-item', 'is-loading')
+    container.style.setProperty('--auto-load-ratio', getPlaceholderRatio())
+
+    const placeholder = document.createElement('div')
+    placeholder.classList.add('auto-load-placeholder')
+
+    const spinner = document.createElement('span')
+    spinner.classList.add('auto-load-spinner')
+
+    const label = document.createElement('span')
+    label.classList.add('auto-load-placeholder-text')
+    label.textContent = `Loading image #${page}...`
+
+    placeholder.append(spinner, label)
+    container.append(placeholder)
+    return container
+  }
+
+  function bindImgLoadState(img: HTMLImageElement, container: HTMLDivElement) {
+    const clearLoadingState = () => {
+      container.append(img)
+      container.classList.remove('is-loading')
+      container.classList.add('is-loaded')
+      container.querySelector('.auto-load-placeholder')?.remove()
+      img.classList.remove('is-loading')
+      img.classList.add('is-loaded')
+    }
+
+    const setPlaceholderText = (text: string) => {
+      const placeholderText = container.querySelector<HTMLElement>(
+        '.auto-load-placeholder-text'
+      )
+      if (placeholderText) {
+        placeholderText.textContent = text
+      }
+    }
+
+    const MaxRetryCount = 3
+    let retryCount = 0
+    let timer = 0
+    const onDone = () => {
+      clearTimeout(timer)
+
+      if (img.complete && img.naturalWidth > 0) {
+        clearLoadingState()
+      } else {
+        if (retryCount >= MaxRetryCount) {
+          setPlaceholderText('Failed to load image')
+          return
+        }
+
+        const retryUrl = new URL(img.src)
+        retryUrl.searchParams.set('retry', retryCount.toString())
+        img.src = retryUrl.toString()
+        retryCount++
+        setPlaceholderText(
+          `Load failed, retry #${retryCount}/${MaxRetryCount}...`
+        )
+
+        timer = window.setTimeout(onDone, 60000)
+        img.decode().then(onDone).catch(onDone)
+      }
+    }
+
+    timer = window.setTimeout(onDone, 60000)
+    img.decode().then(onDone).catch(onDone)
+  }
+
   function api_call(page: number, nextImgKey: string) {
     return new Promise<ApiRes>((resolve, reject) => {
       const xhr = new XMLHttpRequest()
@@ -96,14 +216,17 @@ function setupInfiniteScroll() {
 
   function renderImg(page: number, info: Info) {
     const { key, source, src } = info
+    const container = createImgContainer(page)
     const img = document.createElement('img')
-    img.setAttribute('src', src)
+    img.classList.add('auto-load-img', 'is-loading')
+
     img.dataset.imgKey = key
     img.dataset.page = page + ''
     img.dataset.source = source
-    img.classList.add('auto-load-img')
+    img.setAttribute('src', src)
+    bindImgLoadState(img, container)
 
-    document.getElementById('i3')!.append(img)
+    document.getElementById('i3')!.append(container)
   }
 
   function detectShouldLoadNextPage() {
@@ -133,16 +256,8 @@ function setupInfiniteScroll() {
         s: location.pathname,
       },
     }
-
-    const $img = document.querySelector<HTMLImageElement>('#i3 a img')!
-    $img.removeAttribute('style')
-    $img.classList.add('auto-load-img')
-    $img.dataset.imgKey = window.startkey
-    $img.dataset.source = location.pathname
-
-    document.getElementById('i3')!.append($img)
-    document.querySelector('#i3 a')!.remove()
-    removeSnAnchor()
+    document.querySelector('#i3')!.innerHTML = ''
+    renderImg(window.startpage, store[window.startkey].info)
   }
 
   document.body.classList.add('e-hentai-infinite-scroll', 's')
