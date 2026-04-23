@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.4.0
+
+### Minor Changes
+
+- 512aa7a: feat: 增加加载占位图与重试机制
+
 ## 1.3.10
 
 ### Patch Changes
