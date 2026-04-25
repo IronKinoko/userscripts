@@ -278,6 +278,8 @@ function setupInfiniteScroll() {
     subtree: true,
     attributes: true,
   })
+
+  document.querySelector<HTMLDivElement>('#i1')!.style.width = 'fit-content'
 }
 
 function removeSnAnchor() {
