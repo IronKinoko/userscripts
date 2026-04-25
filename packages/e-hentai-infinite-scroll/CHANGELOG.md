@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.4.1
+
+### Patch Changes
+
+- 0224f00: feat: 动态设置宽度
+
 ## 1.4.0
 
 ### Minor Changes
