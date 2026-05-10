@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.1.3
+
+### Patch Changes
+
+- 8a352e7: feat: 更新游戏网站二维码解码规则
+
 ## 1.1.2
 
 ### Patch Changes

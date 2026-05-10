@@ -1,6 +1,6 @@
 {
   "name": "miscellaneous",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "杂项，所有无法归类的脚本都放在这里",
   "main": "index.js",
   "scripts": {
