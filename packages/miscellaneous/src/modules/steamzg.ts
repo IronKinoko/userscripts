@@ -7,6 +7,11 @@ router({
 })
 
 function parseQRCode() {
+  parseQRCodeV1()
+  parseQRCodeV2()
+}
+
+function parseQRCodeV1() {
   const canvasList = document.querySelectorAll<HTMLCanvasElement>(
     'canvas.su-qr-canvas'
   )
@@ -34,5 +39,43 @@ function parseQRCode() {
     const div = document.createElement('div')
     div.append(link)
     canvas.parentElement?.appendChild(div)
+  })
+}
+
+function parseQRCodeV2() {
+  const items = document.querySelectorAll<HTMLElement>('.su-download-item')
+
+  items.forEach((item) => {
+    const $info = item.querySelector<HTMLDivElement>('.su-download-info')
+    const $text = item.querySelector<HTMLDivElement>('.su-download-text')
+    const $btn = item.querySelector<HTMLButtonElement>('.su-download-btn')
+    if (!$btn || !$text || !$info) return
+    const urlBase64 = $btn.getAttribute('data-qr-url')
+    if (!urlBase64) return
+    const url = atob(urlBase64)
+
+    const $wrap = document.createElement('div')
+    $info.append($wrap)
+    $wrap.append($text)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.target = '_blank'
+    a.textContent = url
+    a.style.display = 'block'
+    a.style.color = '#999999'
+    a.style.lineHeight = '1.2'
+    a.style.fontSize = '12px'
+    $wrap.append(a)
+
+    $btn.addEventListener(
+      'click',
+      (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        window.open(url, '_blank')
+      },
+      { capture: true }
+    )
   })
 }
