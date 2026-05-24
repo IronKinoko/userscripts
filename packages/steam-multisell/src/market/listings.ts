@@ -4,10 +4,12 @@ function queryElementByText(selector: string, text: string) {
 }
 
 export function run() {
-  createMultisellButton()
+  setInterval(createMultisellButton, 16)
 }
 
 function createMultisellButton() {
+  if (queryElementByText('button', '批量出售')) return
+
   const sellBtn = queryElementByText('button', '出售')
   if (!sellBtn) return
 
