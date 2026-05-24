@@ -1,5 +1,11 @@
 # steam-multisell
 
+## 1.1.3
+
+### Patch Changes
+
+- af36b9b: fix: 修复新版本的页面
+
 ## 1.1.2
 
 ### Patch Changes
