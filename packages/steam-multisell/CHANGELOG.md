@@ -1,5 +1,11 @@
 # steam-multisell
 
+## 1.1.4
+
+### Patch Changes
+
+- 5c71056: fix: 修复按钮可能被覆盖的问题
+
 ## 1.1.3
 
 ### Patch Changes
