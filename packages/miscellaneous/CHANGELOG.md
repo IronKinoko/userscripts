@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.1.4
+
+### Patch Changes
+
+- 3c769d3: fix: 修复 game520 适配
+
 ## 1.1.3
 
 ### Patch Changes
