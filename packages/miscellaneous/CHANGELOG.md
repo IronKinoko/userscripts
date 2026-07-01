@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.1.5
+
+### Patch Changes
+
+- 4e93cd1: fix: 修复解析
+
 ## 1.1.4
 
 ### Patch Changes
