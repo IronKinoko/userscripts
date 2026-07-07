@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.2.0
+
+### Minor Changes
+
+- 270cac1: feat: 增加 x gif 下载
+
 ## 1.1.5
 
 ### Patch Changes
