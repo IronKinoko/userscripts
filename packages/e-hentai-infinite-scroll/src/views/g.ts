@@ -227,9 +227,5 @@ export async function setup() {
 
   if (!info.unloadPageLinks.length) return
 
-  if (info.unloadPageLinks.length > 2) {
-    largeGallery()
-  } else {
-    tinyGallery()
-  }
+  largeGallery()
 }

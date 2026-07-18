@@ -20,11 +20,11 @@ type I3MatchGroup = {
 }
 
 enum GalleryImageState {
-  Idle,
-  Waiting,
-  Loading,
-  Loaded,
-  Rendered,
+  Idle = 'Idle',
+  Waiting = 'Waiting',
+  Loading = 'Loading',
+  Loaded = 'Loaded',
+  Rendered = 'Rendered',
 }
 
 interface GalleryImage {
@@ -84,7 +84,7 @@ async function setupInfiniteScroll() {
       '.auto-load-placeholder-text'
     )
     if (placeholderText) {
-      placeholderText.innerHTML = text
+      placeholderText.innerHTML = `[${galleryImage.state}]${text}`
     }
   }
 
@@ -110,6 +110,8 @@ async function setupInfiniteScroll() {
         clearLoadingState()
       } else {
         if (retryCount >= MaxRetryCount) {
+          galleryImage.state = GalleryImageState.Waiting
+          galleryImage.imgUrl = ''
           setPlaceholderText(galleryImage, 'Failed to load image')
           return
         }
@@ -120,7 +122,7 @@ async function setupInfiniteScroll() {
         retryCount++
         setPlaceholderText(
           galleryImage,
-          `Load failed, retry #${retryCount}/${MaxRetryCount}...`
+          `Load failed, retry ${retryCount}/${MaxRetryCount}...`
         )
 
         timer = window.setTimeout(onDone, retryCount * 10000)
@@ -339,9 +341,9 @@ async function setupInfiniteScroll() {
           }
 
           galleryImage.state = GalleryImageState.Loaded
-        } catch (error) {
+        } catch (error: any) {
           galleryImage.state = GalleryImageState.Waiting
-          setPlaceholderText(galleryImage, 'Failed to load image')
+          setPlaceholderText(galleryImage, error.message)
         }
       })
 
