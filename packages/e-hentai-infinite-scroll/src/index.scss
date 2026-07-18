@@ -65,6 +65,10 @@
   }
 
   &.s {
+    #i1 {
+      max-width: 1280px !important;
+      width: 100% !important;
+    }
     .auto-load-item {
       position: relative;
       width: 100%;
@@ -126,19 +130,13 @@
     .auto-load-img.is-loading {
       opacity: 0;
       pointer-events: none;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
 
     .auto-load-img.is-loaded {
       opacity: 1;
-    }
-
-    .auto-load-img-empty {
-      min-height: 1000px;
-      width: 100px !important;
-      margin: 0 auto !important;
-    }
-    #i3 a {
-      pointer-events: none;
     }
   }
 }

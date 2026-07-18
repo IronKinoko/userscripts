@@ -1,4 +1,4 @@
-import { debounce } from 'shared'
+import { debounce, local, memoize, session, sleep } from 'shared'
 
 interface ApiRes {
   /** source */
@@ -13,75 +13,32 @@ interface ApiRes {
   i5: string
   i6: string
 }
-type Info = {
+type I3MatchGroup = {
   key: string
   src: string
   nl: string
-  source: string
 }
 
-const store: Record<string, { info: Info; res: ApiRes }> = {}
+interface GalleryImage {
+  state: 'idle' | 'waiting' | 'loading' | 'loaded' | 'rendered'
+  page: number
+  idx: number
+  galleryUrl: string
+  idxInPage: number
+  sourceUrl: string
+  imgUrl: string
+  container: HTMLDivElement
+}
 
 function parseI3(i3: string) {
-  return i3.match(/'(?<key>.*)'.*src="(?<src>.*?")(.*nl\('(?<nl>.*)'\))?/)!
-    .groups!
+  return i3.match(/'(?<key>.*)'.*src="(?<src>.*?)"(.*nl\('(?<nl>.*)'\))?/)!
+    .groups! as I3MatchGroup
 }
 
-function setupInfiniteScroll() {
-  function getAspectRatioFromImg(img: HTMLImageElement | null) {
-    if (!img) return null
-
-    const width = Math.round(img.naturalWidth || img.width)
-    const height = Math.round(img.naturalHeight || img.height)
-    if (!width || !height) return null
-
-    const gcd = (a: number, b: number): number => {
-      let x = Math.abs(a)
-      let y = Math.abs(b)
-      while (y) {
-        const temp = x % y
-        x = y
-        y = temp
-      }
-      return x || 1
-    }
-
-    const divisor = gcd(width, height)
-    return `${width / divisor} / ${height / divisor}`
-  }
-
-  function getMostCommonAspectRatio() {
-    const images =
-      document.querySelectorAll<HTMLImageElement>('#i3 .auto-load-img')
-    const ratioCountMap: Record<string, number> = {}
-
-    images.forEach((img) => {
-      const ratio = getAspectRatioFromImg(img)
-      if (!ratio) return
-      ratioCountMap[ratio] = (ratioCountMap[ratio] || 0) + 1
-    })
-
-    let maxCount = 0
-    let mostCommonRatio = ''
-
-    Object.entries(ratioCountMap).forEach(([ratio, count]) => {
-      if (count > maxCount) {
-        maxCount = count
-        mostCommonRatio = ratio
-      }
-    })
-
-    return mostCommonRatio
-  }
-
-  function getPlaceholderRatio() {
-    return getMostCommonAspectRatio() || '320 / 450'
-  }
-
+async function setupInfiniteScroll() {
   function createImgContainer(page: number) {
     const container = document.createElement('div')
-    container.classList.add('auto-load-item', 'is-loading')
-    container.style.setProperty('--auto-load-ratio', getPlaceholderRatio())
+    container.classList.add('k-img-item', 'auto-load-item', 'is-loading')
 
     const placeholder = document.createElement('div')
     placeholder.classList.add('auto-load-placeholder')
@@ -91,30 +48,37 @@ function setupInfiniteScroll() {
 
     const label = document.createElement('span')
     label.classList.add('auto-load-placeholder-text')
-    label.textContent = `Loading image #${page}...`
+    label.textContent = `Loading image #${page + 1}...`
+
+    const img = document.createElement('img')
+    img.classList.add('auto-load-img', 'is-loading')
 
     placeholder.append(spinner, label)
     container.append(placeholder)
+    container.append(img)
+
     return container
   }
 
-  function bindImgLoadState(img: HTMLImageElement, container: HTMLDivElement) {
+  const setPlaceholderText = (container: HTMLDivElement, text: string) => {
+    const placeholderText = container.querySelector<HTMLElement>(
+      '.auto-load-placeholder-text'
+    )
+    if (placeholderText) {
+      placeholderText.innerHTML = text
+    }
+  }
+
+  function bindImgLoadState(galleryImage: GalleryImage) {
+    const container = galleryImage.container
+    const img = container.querySelector<HTMLImageElement>('img.auto-load-img')!
+    img.src = galleryImage.imgUrl
     const clearLoadingState = () => {
-      container.append(img)
       container.classList.remove('is-loading')
       container.classList.add('is-loaded')
       container.querySelector('.auto-load-placeholder')?.remove()
       img.classList.remove('is-loading')
       img.classList.add('is-loaded')
-    }
-
-    const setPlaceholderText = (text: string) => {
-      const placeholderText = container.querySelector<HTMLElement>(
-        '.auto-load-placeholder-text'
-      )
-      if (placeholderText) {
-        placeholderText.textContent = text
-      }
     }
 
     const MaxRetryCount = 3
@@ -127,7 +91,7 @@ function setupInfiniteScroll() {
         clearLoadingState()
       } else {
         if (retryCount >= MaxRetryCount) {
-          setPlaceholderText('Failed to load image')
+          setPlaceholderText(container, 'Failed to load image')
           return
         }
 
@@ -136,6 +100,7 @@ function setupInfiniteScroll() {
         img.src = retryUrl.toString()
         retryCount++
         setPlaceholderText(
+          container,
           `Load failed, retry #${retryCount}/${MaxRetryCount}...`
         )
 
@@ -171,161 +136,218 @@ function setupInfiniteScroll() {
       )
     })
   }
-  const maxPageSize = parseInt(
-    document.querySelector('#i2 > div.sn > div > span:nth-child(2)')!
-      .textContent!
+
+  async function getGalleryMeta() {
+    const total = parseInt(
+      document.querySelector('#i2 > div.sn > div > span:nth-child(2)')!
+        .textContent!
+    )
+    const currentPage = window.startpage - 1
+    const prevPageSize = local.getItem('e-hentai-infinite-scroll-page-size')
+    let defaultPage = 0
+
+    if (prevPageSize) {
+      defaultPage = Math.floor(currentPage / parseInt(prevPageSize))
+    }
+
+    const galleryUrl = document.querySelector('#i5 a')!.getAttribute('href')!
+    const { pages, pageSize, images } = await getGalleryPageMeta(
+      galleryUrl,
+      defaultPage
+    )
+
+    const galleryImages = Array.from({ length: total }).map<GalleryImage>(
+      (_, idx) => {
+        const page = Math.floor(idx / pageSize)
+        const indexInPage = idx % pageSize
+        const pageUrl = new URL(galleryUrl)
+        pageUrl.searchParams.set('p', page.toString())
+        return {
+          state: 'idle',
+          galleryUrl: `${pageUrl.toString()}`,
+          page,
+          idx,
+          idxInPage: indexInPage,
+          sourceUrl: '',
+          imgUrl: '',
+          container: createImgContainer(idx),
+        }
+      }
+    )
+
+    images.forEach((image) => {
+      galleryImages[image.idx].sourceUrl = image.sourceUrl
+    })
+
+    galleryImages[currentPage].state = 'loaded'
+    galleryImages[currentPage].sourceUrl = window.location.href
+    galleryImages[currentPage].imgUrl = $('#i3 img').attr('src')!
+
+    return { total, pages, pageSize, galleryImages }
+  }
+
+  $('body').addClass('e-hentai-infinite-scroll s')
+  const meta = await getGalleryMeta()
+  $('#i3').empty()
+  meta.galleryImages.forEach((galleryImage, index) => {
+    setupImgEvent(galleryImage, index)
+  })
+
+  $('.k-img-item')
+    .get(window.startpage - 1)!
+    .scrollIntoView({ block: 'start' })
+
+  function setupImgEvent(galleryImage: GalleryImage, index: number) {
+    const container = galleryImage.container
+    $('#i3').append(container)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (galleryImage.state === 'idle') galleryImage.state = 'waiting'
+          } else {
+            if (galleryImage.state === 'waiting') galleryImage.state = 'idle'
+          }
+        })
+      },
+      { rootMargin: '-100px 0px 2000px 0px' }
+    )
+    observer.observe(container)
+  }
+
+  window.addEventListener(
+    'scroll',
+    debounce(() => {
+      const idx = getCurrentActiveIdx()
+      if (idx !== null && meta.galleryImages[idx].sourceUrl) {
+        history.replaceState(null, '', meta.galleryImages[idx].sourceUrl)
+      }
+    }, 100)
   )
 
-  let nextImgKey = document
-    .querySelector<HTMLAnchorElement>('#i3 a[onclick]')!
-    .onclick!.toString()
-    .match(/'(?<key>.*)'/)!.groups!.key
-  let page = window.startpage + 1
+  while (true) {
+    const loadedList = meta.galleryImages.filter(
+      (galleryImage) => galleryImage.state === 'loaded'
+    )
 
-  let isLoading = false
-  async function loadImgInfo() {
-    try {
-      if (maxPageSize < page) {
-        return
-      }
-      if (isLoading) return
-      isLoading = true
-      const res = await api_call(page, nextImgKey)
-      isLoading = false
-      const groups = parseI3(res.i3)
+    loadedList.forEach((galleryImage) => {
+      galleryImage.state = 'rendered'
+      bindImgLoadState(galleryImage)
+    })
 
-      const info: Info = {
-        key: res.k,
-        nl: groups.nl,
-        src: groups.src.slice(0, -1),
-        source: res.s[0] === '/' ? res.s : '/' + res.s,
-      }
+    const loadingList = meta.galleryImages.filter(
+      (galleryImage) => galleryImage.state === 'loading'
+    )
 
-      store[res.k] = { info, res }
-
-      renderImg(page, info)
-
-      nextImgKey = groups.key
-      page++
-    } catch (error) {
-      isLoading = false
-      console.error(error)
-      await loadImgInfo()
+    if (loadingList.length >= 3) {
+      await sleep(100)
+      continue
     }
-  }
 
-  function renderImg(page: number, info: Info) {
-    const { key, source, src } = info
-    const container = createImgContainer(page)
-    const img = document.createElement('img')
-    img.classList.add('auto-load-img', 'is-loading')
-
-    img.dataset.imgKey = key
-    img.dataset.page = page + ''
-    img.dataset.source = source
-    img.setAttribute('src', src)
-    bindImgLoadState(img, container)
-
-    document.getElementById('i3')!.append(container)
-  }
-
-  function detectShouldLoadNextPage() {
-    const dom = document.scrollingElement!
-
-    if (dom.scrollHeight <= dom.scrollTop + dom.clientHeight + 2000) {
-      loadImgInfo()
+    const waitingList = meta.galleryImages.filter(
+      (galleryImage) => galleryImage.state === 'waiting'
+    )
+    if (waitingList.length === 0) {
+      await sleep(100)
+      continue
     }
+
+    waitingList
+      .slice(0, 3 - loadingList.length)
+      .forEach(async (galleryImage) => {
+        galleryImage.state = 'loading'
+        try {
+          if (!galleryImage.sourceUrl) {
+            const res = await getGalleryPageMeta(
+              galleryImage.galleryUrl,
+              galleryImage.page
+            )
+            res.images.forEach((image) => {
+              meta.galleryImages[image.idx].sourceUrl = image.sourceUrl
+            })
+          }
+
+          if (!galleryImage.imgUrl) {
+            const nextKey = galleryImage.sourceUrl.split('/').slice(-2)[0]
+            const res = await api_call(galleryImage.idx + 1, nextKey)
+
+            galleryImage.imgUrl = parseI3(res.i3).src
+          }
+
+          galleryImage.state = 'loaded'
+        } catch (error) {
+          galleryImage.state = 'idle'
+          setPlaceholderText(galleryImage.container, 'Failed to load image')
+        }
+      })
+
+    await sleep(100)
   }
-
-  function resetDefaultImgDOM() {
-    const groups = parseI3(document.querySelector('#i3')!.innerHTML)
-    store[window.startkey] = {
-      info: {
-        key: window.startkey,
-        nl: groups.nl,
-        src: groups.src,
-        source: location.pathname,
-      },
-      res: {
-        i: document.querySelector('#i4 > div')!.outerHTML,
-        i3: document.querySelector('#i3')!.innerHTML,
-        n: document.querySelector('#i4 > .sn')!.outerHTML,
-        i5: document.querySelector('#i5')!.innerHTML,
-        i6: document.querySelector('#i6')!.innerHTML,
-        k: window.startkey,
-        s: location.pathname,
-      },
-    }
-    document.querySelector('#i3')!.innerHTML = ''
-    renderImg(window.startpage, store[window.startkey].info)
-  }
-
-  document.body.classList.add('e-hentai-infinite-scroll', 's')
-
-  resetDefaultImgDOM()
-  detectShouldLoadNextPage()
-  document.addEventListener('scroll', () => {
-    detectShouldLoadNextPage()
-    updateCurrentInfo()
-  })
-
-  const ob = new MutationObserver(() => {
-    detectShouldLoadNextPage()
-  })
-
-  ob.observe(document.querySelector('#i3')!, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-  })
-
-  document.querySelector<HTMLDivElement>('#i1')!.style.width = 'fit-content'
 }
 
-function removeSnAnchor() {
-  document.querySelectorAll('.sn a[onclick]').forEach((a) => {
-    a.removeAttribute('onclick')
-  })
+interface PageMeta {
+  pages: number
+  pageSize: number
+  images: {
+    page: number
+    idx: number
+    idxInPage: number
+    sourceUrl: string
+  }[]
 }
-function getCurrentActiveImg() {
-  const imgs = document.querySelectorAll<HTMLImageElement>('#i3 img,#i3 img')
-  for (const img of imgs) {
-    const { top, bottom } = img.getBoundingClientRect()
+
+const getGalleryPageMeta = memoize(async function getGalleryPageMeta(
+  galleryUrl: string,
+  page: number
+) {
+  const url = new URL(galleryUrl)
+  url.searchParams.set('p', page.toString())
+
+  if (session.getItem(url.toString())) {
+    return session.getItem(url.toString()) as PageMeta
+  }
+
+  const response = await fetch(url.toString())
+  const text = await response.text()
+  const doc = new DOMParser().parseFromString(text, 'text/html')
+
+  const pages = doc.querySelectorAll('.gtb .ptt td').length - 2
+  const pageSize = doc.querySelector('#gdt')!.classList.contains('gt200')
+    ? 20
+    : 40
+  local.setItem('e-hentai-infinite-scroll-page-size', pageSize)
+
+  const images = Array.from(doc.querySelector('#gdt')!.children).map(
+    (element, index) => {
+      const url = $(element).attr('href')!
+      const idx = parseInt(url.match(/-(\d+)$/)![1])
+
+      return {
+        page,
+        idx: idx - 1,
+        idxInPage: index,
+        sourceUrl: url,
+      }
+    }
+  )
+
+  session.setItem(url.toString(), { pages, pageSize, images })
+  return { pages, pageSize, images }
+})
+
+function getCurrentActiveIdx() {
+  const items = document.querySelectorAll<HTMLDivElement>('#i3 .k-img-item')
+  for (const idx in Array.from(items)) {
+    const item = items[idx]
+    const { top, bottom } = item.getBoundingClientRect()
     const base = 200
 
     if (top < base && bottom > base) {
-      return img
+      return parseInt(idx)
     }
   }
   return null
 }
-
-function updateCurrentPathname($img: HTMLImageElement) {
-  const source = $img.dataset.source
-  history.replaceState(null, '', source)
-}
-
-function updateBottomInfo($img: HTMLImageElement) {
-  const key = $img.dataset.imgKey!
-  const { res } = store[key]
-
-  document.querySelector('#i2')!.innerHTML = res.n + res.i
-  document.querySelector('#i4')!.innerHTML = res.i + res.n
-  document.querySelector('#i5')!.innerHTML = res.i5
-  document.querySelector('#i6')!.innerHTML = res.i6
-  removeSnAnchor()
-}
-
-const updateCurrentInfo = debounce(function () {
-  const $img = getCurrentActiveImg()
-  if (!$img) return
-
-  const source = $img.dataset.source
-  if (location.pathname === source) return
-
-  updateCurrentPathname($img)
-  updateBottomInfo($img)
-}, 30)
 
 export function setup() {
   setupInfiniteScroll()

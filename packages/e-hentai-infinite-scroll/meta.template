@@ -6,6 +6,7 @@
 // @author       IronKinoko
 // @match        https://e-hentai.org/*
 // @match        https://exhentai.org/*
+// @run-at       document-end
 // @grant        none
 // @require      https://unpkg.com/jquery@3.6.1/dist/jquery.min.js
 // @downloadURL  https://github.com/IronKinoko/userscripts/raw/dist/e-hentai-infinite-scroll.user.js
