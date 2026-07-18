@@ -43,25 +43,35 @@ async function setupInfiniteScroll() {
     const placeholder = document.createElement('div')
     placeholder.classList.add('auto-load-placeholder')
 
-    const spinner = document.createElement('span')
+    const spinnerWrap = document.createElement('div')
+    spinnerWrap.classList.add('auto-load-spinner-wrap')
+
+    const spinner = document.createElement('div')
     spinner.classList.add('auto-load-spinner')
+
+    const indicator = document.createElement('span')
+    indicator.classList.add('auto-load-indicator')
+    indicator.textContent = page + 1 + ''
 
     const label = document.createElement('span')
     label.classList.add('auto-load-placeholder-text')
-    label.textContent = `Loading image #${page + 1}...`
+    label.textContent = `Wait for image to load...`
 
     const img = document.createElement('img')
     img.classList.add('auto-load-img', 'is-loading')
 
-    placeholder.append(spinner, label)
+    spinnerWrap.append(spinner)
+    spinnerWrap.append(indicator)
+    placeholder.append(spinnerWrap)
+    placeholder.append(label)
     container.append(placeholder)
     container.append(img)
 
     return container
   }
 
-  const setPlaceholderText = (container: HTMLDivElement, text: string) => {
-    const placeholderText = container.querySelector<HTMLElement>(
+  const setPlaceholderText = (galleryImage: GalleryImage, text: string) => {
+    const placeholderText = galleryImage.container.querySelector<HTMLElement>(
       '.auto-load-placeholder-text'
     )
     if (placeholderText) {
@@ -91,7 +101,7 @@ async function setupInfiniteScroll() {
         clearLoadingState()
       } else {
         if (retryCount >= MaxRetryCount) {
-          setPlaceholderText(container, 'Failed to load image')
+          setPlaceholderText(galleryImage, 'Failed to load image')
           return
         }
 
@@ -100,16 +110,17 @@ async function setupInfiniteScroll() {
         img.src = retryUrl.toString()
         retryCount++
         setPlaceholderText(
-          container,
+          galleryImage,
           `Load failed, retry #${retryCount}/${MaxRetryCount}...`
         )
 
-        timer = window.setTimeout(onDone, 60000)
+        timer = window.setTimeout(onDone, retryCount * 10000)
         img.decode().then(onDone).catch(onDone)
       }
     }
 
-    timer = window.setTimeout(onDone, 60000)
+    setPlaceholderText(galleryImage, `Loading image...`)
+    timer = window.setTimeout(onDone, 10000)
     img.decode().then(onDone).catch(onDone)
   }
 
@@ -258,26 +269,37 @@ async function setupInfiniteScroll() {
         galleryImage.state = 'loading'
         try {
           if (!galleryImage.sourceUrl) {
-            const res = await getGalleryPageMeta(
-              galleryImage.galleryUrl,
-              galleryImage.page
-            )
-            res.images.forEach((image) => {
-              meta.galleryImages[image.idx].sourceUrl = image.sourceUrl
-            })
+            setPlaceholderText(galleryImage, 'Fetch page meta')
+            try {
+              const res = await getGalleryPageMeta(
+                galleryImage.galleryUrl,
+                galleryImage.page
+              )
+              res.images.forEach((image) => {
+                meta.galleryImages[image.idx].sourceUrl = image.sourceUrl
+              })
+            } catch (error) {
+              getGalleryPageMeta.cache.clear?.()
+              throw new Error('Failed to fetch page meta')
+            }
           }
 
           if (!galleryImage.imgUrl) {
-            const nextKey = galleryImage.sourceUrl.split('/').slice(-2)[0]
-            const res = await api_call(galleryImage.idx + 1, nextKey)
+            try {
+              setPlaceholderText(galleryImage, 'Fetch image url')
+              const nextKey = galleryImage.sourceUrl.split('/').slice(-2)[0]
+              const res = await api_call(galleryImage.idx + 1, nextKey)
 
-            galleryImage.imgUrl = parseI3(res.i3).src
+              galleryImage.imgUrl = parseI3(res.i3).src
+            } catch (error) {
+              throw new Error('Failed to fetch image url')
+            }
           }
 
           galleryImage.state = 'loaded'
         } catch (error) {
-          galleryImage.state = 'idle'
-          setPlaceholderText(galleryImage.container, 'Failed to load image')
+          galleryImage.state = 'waiting'
+          setPlaceholderText(galleryImage, 'Failed to load image')
         }
       })
 
