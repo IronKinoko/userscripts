@@ -1,4 +1,4 @@
-import { debounce, local, memoize, session, sleep } from 'shared'
+import { debounce, local, memoize, session, sleep, throttle } from 'shared'
 
 interface ApiRes {
   /** source */
@@ -19,8 +19,16 @@ type I3MatchGroup = {
   nl: string
 }
 
+enum GalleryImageState {
+  Idle,
+  Waiting,
+  Loading,
+  Loaded,
+  Rendered,
+}
+
 interface GalleryImage {
-  state: 'idle' | 'waiting' | 'loading' | 'loaded' | 'rendered'
+  state: GalleryImageState
   page: number
   idx: number
   galleryUrl: string
@@ -39,6 +47,7 @@ async function setupInfiniteScroll() {
   function createImgContainer(page: number) {
     const container = document.createElement('div')
     container.classList.add('k-img-item', 'auto-load-item', 'is-loading')
+    container.setAttribute('data-idx', page.toString())
 
     const placeholder = document.createElement('div')
     placeholder.classList.add('auto-load-placeholder')
@@ -174,7 +183,7 @@ async function setupInfiniteScroll() {
         const pageUrl = new URL(galleryUrl)
         pageUrl.searchParams.set('p', page.toString())
         return {
-          state: 'idle',
+          state: GalleryImageState.Idle,
           galleryUrl: `${pageUrl.toString()}`,
           page,
           idx,
@@ -190,7 +199,7 @@ async function setupInfiniteScroll() {
       galleryImages[image.idx].sourceUrl = image.sourceUrl
     })
 
-    galleryImages[currentPage].state = 'loaded'
+    galleryImages[currentPage].state = GalleryImageState.Loaded
     galleryImages[currentPage].sourceUrl = window.location.href
     galleryImages[currentPage].imgUrl = $('#i3 img').attr('src')!
 
@@ -200,54 +209,87 @@ async function setupInfiniteScroll() {
   $('body').addClass('e-hentai-infinite-scroll s')
   const meta = await getGalleryMeta()
   $('#i3').empty()
-  meta.galleryImages.forEach((galleryImage, index) => {
-    setupImgEvent(galleryImage, index)
+  meta.galleryImages.forEach((galleryImage) => {
+    const container = galleryImage.container
+    $('#i3').append(container)
   })
 
+  await sleep()
   $('.k-img-item')
     .get(window.startpage - 1)!
     .scrollIntoView({ block: 'start' })
 
-  function setupImgEvent(galleryImage: GalleryImage, index: number) {
-    const container = galleryImage.container
-    $('#i3').append(container)
+  let observer: IntersectionObserver
+  function createObserver() {
+    const activeLineY = 200
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (galleryImage.state === 'idle') galleryImage.state = 'waiting'
-          } else {
-            if (galleryImage.state === 'waiting') galleryImage.state = 'idle'
+            const idx = parseInt(entry.target.getAttribute('data-idx')!)
+
+            updateBrowserHistory(idx)
+            detectBoxInView(idx)
           }
         })
       },
-      { rootMargin: '-100px 0px 2000px 0px' }
+      {
+        rootMargin: `${-activeLineY}px 0px -${
+          document.body.clientHeight - activeLineY - 1
+        }px 0px`,
+      }
     )
-    observer.observe(container)
+    meta.galleryImages.forEach((galleryImage) => {
+      observer.observe(galleryImage.container)
+    })
+    return observer
   }
+  observer = createObserver()
 
   window.addEventListener(
-    'scroll',
+    'resize',
     debounce(() => {
-      const idx = getCurrentActiveIdx()
-      if (idx !== null && meta.galleryImages[idx].sourceUrl) {
-        history.replaceState(null, '', meta.galleryImages[idx].sourceUrl)
-      }
-    }, 100)
+      observer.disconnect()
+      observer = createObserver()
+    })
   )
+
+  const updateBrowserHistory = throttle((idx: number) => {
+    if (meta.galleryImages[idx].sourceUrl) {
+      history.replaceState(null, '', meta.galleryImages[idx].sourceUrl)
+    }
+  }, 100)
+
+  const detectBoxInView = debounce((idx: number) => {
+    for (let i = 0; i < meta.galleryImages.length; i++) {
+      const galleryImage = meta.galleryImages[i]
+      if (!galleryImage) continue
+
+      if (i >= idx - 1 && i < idx + 5) {
+        if (galleryImage.state === GalleryImageState.Idle) {
+          galleryImage.state = GalleryImageState.Waiting
+        }
+      } else {
+        if (galleryImage.state === GalleryImageState.Waiting) {
+          galleryImage.state = GalleryImageState.Idle
+        }
+      }
+    }
+  }, 100)
 
   while (true) {
     const loadedList = meta.galleryImages.filter(
-      (galleryImage) => galleryImage.state === 'loaded'
+      (galleryImage) => galleryImage.state === GalleryImageState.Loaded
     )
 
     loadedList.forEach((galleryImage) => {
-      galleryImage.state = 'rendered'
+      galleryImage.state = GalleryImageState.Rendered
       bindImgLoadState(galleryImage)
     })
 
     const loadingList = meta.galleryImages.filter(
-      (galleryImage) => galleryImage.state === 'loading'
+      (galleryImage) => galleryImage.state === GalleryImageState.Loading
     )
 
     if (loadingList.length >= 3) {
@@ -256,7 +298,7 @@ async function setupInfiniteScroll() {
     }
 
     const waitingList = meta.galleryImages.filter(
-      (galleryImage) => galleryImage.state === 'waiting'
+      (galleryImage) => galleryImage.state === GalleryImageState.Waiting
     )
     if (waitingList.length === 0) {
       await sleep(100)
@@ -266,7 +308,7 @@ async function setupInfiniteScroll() {
     waitingList
       .slice(0, 3 - loadingList.length)
       .forEach(async (galleryImage) => {
-        galleryImage.state = 'loading'
+        galleryImage.state = GalleryImageState.Loading
         try {
           if (!galleryImage.sourceUrl) {
             setPlaceholderText(galleryImage, 'Fetch page meta')
@@ -296,9 +338,9 @@ async function setupInfiniteScroll() {
             }
           }
 
-          galleryImage.state = 'loaded'
+          galleryImage.state = GalleryImageState.Loaded
         } catch (error) {
-          galleryImage.state = 'waiting'
+          galleryImage.state = GalleryImageState.Waiting
           setPlaceholderText(galleryImage, 'Failed to load image')
         }
       })
@@ -356,20 +398,6 @@ const getGalleryPageMeta = memoize(async function getGalleryPageMeta(
   session.setItem(url.toString(), { pages, pageSize, images })
   return { pages, pageSize, images }
 })
-
-function getCurrentActiveIdx() {
-  const items = document.querySelectorAll<HTMLDivElement>('#i3 .k-img-item')
-  for (const idx in Array.from(items)) {
-    const item = items[idx]
-    const { top, bottom } = item.getBoundingClientRect()
-    const base = 200
-
-    if (top < base && bottom > base) {
-      return parseInt(idx)
-    }
-  }
-  return null
-}
 
 export function setup() {
   setupInfiniteScroll()
