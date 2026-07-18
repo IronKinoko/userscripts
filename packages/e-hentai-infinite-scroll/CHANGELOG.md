@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.5.0
+
+### Minor Changes
+
+- 5fb9af2: feat: 优化加载方案
+
 ## 1.4.1
 
 ### Patch Changes
