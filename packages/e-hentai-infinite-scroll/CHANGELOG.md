@@ -1,5 +1,12 @@
 # e-hentai-infinite-scroll
 
+## 1.5.1
+
+### Patch Changes
+
+- 562093f: feat: 增强加载指示器样式和提示语
+- 475d07b: feat: 优化加载效果
+
 ## 1.5.0
 
 ### Minor Changes
