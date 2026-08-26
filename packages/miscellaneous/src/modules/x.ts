@@ -8,10 +8,53 @@ router({
 function main() {
   const run = () => {
     injectDownloadIcon()
+    patchMediaTab()
 
     requestAnimationFrame(run)
   }
   requestAnimationFrame(run)
+}
+
+// 方案：改写媒体 tab 的 href 追加 ?filter=photo，
+// 再用捕获阶段监听器（先于应用自身的处理器）拦截真实点击：
+// preventDefault + stopPropagation，随后派发一个合成 click 事件。
+// 合成事件照常冒泡到应用的路由处理器，若处理器从 DOM 读取 href，
+// 就会导航到带 filter 的 URL —— 全程 SPA 内部切换，无刷新。
+function patchMediaTab() {
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('a[href]')
+  )
+  const mediaTab = links.find((a) =>
+    /\/.*?\/media/.test(a.getAttribute('href') || '')
+  )
+  if (!mediaTab || mediaTab.hasAttribute('data-x-patched')) return
+
+  const url = new URL(mediaTab.href)
+  url.searchParams.set('filter', 'photo')
+  mediaTab.setAttribute('data-x-patched', 'true')
+  mediaTab.setAttribute('href', url.toString())
+
+  mediaTab.addEventListener(
+    'click',
+    (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      let target: string
+      const currentUrl = new URL(window.location.href)
+      if (currentUrl.searchParams.get('filter') === 'photo') {
+        currentUrl.searchParams.delete('filter')
+        target = currentUrl.toString()
+      } else {
+        target = url.toString()
+      }
+      const state = history.state
+
+      history.pushState(state, '', target)
+      window.dispatchEvent(new PopStateEvent('popstate', { state }))
+    },
+    true
+  )
 }
 
 function injectDownloadIcon() {
