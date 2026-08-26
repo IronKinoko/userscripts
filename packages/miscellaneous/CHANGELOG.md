@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.3.0
+
+### Minor Changes
+
+- dc47278: x: 用户主页媒体 tab 点击后默认筛选 photo（SPA 内部切换，无刷新）
+
 ## 1.2.0
 
 ### Minor Changes
