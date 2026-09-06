@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.4.0
+
+### Minor Changes
+
+- d9547ad: feat(github): add GitHub download link acceleration via proxy
+
 ## 1.3.0
 
 ### Minor Changes
