@@ -1,14 +1,8 @@
 import { local } from './storage'
 
-export interface Opts {
-  url: string
-  method?: 'GET' | 'POST'
-  params?: any
-  responseType?: 'text' | 'steam' | 'arraybuffer' | 'blob' | 'json'
-  headers?: any
-}
-
-export function request<T = any>(opts: Opts) {
+export function request<T = any>(
+  opts: GMXMLHttpRequestDetails & { params?: Record<string, string> }
+): Promise<{ response: T }> {
   let { url, method = 'GET', params, responseType = 'json', ...rest } = opts
 
   if (params) {
