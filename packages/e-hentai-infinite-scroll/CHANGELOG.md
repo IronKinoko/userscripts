@@ -1,5 +1,11 @@
 # e-hentai-infinite-scroll
 
+## 1.5.2
+
+### Patch Changes
+
+- 10614a1: feat: 增加失败重试
+
 ## 1.5.1
 
 ### Patch Changes
