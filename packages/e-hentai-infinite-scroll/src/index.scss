@@ -129,6 +129,27 @@
       text-align: center;
     }
 
+    .auto-load-retry-button {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+      padding: 6px 18px;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      font: inherit;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+
+      &:hover {
+        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.7);
+        outline-offset: 2px;
+      }
+    }
+
     .auto-load-item.is-loaded .auto-load-placeholder {
       display: none;
     }

@@ -25,6 +25,7 @@ enum GalleryImageState {
   Loading = 'Loading',
   Loaded = 'Loaded',
   Rendered = 'Rendered',
+  Failed = 'Failed',
 }
 
 interface GalleryImage {
@@ -88,6 +89,28 @@ async function setupInfiniteScroll() {
     }
   }
 
+  const showRetryButton = (galleryImage: GalleryImage) => {
+    const placeholder = galleryImage.container.querySelector<HTMLElement>(
+      '.auto-load-placeholder'
+    )
+    if (!placeholder) return
+
+    const retryButton = document.createElement('button')
+    retryButton.type = 'button'
+    retryButton.classList.add('auto-load-retry-button')
+    retryButton.textContent = 'Retry'
+    retryButton.addEventListener('click', () => {
+      if (galleryImage.state !== GalleryImageState.Failed) return
+
+      retryButton.disabled = true
+      retryButton.remove()
+      galleryImage.state = GalleryImageState.Waiting
+      galleryImage.imgUrl = ''
+      setPlaceholderText(galleryImage, 'Waiting to retry...')
+    })
+    placeholder.append(retryButton)
+  }
+
   function bindImgLoadState(galleryImage: GalleryImage) {
     const container = galleryImage.container
     const img = container.querySelector<HTMLImageElement>('img.auto-load-img')!
@@ -103,16 +126,21 @@ async function setupInfiniteScroll() {
     const MaxRetryCount = 3
     let retryCount = 0
     let timer = 0
+    let isFinished = false
     const onDone = () => {
+      if (isFinished) return
       clearTimeout(timer)
 
       if (img.complete && img.naturalWidth > 0) {
+        isFinished = true
         clearLoadingState()
       } else {
         if (retryCount >= MaxRetryCount) {
-          galleryImage.state = GalleryImageState.Waiting
+          isFinished = true
+          galleryImage.state = GalleryImageState.Failed
           galleryImage.imgUrl = ''
           setPlaceholderText(galleryImage, 'Failed to load image')
+          showRetryButton(galleryImage)
           return
         }
 
