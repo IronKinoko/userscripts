@@ -1,5 +1,11 @@
 # miscellaneous
 
+## 1.4.1
+
+### Patch Changes
+
+- feat: 优化 x 下载逻辑
+
 ## 1.4.0
 
 ### Minor Changes
