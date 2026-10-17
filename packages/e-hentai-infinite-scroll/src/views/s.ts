@@ -28,6 +28,8 @@ enum GalleryImageState {
   Failed = 'Failed',
 }
 
+const galleryImageStates = Object.values(GalleryImageState)
+
 interface GalleryImage {
   state: GalleryImageState
   page: number
@@ -45,6 +47,36 @@ function parseI3(i3: string) {
 }
 
 async function setupInfiniteScroll() {
+  function renderStateProgress(
+    container: HTMLDivElement,
+    state: GalleryImageState
+  ) {
+    const currentIndex = galleryImageStates.indexOf(state)
+    const progress = container.querySelector('.auto-load-progress')
+    if (!progress) return
+
+    progress.setAttribute('aria-valuenow', `${currentIndex + 1}`)
+    progress.setAttribute('aria-valuetext', state)
+    progress
+      .querySelectorAll<HTMLElement>('.auto-load-progress-step')
+      .forEach((step, index) => {
+        step.classList.toggle('is-complete', index < currentIndex)
+        step.classList.toggle('is-current', index === currentIndex)
+        step.classList.toggle(
+          'is-failed',
+          index === currentIndex && state === GalleryImageState.Failed
+        )
+      })
+  }
+
+  function setGalleryImageState(
+    galleryImage: GalleryImage,
+    state: GalleryImageState
+  ) {
+    galleryImage.state = state
+    renderStateProgress(galleryImage.container, state)
+  }
+
   function createImgContainer(page: number) {
     const container = document.createElement('div')
     container.classList.add('k-img-item', 'auto-load-item', 'is-loading')
@@ -63,6 +95,20 @@ async function setupInfiniteScroll() {
     indicator.classList.add('auto-load-indicator')
     indicator.textContent = page + 1 + ''
 
+    const progress = document.createElement('div')
+    progress.classList.add('auto-load-progress')
+    progress.setAttribute('role', 'progressbar')
+    progress.setAttribute('aria-valuemin', '1')
+    progress.setAttribute('aria-valuemax', `${galleryImageStates.length}`)
+
+    galleryImageStates.forEach((state) => {
+      const step = document.createElement('span')
+      step.classList.add('auto-load-progress-step')
+      step.title = state
+      step.setAttribute('aria-label', state)
+      progress.append(step)
+    })
+
     const label = document.createElement('span')
     label.classList.add('auto-load-placeholder-text')
     label.textContent = `Wait for image to load...`
@@ -73,9 +119,11 @@ async function setupInfiniteScroll() {
     spinnerWrap.append(spinner)
     spinnerWrap.append(indicator)
     placeholder.append(spinnerWrap)
+    placeholder.append(progress)
     placeholder.append(label)
     container.append(placeholder)
     container.append(img)
+    renderStateProgress(container, GalleryImageState.Idle)
 
     return container
   }
@@ -85,7 +133,7 @@ async function setupInfiniteScroll() {
       '.auto-load-placeholder-text'
     )
     if (placeholderText) {
-      placeholderText.innerHTML = `[${galleryImage.state}]${text}`
+      placeholderText.textContent = text
     }
   }
 
@@ -104,7 +152,7 @@ async function setupInfiniteScroll() {
 
       retryButton.disabled = true
       retryButton.remove()
-      galleryImage.state = GalleryImageState.Waiting
+      setGalleryImageState(galleryImage, GalleryImageState.Waiting)
       galleryImage.imgUrl = ''
       setPlaceholderText(galleryImage, 'Waiting to retry...')
     })
@@ -114,7 +162,6 @@ async function setupInfiniteScroll() {
   function bindImgLoadState(galleryImage: GalleryImage) {
     const container = galleryImage.container
     const img = container.querySelector<HTMLImageElement>('img.auto-load-img')!
-    img.src = galleryImage.imgUrl
     const clearLoadingState = () => {
       container.classList.remove('is-loading')
       container.classList.add('is-loaded')
@@ -126,41 +173,64 @@ async function setupInfiniteScroll() {
     const MaxRetryCount = 3
     let retryCount = 0
     let timer = 0
+    let attempt = 0
     let isFinished = false
-    const onDone = () => {
-      if (isFinished) return
+    const finishAttempt = (
+      succeeded: boolean,
+      attemptId: number,
+      sourceUrl: string
+    ) => {
+      if (isFinished || attemptId !== attempt) return
       clearTimeout(timer)
+      img.onload = null
+      img.onerror = null
 
-      if (img.complete && img.naturalWidth > 0) {
+      if (succeeded) {
         isFinished = true
         clearLoadingState()
       } else {
         if (retryCount >= MaxRetryCount) {
           isFinished = true
-          galleryImage.state = GalleryImageState.Failed
+          setGalleryImageState(galleryImage, GalleryImageState.Failed)
           galleryImage.imgUrl = ''
           setPlaceholderText(galleryImage, 'Failed to load image')
           showRetryButton(galleryImage)
           return
         }
 
-        const retryUrl = new URL(img.src)
+        const retryUrl = new URL(sourceUrl, document.baseURI)
         retryUrl.searchParams.set('retry', retryCount.toString())
-        img.src = retryUrl.toString()
         retryCount++
         setPlaceholderText(
           galleryImage,
           `Load failed, retry ${retryCount}/${MaxRetryCount}...`
         )
 
-        timer = window.setTimeout(onDone, retryCount * 10000)
-        img.decode().then(onDone).catch(onDone)
+        startAttempt(retryUrl.toString(), retryCount * 10000)
       }
     }
 
+    const startAttempt = (sourceUrl: string, timeout: number) => {
+      const attemptId = ++attempt
+      img.onload = () => {
+        if (img.complete) {
+          finishAttempt(img.naturalWidth > 0, attemptId, sourceUrl)
+        }
+      }
+      img.onerror = () => {
+        if (img.complete) {
+          finishAttempt(false, attemptId, sourceUrl)
+        }
+      }
+      timer = window.setTimeout(
+        () => finishAttempt(false, attemptId, sourceUrl),
+        timeout
+      )
+      img.src = sourceUrl
+    }
+
     setPlaceholderText(galleryImage, `Loading image...`)
-    timer = window.setTimeout(onDone, 10000)
-    img.decode().then(onDone).catch(onDone)
+    startAttempt(galleryImage.imgUrl, 10000)
   }
 
   function api_call(page: number, nextImgKey: string) {
@@ -229,7 +299,7 @@ async function setupInfiniteScroll() {
       galleryImages[image.idx].sourceUrl = image.sourceUrl
     })
 
-    galleryImages[currentPage].state = GalleryImageState.Loaded
+    setGalleryImageState(galleryImages[currentPage], GalleryImageState.Loaded)
     galleryImages[currentPage].sourceUrl = window.location.href
     galleryImages[currentPage].imgUrl = $('#i3 img').attr('src')!
 
@@ -298,11 +368,11 @@ async function setupInfiniteScroll() {
 
       if (i >= idx - 1 && i < idx + 5) {
         if (galleryImage.state === GalleryImageState.Idle) {
-          galleryImage.state = GalleryImageState.Waiting
+          setGalleryImageState(galleryImage, GalleryImageState.Waiting)
         }
       } else {
         if (galleryImage.state === GalleryImageState.Waiting) {
-          galleryImage.state = GalleryImageState.Idle
+          setGalleryImageState(galleryImage, GalleryImageState.Idle)
         }
       }
     }
@@ -314,7 +384,7 @@ async function setupInfiniteScroll() {
     )
 
     loadedList.forEach((galleryImage) => {
-      galleryImage.state = GalleryImageState.Rendered
+      setGalleryImageState(galleryImage, GalleryImageState.Rendered)
       bindImgLoadState(galleryImage)
     })
 
@@ -338,7 +408,7 @@ async function setupInfiniteScroll() {
     waitingList
       .slice(0, 3 - loadingList.length)
       .forEach(async (galleryImage) => {
-        galleryImage.state = GalleryImageState.Loading
+        setGalleryImageState(galleryImage, GalleryImageState.Loading)
         try {
           if (!galleryImage.sourceUrl) {
             setPlaceholderText(galleryImage, 'Fetch page meta')
@@ -368,9 +438,9 @@ async function setupInfiniteScroll() {
             }
           }
 
-          galleryImage.state = GalleryImageState.Loaded
+          setGalleryImageState(galleryImage, GalleryImageState.Loaded)
         } catch (error: any) {
-          galleryImage.state = GalleryImageState.Waiting
+          setGalleryImageState(galleryImage, GalleryImageState.Waiting)
           setPlaceholderText(galleryImage, error.message)
         }
       })
