@@ -9,10 +9,357 @@ function main() {
   const run = () => {
     injectDownloadIcon()
     patchMediaTab()
+    enableScrollSnapDrag()
+    enableCarouselDrag()
+    enableSwipeToDismissDrag()
 
     requestAnimationFrame(run)
   }
   requestAnimationFrame(run)
+}
+
+function enableCarouselDrag() {
+  const lists = document.querySelectorAll<HTMLElement>(
+    '[role="dialog"] [aria-roledescription="carousel"] [role="list"]'
+  )
+
+  lists.forEach((list) => {
+    if (list.hasAttribute('data-x-carousel-drag-enabled')) return
+
+    const carousel = list.closest<HTMLElement>(
+      '[aria-roledescription="carousel"]'
+    )
+    if (!carousel) return
+
+    list.setAttribute('data-x-carousel-drag-enabled', 'true')
+    list.style.cursor = 'grab'
+
+    disableImageDragging(list)
+
+    list.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return
+
+      const startX = event.clientX
+      const startY = event.clientY
+      const startTime = Date.now()
+      const originalTransform = list.style.transform
+      const originalTransition = list.style.transition
+      const originalUserSelect = list.style.userSelect
+      const transformMatch = originalTransform.match(
+        /translate3d\(\s*(-?[\d.]+)px,\s*(-?[\d.]+)px,\s*(-?[\d.]+)px\s*\)/i
+      )
+      const computedTransform = window.getComputedStyle(list).transform
+      const computedMatrix =
+        computedTransform === 'none'
+          ? new DOMMatrixReadOnly()
+          : new DOMMatrixReadOnly(computedTransform)
+      const startTranslateX = transformMatch
+        ? Number(transformMatch[1])
+        : computedMatrix.m41
+      const translateY = transformMatch
+        ? Number(transformMatch[2])
+        : computedMatrix.m42
+      const translateZ = transformMatch
+        ? Number(transformMatch[3])
+        : computedMatrix.m43
+      let dragging = false
+      let axis: 'x' | 'y' | null = null
+      let deltaX = 0
+      let deltaY = 0
+
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        deltaX = moveEvent.clientX - startX
+        deltaY = moveEvent.clientY - startY
+        if (!axis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 5) {
+          axis = Math.abs(deltaX) >= Math.abs(deltaY) ? 'x' : 'y'
+        }
+        if (axis !== 'x') return
+
+        if (!dragging) {
+          dragging = true
+          list.style.cursor = 'grabbing'
+          list.style.userSelect = 'none'
+          list.style.transition = 'none'
+        }
+
+        moveEvent.preventDefault()
+        const nextTranslateX = startTranslateX + deltaX
+        const translatedTransform = transformMatch
+          ? originalTransform.replace(
+              transformMatch[0],
+              `translate3d(${nextTranslateX}px, ${translateY}px, ${translateZ}px)`
+            )
+          : `translate3d(${nextTranslateX}px, ${translateY}px, ${translateZ}px)`
+        list.style.transform = translatedTransform
+      }
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+
+        if (dragging) {
+          list.style.transform = originalTransform
+          list.style.transition = originalTransition
+          list.style.cursor = 'grab'
+          list.style.userSelect = originalUserSelect
+
+          const duration = Date.now() - startTime
+          const distance = Math.abs(deltaX)
+          const shouldSwitch =
+            (distance >= 50 && duration <= 300) || distance >= 120
+
+          if (shouldSwitch) {
+            const testId = deltaX < 0 ? 'Carousel-NavRight' : 'Carousel-NavLeft'
+            carousel
+              .querySelector<HTMLElement>(`[data-testid="${testId}"]`)
+              ?.click()
+          }
+
+          const preventClick = (clickEvent: MouseEvent) => {
+            if (list.contains(clickEvent.target as Node)) {
+              clickEvent.preventDefault()
+              clickEvent.stopPropagation()
+            }
+            document.removeEventListener('click', preventClick, true)
+          }
+          document.addEventListener('click', preventClick, true)
+          window.setTimeout(
+            () => document.removeEventListener('click', preventClick, true),
+            0
+          )
+        }
+      }
+
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+    })
+  })
+}
+
+function enableSwipeToDismissDrag() {
+  document
+    .querySelectorAll<HTMLElement>(
+      '[role="dialog"] [data-testid="swipe-to-dismiss"]'
+    )
+    .forEach(enableVerticalDrag)
+}
+
+function enableVerticalDrag(element: HTMLElement) {
+  if (element.hasAttribute('data-x-vertical-drag-enabled')) return
+
+  element.setAttribute('data-x-vertical-drag-enabled', 'true')
+  element.style.cursor = 'grab'
+  element.addEventListener('dragstart', (event) => event.preventDefault())
+
+  element.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) return
+
+    const startX = event.clientX
+    const startY = event.clientY
+    const startTime = Date.now()
+    const originalTransform = element.style.transform
+    const originalTransition = element.style.transition
+    const originalOpacity = element.style.opacity
+    const originalCursor = element.style.cursor
+    const originalUserSelect = element.style.userSelect
+    const transformMatch = originalTransform.match(
+      /translate3d\(\s*(-?[\d.]+)px,\s*(-?[\d.]+)px,\s*(-?[\d.]+)px\s*\)/i
+    )
+    const computedTransform = window.getComputedStyle(element).transform
+    const computedMatrix =
+      computedTransform === 'none'
+        ? new DOMMatrixReadOnly()
+        : new DOMMatrixReadOnly(computedTransform)
+    const startTranslateX = transformMatch
+      ? Number(transformMatch[1])
+      : computedMatrix.m41
+    const startTranslateY = transformMatch
+      ? Number(transformMatch[2])
+      : computedMatrix.m42
+    const translateZ = transformMatch
+      ? Number(transformMatch[3])
+      : computedMatrix.m43
+    let axis: 'x' | 'y' | null = null
+    let dragging = false
+    let deltaX = 0
+    let deltaY = 0
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      deltaX = moveEvent.clientX - startX
+      deltaY = moveEvent.clientY - startY
+      if (!axis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 5) {
+        axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'y' : 'x'
+      }
+      if (axis !== 'y') return
+
+      if (!dragging) {
+        dragging = true
+        element.style.cursor = 'grabbing'
+        element.style.userSelect = 'none'
+        element.style.transition = 'none'
+      }
+
+      moveEvent.preventDefault()
+      element.style.transform = transformMatch
+        ? originalTransform.replace(
+            transformMatch[0],
+            `translate3d(${startTranslateX + deltaX}px, ${
+              startTranslateY + deltaY
+            }px, ${translateZ}px)`
+          )
+        : `translate3d(${startTranslateX + deltaX}px, ${
+            startTranslateY + deltaY
+          }px, ${translateZ}px)`
+      const downwardDistance = Math.max(deltaY, 0)
+      element.style.opacity = String(Math.max(0.2, 1 - downwardDistance / 300))
+    }
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      if (!dragging) return
+
+      element.style.transform = originalTransform
+      element.style.transition = originalTransition
+      element.style.opacity = originalOpacity
+      element.style.cursor = originalCursor
+      element.style.userSelect = originalUserSelect
+
+      const duration = Date.now() - startTime
+      const distance = Math.max(deltaY, 0)
+      const shouldDismiss =
+        (distance >= 50 && duration <= 300) || distance >= 120
+      if (shouldDismiss) {
+        element
+          .closest('[role="dialog"]')
+          ?.querySelector<HTMLElement>('[aria-label="关闭"]')
+          ?.click()
+      }
+
+      const preventClick = (clickEvent: MouseEvent) => {
+        if (element.contains(clickEvent.target as Node)) {
+          clickEvent.preventDefault()
+          clickEvent.stopPropagation()
+        }
+        document.removeEventListener('click', preventClick, true)
+      }
+      document.addEventListener('click', preventClick, true)
+      window.setTimeout(
+        () => document.removeEventListener('click', preventClick, true),
+        0
+      )
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  })
+}
+
+function disableImageDragging(list: HTMLElement) {
+  list.addEventListener('dragstart', (event) => {
+    event.preventDefault()
+  })
+
+  list.querySelectorAll<HTMLImageElement>('img').forEach((image) => {
+    image.draggable = false
+  })
+
+  const imageObserver = new MutationObserver((records) => {
+    records.forEach((record) => {
+      record.addedNodes.forEach((node) => {
+        if (node instanceof HTMLImageElement) {
+          node.draggable = false
+        } else if (node instanceof Element) {
+          node.querySelectorAll<HTMLImageElement>('img').forEach((image) => {
+            image.draggable = false
+          })
+        }
+      })
+    })
+  })
+  imageObserver.observe(list, { childList: true, subtree: true })
+}
+
+function enableScrollSnapDrag() {
+  const lists = document.querySelectorAll<HTMLElement>(
+    '[data-testid="ScrollSnap-List"]'
+  )
+
+  lists.forEach((list) => {
+    if (list.hasAttribute('data-x-drag-enabled')) return
+
+    list.setAttribute('data-x-drag-enabled', 'true')
+    list.style.cursor = 'grab'
+    disableImageDragging(list)
+
+    list.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return
+      if (
+        (event.target as HTMLElement).closest(
+          'button, input, textarea, select, [contenteditable="true"]'
+        )
+      ) {
+        return
+      }
+
+      const startX = event.clientX
+      const startScrollLeft = list.scrollLeft
+      const originalSnapType = list.style.getPropertyValue('scroll-snap-type')
+      const originalSnapPriority =
+        list.style.getPropertyPriority('scroll-snap-type')
+      const originalUserSelect = list.style.userSelect
+      let dragging = false
+
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        const deltaX = moveEvent.clientX - startX
+        if (!dragging && Math.abs(deltaX) < 5) return
+
+        if (!dragging) {
+          dragging = true
+          list.style.cursor = 'grabbing'
+          list.style.userSelect = 'none'
+          list.style.setProperty('scroll-snap-type', 'none', 'important')
+        }
+
+        moveEvent.preventDefault()
+        list.scrollLeft = startScrollLeft - deltaX
+      }
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+        list.style.cursor = 'grab'
+        list.style.userSelect = originalUserSelect
+        if (originalSnapType) {
+          list.style.setProperty(
+            'scroll-snap-type',
+            originalSnapType,
+            originalSnapPriority
+          )
+        } else {
+          list.style.removeProperty('scroll-snap-type')
+        }
+
+        if (!dragging) return
+
+        const preventClick = (clickEvent: MouseEvent) => {
+          if (list.contains(clickEvent.target as Node)) {
+            clickEvent.preventDefault()
+            clickEvent.stopPropagation()
+          }
+          document.removeEventListener('click', preventClick, true)
+        }
+        document.addEventListener('click', preventClick, true)
+        window.setTimeout(
+          () => document.removeEventListener('click', preventClick, true),
+          0
+        )
+      }
+
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+    })
+  })
 }
 
 // 方案：改写媒体 tab 的 href 追加 ?filter=photo，
