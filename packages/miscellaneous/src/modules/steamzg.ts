@@ -49,19 +49,25 @@ function parseQRCodeV2() {
     const $info = item.querySelector<HTMLDivElement>('.su-download-info')
     const $text = item.querySelector<HTMLDivElement>('.su-download-text')
     const $btn = item.querySelector<HTMLButtonElement>('.su-download-btn')
+    const $code = item.querySelector<HTMLDivElement>('.su-qr-hover-code strong')
     if (!$btn || !$text || !$info) return
     const urlBase64 = $btn.getAttribute('data-qr-url')
     if (!urlBase64) return
-    const url = atob(urlBase64)
+    const url = new URL(atob(urlBase64))
+
+    const code = $code?.textContent?.trim() ?? ''
+    if (code) {
+      url.searchParams.set('pwd', code)
+    }
 
     const $wrap = document.createElement('div')
     $info.append($wrap)
     $wrap.append($text)
 
     const a = document.createElement('a')
-    a.href = url
+    a.href = url.toString()
     a.target = '_blank'
-    a.textContent = url
+    a.textContent = url.toString()
     a.style.display = 'block'
     a.style.color = '#999999'
     a.style.lineHeight = '1.2'

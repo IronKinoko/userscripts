@@ -2,7 +2,7 @@ import jsQR from 'jsqr'
 import { router } from 'shared'
 
 router({
-  domain: ['gamers520.com'],
+  domain: ['520.gamers520.com'],
   routes: [{ run: main }],
 })
 
